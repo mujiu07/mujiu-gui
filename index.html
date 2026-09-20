@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="樊旭阳 · 图形化个人主页" />
+<title>樊旭阳 · 个人主页</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* ---- 主题（沿用 mujiu 官方色值，dark 为默认）---- */
+  :root {
+    --body: #1D2A35;
+    --body-2: #16212b;
+    --panel: #22313f;
+    --card: #22313f;
+    --primary: #05CE91;
+    --secondary: #FF9D00;
+    --text-100: #cbd5e1;
+    --text-200: #B2BDCC;
+    --text-300: #64748b;
+    --danger: #f87171;
+    --line: rgba(255,255,255,0.09);
+    --line-strong: rgba(255,255,255,0.16);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "IBM Plex Mono", "SFMono-Regular", JetBrains Mono, Consolas, monospace;
+    background:
+      radial-gradient(800px 600px at 90% -10%, color-mix(in srgb, var(--secondary) 10%, transparent), transparent 60%),
+      radial-gradient(700px 500px at 0% 20%, color-mix(in srgb, var(--primary) 9%, transparent), transparent 55%),
+      var(--body);
+    background-attachment: fixed;
+    color: var(--text-100);
+    line-height: 1.65;
+    min-height: 100vh;
+    transition: background .35s ease, color .35s ease;
+  }
+  ::selection { background: var(--primary); color: var(--body); }
+  a { color: var(--primary); text-decoration: none; transition: color .2s; }
+  a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  body::after {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 40;
+    background: repeating-linear-gradient(0deg, rgba(255,255,255,0.016) 0 1px, transparent 1px 2px);
+    mix-blend-mode: overlay; opacity: .5;
+  }
+
+  .shell { max-width: 1020px; margin: 0 auto; padding: 22px 18px 60px; }
+
+  /* ==== 顶栏 ==== */
+  .menubar {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 12px 18px; margin-bottom: 22px;
+    border: 1px solid var(--line); border-radius: 12px;
+    background: color-mix(in srgb, var(--panel) 70%, transparent);
+    backdrop-filter: blur(10px);
+    transition: background .35s ease;
+  }
+  .menubar .brand { display: flex; align-items: center; gap: 12px; font-weight: 600; }
+  .menubar .brand .logo {
+    width: 34px; height: 34px; display: grid; place-items: center;
+    border-radius: 8px; background: var(--primary); color: var(--body);
+    font-weight: 700; font-size: 18px; box-shadow: 0 0 22px color-mix(in srgb, var(--primary) 45%, transparent);
+  }
+  .menubar .brand .t { display: flex; flex-direction: column; }
+  .menubar .brand .t b { color: var(--text-100); font-size: 15px; letter-spacing: .5px; }
+  .menubar .brand .t span { color: var(--text-300); font-size: 11px; }
+
+  .menubar .right { display: flex; align-items: center; gap: 16px; }
+  .theme-picker { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  /* 统一主题色点尺寸，选中态不改变圆点大小 */
+  .theme-dot {
+    flex: 0 0 auto; width: 22px; height: 22px; border-radius: 50%; cursor: pointer;
+    border: 2px solid var(--body-2); box-sizing: border-box;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .theme-dot:hover { transform: scale(1.12); }
+  .theme-dot.active { box-shadow: 0 0 0 2px var(--body-2), 0 0 0 4px var(--primary); }
+
+  /* ==== Hero ==== */
+  .hero {
+    display: grid; grid-template-columns: 1.15fr 1fr; gap: 26px; align-items: stretch;
+    margin-bottom: 24px;
+  }
+  .glass {
+    border: 1px solid var(--line); border-radius: 16px;
+    background: color-mix(in srgb, var(--card) 82%, transparent);
+    backdrop-filter: blur(8px);
+    padding: 30px;
+    transition: background .35s ease, border-color .2s;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.25);
+  }
+  .hero-left { display: flex; flex-direction: column; align-items: flex-start; height: 100%; }
+  /* 帅照主视觉（大图居右，随主题变色） */
+  .portrait {
+    width: 160px; height: 160px; border-radius: 50%;
+    padding: 5px; margin: 2px 0 20px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    box-shadow: 0 0 32px color-mix(in srgb, var(--primary) 38%, transparent), 0 0 8px color-mix(in srgb, var(--secondary) 30%, transparent);
+    transition: background .35s ease, box-shadow .35s ease;
+  }
+  .portrait-lg {
+    width: 100%; max-width: 380px; height: auto; aspect-ratio: 1 / 1;
+    margin: 0 auto; padding: 8px;
+  }
+  .portrait img {
+    display: block; width: 100%; height: 100%;
+    object-fit: cover; border-radius: 50%;
+    background: #fff;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .chip { font-size: 12px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--text-200); background: color-mix(in srgb, var(--panel) 50%, transparent); }
+  .hero-left .kicker { color: var(--primary); font-size: 12px; letter-spacing: 2px; margin-bottom: 12px; }
+  .hero-left h1 { font-size: clamp(36px, 7vw, 64px); font-weight: 700; line-height: 1.1; letter-spacing: -1px; color: var(--text-100); margin-bottom: 6px; overflow-wrap: break-word; }
+  .hero-left h1 .grad { background: linear-gradient(120deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; white-space: nowrap; }
+  .hero-left .role { color: var(--secondary); font-size: 16px; margin-bottom: 16px; }
+  .hero-left .about-txt { color: var(--text-200); font-size: 14px; max-width: 460px; margin-bottom: 22px; }
+  .cta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 22px; border-radius: 10px; font-size: 14px; font-weight: 600;
+    cursor: pointer; border: 1px solid var(--line-strong); transition: all .18s; font-family: inherit;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary { background: var(--primary); color: var(--body); border-color: transparent; box-shadow: 0 8px 22px color-mix(in srgb, var(--primary) 35%, transparent); }
+  .btn-primary:hover { box-shadow: 0 12px 28px color-mix(in srgb, var(--primary) 50%, transparent); }
+  .btn-ghost { background: color-mix(in srgb, var(--panel) 60%, transparent); color: var(--text-100); }
+  .btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
+
+  .hero-right { display: flex; flex-direction: column; gap: 16px; }
+  .hero-right .stat-card { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .stat-card { border: 1px solid var(--line); border-radius: 16px; background: color-mix(in srgb, var(--card) 82%, transparent); padding: 22px; transition: background .35s; }
+  .stat-card .label { color: var(--text-300); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .stat-card .value { font-size: 22px; font-weight: 700; color: var(--text-100); margin-bottom: 4px; }
+  .stat-card .sub { font-size: 12px; color: var(--text-300); }
+
+  /* ==== Section ==== */
+  section { margin-bottom: 40px; }
+  .sec-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .sec-head .arrow { color: var(--primary); font-size: 18px; }
+  .sec-head .title { font-size: 17px; font-weight: 700; color: var(--text-100); letter-spacing: .5px; }
+  .sec-head .sub { color: var(--text-300); font-size: 12px; }
+  .sec-head::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+  /* 卡片网格 */
+  .grid { display: grid; gap: 18px; }
+  .m2 { grid-template-columns: repeat(2, 1fr); }
+  .m3 { grid-template-columns: repeat(3, 1fr); }
+  .m1 { grid-template-columns: minmax(0, 1fr); }
+  .card {
+    border: 1px solid var(--line); border-radius: 14px;
+    background: color-mix(in srgb, var(--card) 82%, transparent);
+    padding: 22px; transition: transform .2s, border-color .2s, background .35s;
+  }
+  .card:hover { transform: translateY(-4px); border-color: var(--line-strong); }
+  .card .ic { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 10px; background: color-mix(in srgb, var(--primary) 16%, transparent); color: var(--primary); font-size: 22px; margin-bottom: 14px; }
+  .card h3 { font-size: 16px; color: var(--text-100); margin-bottom: 6px; }
+  .card p { font-size: 13px; color: var(--text-200); line-height: 1.7; }
+  .card .date { color: var(--secondary); font-size: 12px; margin-bottom: 8px; display: block; }
+  .card a.mini { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 13px; color: var(--primary); }
+
+  .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+  .tag { font-size: 11px; padding: 4px 11px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--text-300); background: color-mix(in srgb, var(--panel) 50%, transparent); }
+
+  /* 项目大卡片 */
+  .proj-card { cursor: pointer; }
+  .proj-card .num { color: var(--secondary); font-size: 12px; font-weight: 700; }
+  .proj-card:hover { border-color: var(--primary); box-shadow: 0 0 24px color-mix(in srgb, var(--primary) 14%, transparent); }
+
+  /* 联系卡 */
+  .contact {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+    border: 1px solid var(--line); border-radius: 16px; padding: 28px;
+    background: linear-gradient(130deg, color-mix(in srgb, var(--primary) 12%, var(--card)), color-mix(in srgb, var(--secondary) 10%, var(--card)));
+    transition: background .35s ease;
+  }
+  .contact h3 { font-size: 20px; color: var(--text-100); margin-bottom: 8px; }
+  .contact p { color: var(--text-200); font-size: 14px; margin-bottom: 18px; }
+  .contact .mailbox { font-size: 14px; }
+  .contact .mailbox .lbl { color: var(--text-300); font-size: 12px; display: block; margin-bottom: 6px; }
+  .contact .mailbox a { font-size: 18px; font-weight: 600; }
+
+  footer { text-align: center; padding-top: 24px; color: var(--text-300); font-size: 12px; border-top: 1px solid var(--line); }
+  footer .g { color: var(--primary); }
+
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 760px) {
+    .hero, .contact { grid-template-columns: 1fr; }
+    .m1, .m2, .m3 { grid-template-columns: 1fr; }
+    .menubar { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- 顶栏 -->
+  <nav class="menubar">
+    <div class="brand">
+      <div class="logo">M</div>
+      <div class="t"><b>mujiu</b><span>图形化个人主页</span></div>
+    </div>
+    <div class="right">
+      <div class="theme-picker" id="themePicker" title="主题"></div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="glass hero-left">
+      <div class="kicker">// 关于我</div>
+      <h1>你好，我是 <span class="grad">樊旭阳</span></h1>
+      <div class="role">计算机科学学生 · CTF 与 AI 爱好者</div>
+      <p class="about-txt">
+        我是一名计算机专业学生，热爱
+        <span style="color:var(--primary)">CTF</span> 与
+        <span style="color:var(--secondary)">AI</span>，
+        喜欢构建各种有趣的网络服务。
+      </p>
+      <div class="chips">
+        <span class="chip">🎓 本科在读</span>
+        <span class="chip">🏫 天津大学 & 深圳理工</span>
+        <span class="chip">💌 inbox@mujiu.net</span>
+      </div>
+      <div class="cta">
+        <a class="btn btn-primary" href="mailto:inbox@mujiu.net">✉ 给樊旭阳发邮件</a>
+        <a class="btn btn-ghost" href="https://github.com/mujiu07" target="_blank">GitHub ↗</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="portrait portrait-lg"><img src="avatar.jpg" alt="樊旭阳 侧脸速写" /></div>
+      <div class="stat-card">
+        <div class="label">邮箱</div>
+        <div class="value"><a href="mailto:inbox@mujiu.net" style="color:inherit">inbox@mujiu.net</a></div>
+        <div class="sub">点输入框即可写信</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 教育背景 -->
+  <section id="education">
+    <div class="sec-head"><span class="arrow">▸</span><span class="title">教育背景</span><span class="sub">education</span></div>
+    <div class="grid m2">
+      <div class="card reveal">
+        <div class="ic">🎓</div>
+        <h3>计算机科学与技术 · 本科在读</h3>
+        <span class="date">2026 ~ 2030</span>
+        <p>天津大学 & 深圳理工大学</p>
+        <div class="tags"><span class="tag">计算机科学与技术</span><span class="tag">本科在读</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 项目 -->
+  <section id="projects">
+    <div class="sec-head"><span class="arrow">▸</span><span class="title">作品 / 项目</span><span class="sub">projects</span></div>
+    <div class="grid m3">
+      <div class="card proj-card reveal" onclick="window.open('https://mujiu.net','_blank')">
+        <div class="ic">🖥️</div>
+        <span class="num">01</span>
+        <h3>交互式终端主页</h3>
+        <p>用命令行风格打造的交互式终端主页，统领各子站点入口。</p>
+        <a class="mini" href="https://mujiu.net" target="_blank">mujiu.net ↗</a>
+        <div class="tags"><span class="tag">React</span><span class="tag">终端风格</span></div>
+      </div>
+      <div class="card proj-card reveal" onclick="window.open('https://ask.mujiu.net','_blank')">
+        <div class="ic">📮</div>
+        <span class="num">02</span>
+        <h3>匿名留言箱</h3>
+        <p>公开匿名留言箱，所有留言公开可见。</p>
+        <a class="mini" href="https://ask.mujiu.net" target="_blank">ask.mujiu.net ↗</a>
+        <div class="tags"><span class="tag">留言箱</span><span class="tag">公开</span></div>
+      </div>
+      <div class="card proj-card reveal" onclick="window.open('https://game.mujiu.net','_blank')">
+        <div class="ic">🎮</div>
+        <span class="num">03</span>
+        <h3>游戏中心</h3>
+        <p>在线小游戏合集，点进去就能把玩。</p>
+        <a class="mini" href="https://game.mujiu.net" target="_blank">game.mujiu.net ↗</a>
+        <div class="tags"><span class="tag">休闲</span><span class="tag">在线</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 社交 -->
+  <section id="socials">
+    <div class="sec-head"><span class="arrow">▸</span><span class="title">社交账号</span><span class="sub">socials</span></div>
+    <div class="grid m1">
+      <div class="card reveal">
+        <div class="ic">🐙</div>
+        <h3>GitHub</h3>
+        <p>github.com/mujiu07</p>
+        <a class="mini" href="https://github.com/mujiu07" target="_blank">mujiu07 ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 联系 -->
+  <section id="contact">
+    <div class="sec-head"><span class="arrow">▸</span><span class="title">联系我</span><span class="sub">say hello</span></div>
+    <div class="contact reveal">
+      <div>
+        <h3>聊聊想法？</h3>
+        <p>CTF、AI、网络服务…… 欢迎来信交流。</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="mailto:inbox@mujiu.net">✉ 写封邮件</a>
+        </div>
+      </div>
+      <div class="mailbox">
+        <span class="lbl">inbox@mujiu.net</span>
+        <a href="mailto:inbox@mujiu.net">樊旭阳 的信箱</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>© <span id="year"></span> 樊旭阳 · <span class="g">图形化个人主页</span> · <a href="https://mujiu.net" target="_blank">mujiu.net</a></div>
+  </footer>
+</div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ---- 主题（沿用 mujiu 官方色值）----
+  const THEMES = {
+    'dark':         { body:'#1D2A35', primary:'#05CE91', secondary:'#FF9D00', t100:'#cbd5e1', t200:'#B2BDCC', t300:'#64748b', panel:'#22313f', sw:'#0b1220' },
+    'light':        { body:'#EFF3F3', primary:'#027474', secondary:'#FF9D00', t100:'#334155', t200:'#475569', t300:'#64748b', panel:'#e2e8e8', sw:'#eef2f2' },
+    'blue-matrix':  { body:'#000000', primary:'#00ff9c', secondary:'#60fdff', t100:'#ffffff', t200:'#c7c7c7', t300:'#76ff9f', panel:'#0b1720', sw:'#001a15' },
+    'espresso':     { body:'#323232', primary:'#E1E48B', secondary:'#A5C260', t100:'#F7F7F7', t200:'#EEEEEE', t300:'#5b5b5b', panel:'#3d3d3d', sw:'#443b3b' },
+    'green-goblin': { body:'#000000', primary:'#E5E500', secondary:'#04A500', t100:'#01FF00', t200:'#04A5B2', t300:'#E50101', panel:'#0d0d0d', sw:'#1a1a00' },
+    'ubuntu':       { body:'#2D0922', primary:'#80D932', secondary:'#80D932', t100:'#FFFFFF', t200:'#E1E9CC', t300:'#CDCDCD', panel:'#3a1230', sw:'#a34a22' },
+  };
+  let curTheme = 'dark';
+
+  function applyTheme(name) {
+    const t = THEMES[name]; if (!t) return;
+    const r = document.documentElement.style;
+    r.setProperty('--body', t.body);
+    r.setProperty('--body-2', t.body);
+    r.setProperty('--panel', t.panel);
+    r.setProperty('--card', t.panel);
+    r.setProperty('--primary', t.primary);
+    r.setProperty('--secondary', t.secondary);
+    r.setProperty('--text-100', t.t100);
+    r.setProperty('--text-200', t.t200);
+    r.setProperty('--text-300', t.t300);
+    curTheme = name;
+    try { localStorage.setItem('mujiu_theme', name); } catch(e){}
+    document.querySelectorAll('.theme-dot').forEach(d => d.classList.toggle('active', d.dataset.t === name));
+  }
+
+  // 渲染主题选择器（图形化色点）
+  const picker = document.getElementById('themePicker');
+  Object.keys(THEMES).forEach(name => {
+    const t = THEMES[name];
+    const d = document.createElement('div');
+    d.className = 'theme-dot';
+    d.title = name;
+    d.dataset.t = name;
+    d.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
+    d.style.borderColor = t.body;
+    d.onclick = () => applyTheme(name);
+    picker.appendChild(d);
+  });
+
+  // 恢复保存的主题
+  try { const saved = localStorage.getItem('mujiu_theme'); if (saved && THEMES[saved]) applyTheme(saved); } catch(e){}
+  // 默认标记
+  Array.from(picker.children)[0].classList.add('active');
+
+  // 滚动渐入
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }), { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  window.addEventListener('load', () => document.querySelectorAll('.reveal').forEach(el => { if (el.getBoundingClientRect().top < innerHeight*0.6) el.classList.add('in'); }));
+</script>
+</body>
+</html>
