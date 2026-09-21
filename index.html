@@ -189,6 +189,61 @@
   .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
   .reveal.in { opacity: 1; transform: translateY(0); }
 
+  /* ==== 顶栏子站导航 ==== */
+  .topnav { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .topnav a { font-size: 13px; color: var(--text-200); }
+  .topnav a:hover { color: var(--primary); text-decoration: none; }
+  .topnav a::before { content: "↗ "; color: var(--text-300); }
+
+  /* ==== 动态背景（网格 + 粒子）==== */
+  #fx { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .6; }
+  .shell { position: relative; z-index: 1; }
+
+  /* ==== 鼠标跟随光晕 ==== */
+  .glow {
+    position: fixed; top: 0; left: 0; z-index: 0; width: 520px; height: 520px; border-radius: 50%;
+    pointer-events: none; opacity: 0; transition: opacity .4s ease;
+    background: radial-gradient(circle, color-mix(in srgb, var(--primary) 22%, transparent), transparent 62%);
+    filter: blur(30px); transform: translate3d(-50%, -50%, 0);
+  }
+  body.pointer-on .glow { opacity: .5; }
+
+  /* ==== 卡片：光标高亮 + 边框流光 + 3D 倾斜 ==== */
+  .tiltable { position: relative; transform-style: preserve-3d; will-change: transform; }
+  .tiltable::before {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    opacity: 0; transition: opacity .25s ease;
+    background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--primary) 15%, transparent), transparent 70%);
+  }
+  body.pointer-on .tiltable:hover::before { opacity: 1; }
+  .tiltable::after {
+    content: ""; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none;
+    padding: 1px; opacity: 0; transition: opacity .25s ease;
+    background: radial-gradient(200px circle at var(--mx, 50%) var(--my, 50%), var(--primary), transparent 62%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+  }
+  body.pointer-on .tiltable:hover::after { opacity: .85; }
+
+  /* ==== 打字机 ==== */
+  .caret { display: inline-block; width: 3px; height: .86em; margin-left: 5px; vertical-align: -1px; background: var(--primary); animation: blink 1.05s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ==== 数字滚动 ==== */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .stat { text-align: center; padding: 8px 4px; border-radius: 10px; border: 1px solid var(--line); background: color-mix(in srgb, var(--panel) 45%, transparent); }
+  .stat b { display: block; font-size: 24px; font-weight: 700; color: var(--primary); font-variant-numeric: tabular-nums; }
+  .stat span { font-size: 11px; color: var(--text-300); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    #fx, .glow { display: none; }
+    .caret { display: none; }
+  }
+
+  @media (max-width: 760px) {
+    .topnav { order: 3; width: 100%; justify-content: flex-start; }
+  }
   @media (max-width: 760px) {
     .hero, .contact { grid-template-columns: 1fr; }
     .m1, .m2, .m3 { grid-template-columns: 1fr; }
@@ -197,6 +252,9 @@
 </style>
 </head>
 <body>
+
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="glow" id="glow" aria-hidden="true"></div>
 
 <div class="shell">
 
@@ -207,6 +265,11 @@
       <div class="t"><b>mujiu</b><span>图形化个人主页</span></div>
     </div>
     <div class="right">
+      <nav class="topnav">
+        <a href="https://mujiu.net">主站</a>
+        <a href="https://game.mujiu.net">小游戏</a>
+        <a href="https://ask.mujiu.net">留言箱</a>
+      </nav>
       <div class="theme-picker" id="themePicker" title="主题"></div>
     </div>
   </nav>
@@ -215,7 +278,7 @@
   <div class="hero">
     <div class="glass hero-left">
       <div class="kicker">// 关于我</div>
-      <h1>你好，我是 <span class="grad">樊旭阳</span></h1>
+      <h1>你好，我是 <span class="grad" id="typed" data-text="樊旭阳"></span><span class="caret" id="caret"></span></h1>
       <div class="role">计算机科学学生 · CTF 与 AI 爱好者</div>
       <p class="about-txt">
         我是一名计算机专业学生，热爱
@@ -225,7 +288,7 @@
       </p>
       <div class="chips">
         <span class="chip">🎓 本科在读</span>
-        <span class="chip">🏫 天津大学 & 深圳理工</span>
+        <span class="chip">🏫 天津大学 & 香港理工大学深圳</span>
         <span class="chip">💌 inbox@mujiu.net</span>
       </div>
       <div class="cta">
@@ -235,6 +298,14 @@
     </div>
     <div class="hero-right">
       <div class="portrait portrait-lg"><img src="avatar.jpg" alt="樊旭阳 侧脸速写" /></div>
+      <div class="stat-card">
+        <div class="label">site stats</div>
+        <div class="stats">
+          <div class="stat"><b class="cnt" data-to="3">0</b><span>子站点</span></div>
+          <div class="stat"><b class="cnt" data-to="8">0</b><span>小游戏</span></div>
+          <div class="stat"><b class="cnt" data-to="6">0</b><span>主题</span></div>
+        </div>
+      </div>
       <div class="stat-card">
         <div class="label">邮箱</div>
         <div class="value"><a href="mailto:inbox@mujiu.net" style="color:inherit">inbox@mujiu.net</a></div>
@@ -251,7 +322,7 @@
         <div class="ic">🎓</div>
         <h3>计算机科学与技术 · 本科在读</h3>
         <span class="date">2026 ~ 2030</span>
-        <p>天津大学 & 深圳理工大学</p>
+        <p>天津大学 & 香港理工大学深圳（PolyU Shenzhen）</p>
         <div class="tags"><span class="tag">计算机科学与技术</span><span class="tag">本科在读</span></div>
       </div>
     </div>
@@ -331,7 +402,7 @@
   const THEMES = {
     'dark':         { body:'#1D2A35', primary:'#05CE91', secondary:'#FF9D00', t100:'#cbd5e1', t200:'#B2BDCC', t300:'#64748b', panel:'#22313f', sw:'#0b1220' },
     'light':        { body:'#EFF3F3', primary:'#027474', secondary:'#FF9D00', t100:'#334155', t200:'#475569', t300:'#64748b', panel:'#e2e8e8', sw:'#eef2f2' },
-    'blue-matrix':  { body:'#000000', primary:'#00ff9c', secondary:'#60fdff', t100:'#ffffff', t200:'#c7c7c7', t300:'#76ff9f', panel:'#0b1720', sw:'#001a15' },
+    'blue-matrix':  { body:'#101116', primary:'#00ff9c', secondary:'#60fdff', t100:'#ffffff', t200:'#c7c7c7', t300:'#76ff9f', panel:'#0b1720', sw:'#001a15' },
     'espresso':     { body:'#323232', primary:'#E1E48B', secondary:'#A5C260', t100:'#F7F7F7', t200:'#EEEEEE', t300:'#5b5b5b', panel:'#3d3d3d', sw:'#443b3b' },
     'green-goblin': { body:'#000000', primary:'#E5E500', secondary:'#04A500', t100:'#01FF00', t200:'#04A5B2', t300:'#E50101', panel:'#0d0d0d', sw:'#1a1a00' },
     'ubuntu':       { body:'#2D0922', primary:'#80D932', secondary:'#80D932', t100:'#FFFFFF', t200:'#E1E9CC', t300:'#CDCDCD', panel:'#3a1230', sw:'#a34a22' },
@@ -378,6 +449,154 @@
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }), { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
   window.addEventListener('load', () => document.querySelectorAll('.reveal').forEach(el => { if (el.getBoundingClientRect().top < innerHeight*0.6) el.classList.add('in'); }));
+
+  // ================= 炫技效果（触屏 / 低配 / 减少动态自动降级） =================
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const glowEl = document.getElementById('glow');
+  const fxCanvas = document.getElementById('fx');
+  const ptr = { x: innerWidth / 2, y: innerHeight / 2, gx: innerWidth / 2, gy: innerHeight / 2 };
+  const tiltables = Array.from(document.querySelectorAll('.card, .glass, .stat-card, .contact'));
+  tiltables.forEach(el => el.classList.add('tiltable'));
+
+  if (finePointer && !reduceMotion) {
+    document.body.classList.add('pointer-on');
+    window.addEventListener('pointermove', e => { ptr.x = e.clientX; ptr.y = e.clientY; }, { passive: true });
+
+    // 1) 鼠标跟随光晕（缓动趋近）
+    (function glowLoop() {
+      ptr.gx += (ptr.x - ptr.gx) * 0.12;
+      ptr.gy += (ptr.y - ptr.gy) * 0.12;
+      if (glowEl) glowEl.style.transform = `translate3d(${ptr.gx.toFixed(1)}px, ${ptr.gy.toFixed(1)}px, 0) translate(-50%, -50%)`;
+      requestAnimationFrame(glowLoop);
+    })();
+
+    // 2) 3D 卡片倾斜 + 光标高亮 + 边框流光
+    tiltables.forEach(el => {
+      el.addEventListener('pointermove', e => {
+        const r = el.getBoundingClientRect();
+        const mx = e.clientX - r.left, my = e.clientY - r.top;
+        el.style.setProperty('--mx', mx + 'px');
+        el.style.setProperty('--my', my + 'px');
+        const rx = (my / r.height - 0.5) * -5;
+        const ry = (mx / r.width - 0.5) * 5;
+        el.style.transform = `perspective(900px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translateY(-3px)`;
+      });
+      el.addEventListener('pointerleave', () => {
+        el.style.transform = '';
+        el.style.removeProperty('--mx');
+        el.style.removeProperty('--my');
+      });
+    });
+  }
+
+  // 3) 动态网格 + 粒子背景
+  (function gridFx() {
+    if (!fxCanvas) return;
+    if (reduceMotion) { fxCanvas.remove(); return; }
+    const ctx = fxCanvas.getContext('2d');
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let W = 0, H = 0, ps = [], raf = null;
+    function resize() {
+      W = innerWidth; H = innerHeight;
+      fxCanvas.width = W * dpr; fxCanvas.height = H * dpr;
+      fxCanvas.style.width = W + 'px'; fxCanvas.style.height = H + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    resize();
+    addEventListener('resize', resize);
+    const N = innerWidth < 760 ? 16 : 40;
+    const LINK = innerWidth < 760 ? 90 : 130;
+    ps = Array.from({ length: N }, () => ({
+      x: Math.random() * innerWidth, y: Math.random() * innerHeight,
+      vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25,
+    }));
+    function frame() {
+      const root = getComputedStyle(document.documentElement);
+      const primary = root.getPropertyValue('--primary').trim() || '#05CE91';
+      ctx.clearRect(0, 0, W, H);
+
+      // 网格（随鼠标轻微视差）
+      const g = 48;
+      const ox = finePointer ? (ptr.x / W - .5) * 10 : 0;
+      const oy = finePointer ? (ptr.y / H - .5) * 10 : 0;
+      ctx.strokeStyle = 'rgba(255,255,255,0.045)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let x = ox % g; x < W; x += g) { ctx.moveTo(x, 0); ctx.lineTo(x, H); }
+      for (let y = oy % g; y < H; y += g) { ctx.moveTo(0, y); ctx.lineTo(W, y); }
+      ctx.stroke();
+
+      // 粒子 + 连线（含鼠标吸引线）
+      for (let i = 0; i < ps.length; i++) {
+        const p = ps[i];
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+        ctx.fillStyle = primary;
+        ctx.globalAlpha = .55;
+        ctx.beginPath(); ctx.arc(p.x, p.y, 1.3, 0, Math.PI * 2); ctx.fill();
+        for (let j = i + 1; j < ps.length; j++) {
+          const q = ps[j], d = Math.hypot(p.x - q.x, p.y - q.y);
+          if (d < LINK) {
+            ctx.globalAlpha = (1 - d / LINK) * .3;
+            ctx.strokeStyle = primary;
+            ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke();
+          }
+        }
+        if (finePointer) {
+          const dm = Math.hypot(p.x - ptr.x, p.y - ptr.y);
+          if (dm < 170) {
+            ctx.globalAlpha = (1 - dm / 170) * .5;
+            ctx.strokeStyle = primary;
+            ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(ptr.x, ptr.y); ctx.stroke();
+          }
+        }
+      }
+      ctx.globalAlpha = 1;
+      raf = requestAnimationFrame(frame);
+    }
+    frame();
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) { if (raf) cancelAnimationFrame(raf); raf = null; }
+      else if (!raf) frame();
+    });
+  })();
+
+  // 4) 打字机标题
+  (function typewriter() {
+    const el = document.getElementById('typed');
+    const caret = document.getElementById('caret');
+    if (!el) return;
+    const text = el.dataset.text || '';
+    if (reduceMotion) { el.textContent = text; if (caret) caret.remove(); return; }
+    let i = 0;
+    (function step() {
+      el.textContent = text.slice(0, ++i);
+      if (i < text.length) setTimeout(step, 180);
+      else if (caret) setTimeout(() => caret.remove(), 1400);
+    })();
+  })();
+
+  // 5) 数字滚动
+  (function countUp() {
+    const els = Array.from(document.querySelectorAll('.cnt'));
+    function run(el) {
+      const to = parseInt(el.dataset.to || '0', 10);
+      if (reduceMotion) { el.textContent = to; return; }
+      const dur = 900, t0 = performance.now();
+      (function tick(now) {
+        const k = Math.min(1, (now - t0) / dur);
+        el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3)));
+        if (k < 1) requestAnimationFrame(tick);
+      })(t0);
+    }
+    if (!('IntersectionObserver' in window)) { els.forEach(run); return; }
+    const ob = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) { run(e.target); ob.unobserve(e.target); }
+    }), { threshold: .4 });
+    els.forEach(el => ob.observe(el));
+  })();
 </script>
 </body>
 </html>
