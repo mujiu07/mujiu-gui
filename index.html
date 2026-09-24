@@ -235,6 +235,76 @@
   .stat b { display: block; font-size: 24px; font-weight: 700; color: var(--primary); font-variant-numeric: tabular-nums; }
   .stat span { font-size: 11px; color: var(--text-300); }
 
+  /* ==== 滚动进度条 ==== */
+  .progress { position: fixed; top: 0; left: 0; z-index: 50; height: 2px; width: 0;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    box-shadow: 0 0 12px color-mix(in srgb, var(--primary) 55%, transparent); }
+
+  /* ==== 点击涟漪 ==== */
+  .ripple { position: fixed; z-index: 45; border-radius: 50%; pointer-events: none;
+    border: 1px solid color-mix(in srgb, var(--primary) 55%, transparent);
+    background: radial-gradient(circle, color-mix(in srgb, var(--primary) 14%, transparent), transparent 70%);
+    transform: translate(-50%, -50%) scale(0); animation: rippleOut .6s ease-out forwards; }
+  @keyframes rippleOut { to { transform: translate(-50%, -50%) scale(1); opacity: 0; } }
+
+  /* ==== 主题切换波纹（View Transitions 圆形扩散）==== */
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+
+  /* ==== 姓名扫光 ==== */
+  .hero-left h1 .grad {
+    background: linear-gradient(100deg, var(--primary), var(--secondary) 38%, var(--primary) 72%);
+    background-size: 240% 100%; animation: sheen 6s linear infinite;
+  }
+  @keyframes sheen { to { background-position: -240% 0; } }
+
+  /* ==== 主题色点（button 重置 + 键盘焦点）==== */
+  .theme-dot { padding: 0; appearance: none; -webkit-appearance: none; }
+  .theme-dot:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+
+  /* ==== 技能栈 ==== */
+  .skill-group { display: flex; flex-direction: column; gap: 10px; }
+  .skill-group .gl { font-size: 12px; color: var(--text-300); letter-spacing: 1px; text-transform: uppercase; }
+  .chips.tight { margin: 0; gap: 7px; }
+  .chip.hot { border-color: color-mix(in srgb, var(--primary) 45%, transparent); color: var(--text-100);
+    transition: transform .18s, box-shadow .18s, border-color .18s; }
+  .chip.hot:hover { transform: translateY(-2px); border-color: var(--primary);
+    box-shadow: 0 0 16px color-mix(in srgb, var(--primary) 22%, transparent); }
+
+  /* ==== 更新日志时间线 ==== */
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ""; position: absolute; left: 5px; top: 4px; bottom: 4px; width: 1px;
+    background: linear-gradient(180deg, var(--primary), color-mix(in srgb, var(--primary) 8%, transparent)); }
+  .tl { position: relative; padding-bottom: 20px; }
+  .tl:last-child { padding-bottom: 0; }
+  .tl::before { content: ""; position: absolute; left: -23px; top: 6px; width: 11px; height: 11px; border-radius: 50%;
+    background: var(--body); border: 2px solid var(--primary);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--primary) 55%, transparent); }
+  .tl .d { color: var(--secondary); font-size: 12px; }
+  .tl h4 { font-size: 14px; color: var(--text-100); margin: 2px 0 4px; }
+  .tl p { font-size: 13px; color: var(--text-200); margin: 0; }
+
+  /* ==== 现在在做什么 ==== */
+  .now-line { color: var(--primary); font-size: 14px; min-height: 1.7em; }
+  .now-line::after { content: ""; display: inline-block; width: 7px; height: 1em; margin-left: 3px;
+    background: var(--primary); vertical-align: -2px; animation: blink 1.05s steps(1) infinite; }
+  @media (prefers-reduced-motion: reduce) { .now-line::after { animation: none; } }
+
+  /* ==== 回到顶部 ==== */
+  .totop { position: fixed; right: 20px; bottom: 20px; z-index: 46; width: 42px; height: 42px;
+    border-radius: 12px; display: grid; place-items: center; cursor: pointer; font-family: inherit;
+    font-size: 16px; color: var(--primary); background: color-mix(in srgb, var(--panel) 80%, transparent);
+    border: 1px solid var(--line-strong); backdrop-filter: blur(8px);
+    opacity: 0; pointer-events: none; transition: opacity .25s, transform .2s, border-color .2s; }
+  .totop.show { opacity: 1; pointer-events: auto; }
+  .totop:hover { transform: translateY(-3px); border-color: var(--primary); }
+
+  /* ==== 提示气泡（彩蛋 / 主题同步）==== */
+  .toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 18px); z-index: 60;
+    padding: 10px 18px; border-radius: 999px; font-size: 13px; color: var(--text-100);
+    background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--primary);
+    box-shadow: 0 12px 30px rgba(0,0,0,.35); opacity: 0; transition: opacity .3s, transform .3s; }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
   @media (prefers-reduced-motion: reduce) {
     .reveal { opacity: 1; transform: none; transition: none; }
     #fx, .glow { display: none; }
@@ -255,6 +325,7 @@
 
 <canvas id="fx" aria-hidden="true"></canvas>
 <div class="glow" id="glow" aria-hidden="true"></div>
+<div class="progress" id="progress" aria-hidden="true"></div>
 
 <div class="shell">
 
@@ -270,7 +341,7 @@
         <a href="https://game.mujiu.net">小游戏</a>
         <a href="https://ask.mujiu.net">留言箱</a>
       </nav>
-      <div class="theme-picker" id="themePicker" title="主题"></div>
+      <div class="theme-picker" id="themePicker" title="主题（与 mujiu.net 同步）"></div>
     </div>
   </nav>
 
@@ -288,7 +359,7 @@
       </p>
       <div class="chips">
         <span class="chip">🎓 本科在读</span>
-        <span class="chip">🏫 天津大学 & 香港理工大学深圳</span>
+        <span class="chip">🏫 天津大学（TJU）& 香港理工大学（PolyU）</span>
         <span class="chip">💌 inbox@mujiu.net</span>
       </div>
       <div class="cta">
@@ -307,6 +378,10 @@
         </div>
       </div>
       <div class="stat-card">
+        <div class="label">现在在做什么</div>
+        <div class="now-line" id="nowLine" data-lines="在学 CTF｜在折腾 AI｜在维护 mujiu.net 各子站"></div>
+      </div>
+      <div class="stat-card">
         <div class="label">邮箱</div>
         <div class="value"><a href="mailto:inbox@mujiu.net" style="color:inherit">inbox@mujiu.net</a></div>
         <div class="sub">点输入框即可写信</div>
@@ -322,8 +397,55 @@
         <div class="ic">🎓</div>
         <h3>计算机科学与技术 · 本科在读</h3>
         <span class="date">2026 ~ 2030</span>
-        <p>天津大学 & 香港理工大学深圳（PolyU Shenzhen）</p>
+        <p>天津大学（TJU）& 香港理工大学（PolyU）</p>
         <div class="tags"><span class="tag">计算机科学与技术</span><span class="tag">本科在读</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 技能栈 -->
+  <section id="skills">
+    <div class="sec-head"><span class="arrow">▸</span><span class="title">技能栈</span><span class="sub">skills</span></div>
+    <div class="grid m3">
+      <div class="card reveal">
+        <div class="ic">🎨</div>
+        <h3>前端</h3>
+        <div class="skill-group">
+          <span class="gl">日常在用</span>
+          <div class="chips tight">
+            <span class="chip hot">HTML / CSS</span>
+            <span class="chip hot">JavaScript</span>
+            <span class="chip hot">React</span>
+            <span class="chip hot">TypeScript</span>
+            <span class="chip hot">Vite</span>
+          </div>
+        </div>
+      </div>
+      <div class="card reveal">
+        <div class="ic">🛠️</div>
+        <h3>后端与数据</h3>
+        <div class="skill-group">
+          <span class="gl">够用就行</span>
+          <div class="chips tight">
+            <span class="chip hot">PHP</span>
+            <span class="chip hot">SQLite</span>
+            <span class="chip hot">Python</span>
+            <span class="chip hot">REST / JSON</span>
+          </div>
+        </div>
+      </div>
+      <div class="card reveal">
+        <div class="ic">🧰</div>
+        <h3>运维与工具</h3>
+        <div class="skill-group">
+          <span class="gl">自己动手</span>
+          <div class="chips tight">
+            <span class="chip hot">Linux</span>
+            <span class="chip hot">nginx</span>
+            <span class="chip hot">Cloudflare</span>
+            <span class="chip hot">Git / GitHub</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -355,6 +477,30 @@
         <p>在线小游戏合集，点进去就能把玩。</p>
         <a class="mini" href="https://game.mujiu.net" target="_blank">game.mujiu.net ↗</a>
         <div class="tags"><span class="tag">休闲</span><span class="tag">在线</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 更新日志 -->
+  <section id="changelog">
+    <div class="sec-head"><span class="arrow">▸</span><span class="title">更新日志</span><span class="sub">changelog</span></div>
+    <div class="card reveal">
+      <div class="timeline">
+        <div class="tl">
+          <span class="d">2026-09-24</span>
+          <h4>主题跨站同步 + 缓存策略根治</h4>
+          <p>4 站 HTML 全部改成 no-store；在这里选的主题，打开主站与各子站会自动跟随，不用再选一遍。</p>
+        </div>
+        <div class="tl">
+          <span class="d">2026-09-21</span>
+          <h4>四个子站视觉统一 &amp; 上线</h4>
+          <p>主站补内容与 404 页面、8 款小游戏收录、留言箱上线、本页发布，统一配色与 IBM Plex Mono。</p>
+        </div>
+        <div class="tl">
+          <span class="d">2026-09-19</span>
+          <h4>主站 PWA 化</h4>
+          <p>离线缓存、自托管字体与深色主题 manifest，去掉境外字体 CDN 依赖。</p>
+        </div>
       </div>
     </div>
   </section>
@@ -392,8 +538,12 @@
 
   <footer>
     <div>© <span id="year"></span> 樊旭阳 · <span class="g">图形化个人主页</span> · <a href="https://mujiu.net" target="_blank">mujiu.net</a></div>
+    <div style="margin-top:6px">试试键盘彩蛋：↑↑↓↓←→←→BA</div>
   </footer>
 </div>
+
+<button class="totop" id="totop" type="button" aria-label="回到顶部" title="回到顶部">↑</button>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
@@ -409,7 +559,32 @@
   };
   let curTheme = 'dark';
 
-  function applyTheme(name) {
+  // ---- 主题存储：cookie 作用域 .mujiu.net，四个子域共享；localStorage 仅作回退/迁移 ----
+  const THEME_COOKIE = 'mujiu_theme';
+  const THEME_MAX_AGE = 31536000;
+  let primaryColor = '#05CE91';   // 缓存当前主题主色，避免粒子每帧读样式
+
+  function readThemeCookie() {
+    const m = document.cookie.match(/(?:^|;\s*)mujiu_theme=([^;]+)/);
+    return m ? decodeURIComponent(m[1]) : '';
+  }
+
+  function writeThemeCookie(name) {
+    const secure = location.protocol === 'https:' ? '; Secure' : '';
+    const base = `${THEME_COOKIE}=${encodeURIComponent(name)}; path=/; max-age=${THEME_MAX_AGE}; SameSite=Lax${secure}`;
+    document.cookie = `${base}; domain=.mujiu.net`;   // 主站与子域共享
+    document.cookie = base;                           // 本地预览(host 不匹配)时兜底
+    try { localStorage.setItem(THEME_COOKIE, name); } catch(e){}
+  }
+
+  function readSavedTheme() {
+    const c = readThemeCookie();
+    if (c && THEMES[c]) return c;
+    try { const ls = localStorage.getItem(THEME_COOKIE); if (ls && THEMES[ls]) return ls; } catch(e){}
+    return '';
+  }
+
+  function applyTheme(name, persist = true) {
     const t = THEMES[name]; if (!t) return;
     const r = document.documentElement.style;
     r.setProperty('--body', t.body);
@@ -422,28 +597,59 @@
     r.setProperty('--text-200', t.t200);
     r.setProperty('--text-300', t.t300);
     curTheme = name;
-    try { localStorage.setItem('mujiu_theme', name); } catch(e){}
+    primaryColor = t.primary;
+    if (persist) writeThemeCookie(name);
     document.querySelectorAll('.theme-dot').forEach(d => d.classList.toggle('active', d.dataset.t === name));
   }
 
-  // 渲染主题选择器（图形化色点）
+  // 切换主题：浏览器支持时用 View Transitions 从点击处做圆形扩散
+  function switchTheme(name, x, y) {
+    if (name === curTheme || !THEMES[name]) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!document.startViewTransition || reduce) { applyTheme(name); toast(`主题：${name}`); return; }
+    const px = typeof x === 'number' ? x : innerWidth - 80;
+    const py = typeof y === 'number' ? y : 40;
+    const vt = document.startViewTransition(() => applyTheme(name));
+    vt.ready.then(() => {
+      const r = Math.hypot(Math.max(px, innerWidth - px), Math.max(py, innerHeight - py));
+      document.documentElement.animate(
+        { clipPath: [`circle(0px at ${px}px ${py}px)`, `circle(${r}px at ${px}px ${py}px)`] },
+        { duration: 520, easing: 'ease-in-out', pseudoElement: '::view-transition-new(root)' }
+      );
+    }).catch(() => {});
+    toast(`主题：${name} · 已同步全站`);
+  }
+
+  // 渲染主题选择器（用 button，键盘可 Tab + 回车切换）
   const picker = document.getElementById('themePicker');
   Object.keys(THEMES).forEach(name => {
     const t = THEMES[name];
-    const d = document.createElement('div');
-    d.className = 'theme-dot';
-    d.title = name;
-    d.dataset.t = name;
-    d.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
-    d.style.borderColor = t.body;
-    d.onclick = () => applyTheme(name);
-    picker.appendChild(d);
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'theme-dot';
+    b.title = name;
+    b.dataset.t = name;
+    b.setAttribute('aria-label', `切换到 ${name} 主题`);
+    b.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
+    b.style.borderColor = t.body;
+    b.addEventListener('click', e => switchTheme(name, e.clientX, e.clientY));
+    picker.appendChild(b);
   });
 
-  // 恢复保存的主题
-  try { const saved = localStorage.getItem('mujiu_theme'); if (saved && THEMES[saved]) applyTheme(saved); } catch(e){}
-  // 默认标记
-  Array.from(picker.children)[0].classList.add('active');
+  // 恢复：cookie（跨子域）优先 → localStorage（并迁移进 cookie）→ 默认 dark
+  (function restoreTheme() {
+    const saved = readSavedTheme();
+    if (saved) applyTheme(saved, readThemeCookie() !== saved);
+    else applyTheme('dark', false);
+  })();
+
+  // 在别的子域换了主题，切回本页时跟着变
+  function syncThemeFromCookie() {
+    const c = readThemeCookie();
+    if (c && THEMES[c] && c !== curTheme) applyTheme(c, false);
+  }
+  window.addEventListener('focus', syncThemeFromCookie);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) syncThemeFromCookie(); });
 
   // 滚动渐入
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }), { threshold: 0.12 });
@@ -512,8 +718,7 @@
       vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25,
     }));
     function frame() {
-      const root = getComputedStyle(document.documentElement);
-      const primary = root.getPropertyValue('--primary').trim() || '#05CE91';
+      const primary = primaryColor;   // 主题切换时缓存，省掉每帧读样式
       ctx.clearRect(0, 0, W, H);
 
       // 网格（随鼠标轻微视差）
@@ -597,6 +802,123 @@
     }), { threshold: .4 });
     els.forEach(el => ob.observe(el));
   })();
+
+  // ================= 附加交互效果 =================
+  const reduceFx = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 提示气泡
+  let toastTimer = null;
+  function toast(msg) {
+    const el = document.getElementById('toast'); if (!el) return;
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+  }
+
+  // 6) 滚动进度条 + 回到顶部
+  const bar = document.getElementById('progress');
+  const toTop = document.getElementById('totop');
+  function onScroll() {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    const k = max > 0 ? Math.min(1, scrollY / max) : 0;
+    if (bar) bar.style.width = (k * 100).toFixed(2) + '%';
+    if (toTop) toTop.classList.toggle('show', scrollY > 420);
+  }
+  addEventListener('scroll', onScroll, { passive: true });
+  addEventListener('resize', onScroll);
+  onScroll();
+  if (toTop) toTop.addEventListener('click', () => scrollTo({ top: 0, behavior: reduceFx ? 'auto' : 'smooth' }));
+
+  // 7) 点击涟漪
+  if (!reduceFx) {
+    addEventListener('pointerdown', e => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      const el = document.createElement('span');
+      el.className = 'ripple';
+      el.style.left = e.clientX + 'px';
+      el.style.top = e.clientY + 'px';
+      el.style.width = el.style.height = '120px';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 620);
+    }, { passive: true });
+  }
+
+  // 8) 磁吸按钮（鼠标靠近时轻微跟随）
+  if (finePointer && !reduceMotion) {
+    document.querySelectorAll('.btn').forEach(b => {
+      b.addEventListener('pointermove', e => {
+        const r = b.getBoundingClientRect();
+        const dx = (e.clientX - (r.left + r.width / 2)) * 0.16;
+        const dy = (e.clientY - (r.top + r.height / 2)) * 0.26;
+        b.style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px)`;
+      });
+      b.addEventListener('pointerleave', () => { b.style.transform = ''; });
+    });
+  }
+
+  // 9) "现在在做什么" 多行轮播打字机
+  (function nowTicker() {
+    const el = document.getElementById('nowLine'); if (!el) return;
+    const lines = (el.dataset.lines || '').split('｜').filter(Boolean);
+    if (!lines.length) return;
+    if (reduceFx) { el.textContent = lines.join(' / '); return; }
+    let li = 0, ci = 0, del = false;
+    (function step() {
+      const cur = lines[li];
+      if (!del) {
+        ci++;
+        el.textContent = cur.slice(0, ci);
+        if (ci === cur.length) { del = true; return setTimeout(step, 1500); }
+        return setTimeout(step, 70);
+      }
+      ci--;
+      el.textContent = cur.slice(0, ci);
+      if (ci === 0) { del = false; li = (li + 1) % lines.length; return setTimeout(step, 240); }
+      setTimeout(step, 32);
+    })();
+  })();
+
+  // 10) 键盘彩蛋：↑↑↓↓←→←→BA → 矩阵雨
+  (function konami() {
+    const seq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+    let i = 0;
+    addEventListener('keydown', e => {
+      const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+      i = (k === seq[i]) ? i + 1 : (k === seq[0] ? 1 : 0);
+      if (i === seq.length) { i = 0; matrixRain(); }
+    });
+  })();
+
+  function matrixRain() {
+    if (reduceFx) { toast('彩蛋：矩阵模式（系统已开启减少动效，已跳过）'); return; }
+    const cv = document.createElement('canvas');
+    cv.setAttribute('aria-hidden', 'true');
+    cv.style.cssText = 'position:fixed;inset:0;z-index:55;pointer-events:none;opacity:.85';
+    cv.width = innerWidth; cv.height = innerHeight;
+    document.body.appendChild(cv);
+    const c = cv.getContext('2d');
+    const size = 14;
+    const cols = Math.floor(innerWidth / size);
+    const drops = Array.from({ length: cols }, () => Math.random() * -40);
+    const glyphs = 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉ0123456789';
+    let frames = 0;
+    (function draw() {
+      c.fillStyle = 'rgba(0,0,0,0.12)';
+      c.fillRect(0, 0, cv.width, cv.height);
+      c.font = `${size - 1}px "IBM Plex Mono", monospace`;
+      for (let i = 0; i < cols; i++) {
+        const ch = glyphs[Math.floor(Math.random() * glyphs.length)];
+        c.fillStyle = Math.random() > .96 ? '#ffffff' : primaryColor;
+        c.fillText(ch, i * size, drops[i] * size);
+        if (drops[i] * size > cv.height && Math.random() > .975) drops[i] = 0;
+        drops[i]++;
+      }
+      if (++frames > 220) { cv.remove(); return; }
+      requestAnimationFrame(draw);
+    })();
+    toast('彩蛋解锁：矩阵模式');
+  }
 </script>
 </body>
 </html>
