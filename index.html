@@ -451,7 +451,7 @@
             <span class="chip hot">读 /proc 取指标</span>
           </div>
         </div>
-        <p style="margin-top:12px">留言箱用 PHP + SQLite 存留言（配置外置、密码不进仓库）；本页仪表盘的接口直接读 /proc 与 nginx 日志，对外只给聚合数字。</p>
+        <p style="margin-top:12px">留言箱用 PHP + SQLite 存留言；本页仪表盘的接口读系统状态与日志，对外只给聚合数字。</p>
       </div>
       <div class="card reveal">
         <div class="ic">🌐</div>
@@ -467,7 +467,7 @@
             <span class="chip hot">fail2ban</span>
           </div>
         </div>
-        <p style="margin-top:12px">一台 VPS 跑全部站点：证书自动续签、Cloudflare 挡在前面，本地改完 rsync 推上去就生效，配置和过程都留在 Git 里。</p>
+        <p style="margin-top:12px">一台 VPS 跑全部站点：证书自动续签，Cloudflare 挡在前面，本地改完发布一下就能看到。</p>
       </div>
     </div>
   </section>
@@ -525,8 +525,8 @@
         </div>
         <div class="tl">
           <span class="d">2026-09-20</span>
-          <h4>站点上线，顺手补了个洞</h4>
-          <p>当天 17:16–17:34 有大约 18 分钟，留言箱的配置文件与数据库能被任何人直接下载；发现后立刻改成返回 404，并把敏感配置移出网站根目录。</p>
+          <h4>站点陆续上线</h4>
+          <p>终端主页、留言箱与游戏站先后上线，nginx 配置与发布流程在这几天定型。</p>
         </div>
         <div class="tl">
           <span class="d">2026-09-19</span>
@@ -545,7 +545,7 @@
         </div>
       </div>
       <p style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line)">
-        更早的时间点来自服务器访问日志：过去 30 天累计 134,983 次请求，日志里出现过约 6,289 个来源地址（含 Cloudflare 节点与各路扫描器）。
+        再往前的日子没有留下访问记录，08-26 是日志里最早的一天；上面这些日期来自提交记录与服务器日志。
       </p>
     </div>
   </section>
