@@ -253,7 +253,12 @@
   /* ==== 姓名扫光 ==== */
   .hero-left h1 .grad {
     background: linear-gradient(100deg, var(--primary), var(--secondary) 38%, var(--primary) 72%);
-    background-size: 240% 100%; animation: sheen 6s linear infinite;
+    background-size: 240% 100%;
+    /* 注意：background 简写会把 background-clip 重置成 border-box，
+       必须在这之后再声明一次，否则名字会变成一整块渐变色块（文字还是透明的） */
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: sheen 6s linear infinite;
   }
   @keyframes sheen { to { background-position: -240% 0; } }
 
