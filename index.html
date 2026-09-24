@@ -266,7 +266,7 @@
   .theme-dot { padding: 0; appearance: none; -webkit-appearance: none; }
   .theme-dot:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
 
-  /* ==== 技能栈 ==== */
+  /* ==== 站点构成（原来的"技能栈"）==== */
   .skill-group { display: flex; flex-direction: column; gap: 10px; }
   .skill-group .gl { font-size: 12px; color: var(--text-300); letter-spacing: 1px; text-transform: uppercase; }
   .chips.tight { margin: 0; gap: 7px; }
@@ -274,6 +274,18 @@
     transition: transform .18s, box-shadow .18s, border-color .18s; }
   .chip.hot:hover { transform: translateY(-2px); border-color: var(--primary);
     box-shadow: 0 0 16px color-mix(in srgb, var(--primary) 22%, transparent); }
+
+  /* ==== 服务器仪表盘 ==== */
+  .dash { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .dash-cell { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px;
+    background: color-mix(in srgb, var(--panel) 45%, transparent); }
+  .dash-cell .dl { display: block; color: var(--text-300); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .dash-cell b { font-size: 22px; font-weight: 700; color: var(--primary); font-variant-numeric: tabular-nums; }
+  .dash-cell .ds { display: block; color: var(--text-300); font-size: 11px; margin-top: 4px; }
+  .meter { height: 4px; border-radius: 999px; background: var(--line); overflow: hidden; margin-top: 8px; }
+  .meter i { display: block; height: 100%; width: 0; border-radius: 999px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: width .5s ease; }
+  .dash-foot { color: var(--text-300); font-size: 11px; margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
 
   /* ==== 更新日志时间线 ==== */
   .timeline { position: relative; padding-left: 24px; }
@@ -322,6 +334,7 @@
   @media (max-width: 760px) {
     .hero, .contact { grid-template-columns: 1fr; }
     .m1, .m2, .m3 { grid-template-columns: 1fr; }
+    .dash { grid-template-columns: repeat(2, 1fr); }
     .menubar { flex-wrap: wrap; }
   }
 </style>
@@ -408,49 +421,53 @@
     </div>
   </section>
 
-  <!-- 技能栈 -->
-  <section id="skills">
-    <div class="sec-head"><span class="arrow">▸</span><span class="title">技能栈</span><span class="sub">skills</span></div>
+  <!-- 这个站怎么搭的（只描述站点本身，不写个人能力清单） -->
+  <section id="stack">
+    <div class="sec-head"><span class="arrow">▸</span><span class="title">这个站怎么搭的</span><span class="sub">how this site is built</span></div>
     <div class="grid m3">
       <div class="card reveal">
-        <div class="ic">🎨</div>
+        <div class="ic">🧩</div>
         <h3>前端</h3>
         <div class="skill-group">
-          <span class="gl">日常在用</span>
+          <span class="gl">页面本体</span>
           <div class="chips tight">
-            <span class="chip hot">HTML / CSS</span>
-            <span class="chip hot">JavaScript</span>
-            <span class="chip hot">React</span>
-            <span class="chip hot">TypeScript</span>
-            <span class="chip hot">Vite</span>
+            <span class="chip hot">单文件 HTML</span>
+            <span class="chip hot">原生 CSS / JS</span>
+            <span class="chip hot">IBM Plex Mono</span>
+            <span class="chip hot">6 套主题</span>
           </div>
         </div>
+        <p style="margin-top:12px">本页和几个子站都是一个 HTML 文件装完，不引框架、不用构建；主站则是 React + Vite 打包出来的终端风格页面。</p>
       </div>
       <div class="card reveal">
-        <div class="ic">🛠️</div>
+        <div class="ic">🗄️</div>
         <h3>后端与数据</h3>
         <div class="skill-group">
-          <span class="gl">够用就行</span>
+          <span class="gl">跑在服务器上</span>
           <div class="chips tight">
-            <span class="chip hot">PHP</span>
+            <span class="chip hot">PHP 8.2</span>
             <span class="chip hot">SQLite</span>
-            <span class="chip hot">Python</span>
             <span class="chip hot">REST / JSON</span>
+            <span class="chip hot">读 /proc 取指标</span>
           </div>
         </div>
+        <p style="margin-top:12px">留言箱用 PHP + SQLite 存留言（配置外置、密码不进仓库）；本页仪表盘的接口直接读 /proc 与 nginx 日志，对外只给聚合数字。</p>
       </div>
       <div class="card reveal">
-        <div class="ic">🧰</div>
-        <h3>运维与工具</h3>
+        <div class="ic">🌐</div>
+        <h3>服务器与部署</h3>
         <div class="skill-group">
-          <span class="gl">自己动手</span>
+          <span class="gl">上线流程</span>
           <div class="chips tight">
-            <span class="chip hot">Linux</span>
-            <span class="chip hot">nginx</span>
+            <span class="chip hot">Debian 12</span>
+            <span class="chip hot">nginx 1.22</span>
             <span class="chip hot">Cloudflare</span>
-            <span class="chip hot">Git / GitHub</span>
+            <span class="chip hot">rsync 发布</span>
+            <span class="chip hot">certbot</span>
+            <span class="chip hot">fail2ban</span>
           </div>
         </div>
+        <p style="margin-top:12px">一台 VPS 跑全部站点：证书自动续签、Cloudflare 挡在前面，本地改完 rsync 推上去就生效，配置和过程都留在 Git 里。</p>
       </div>
     </div>
   </section>
@@ -488,13 +505,18 @@
 
   <!-- 更新日志 -->
   <section id="changelog">
-    <div class="sec-head"><span class="arrow">▸</span><span class="title">更新日志</span><span class="sub">changelog</span></div>
+    <div class="sec-head"><span class="arrow">▸</span><span class="title">更新日志</span><span class="sub">changelog · 含服务器日志里的更早记录</span></div>
     <div class="card reveal">
       <div class="timeline">
         <div class="tl">
           <span class="d">2026-09-24</span>
-          <h4>主题跨站同步 + 缓存策略根治</h4>
-          <p>4 站 HTML 全部改成 no-store；在这里选的主题，打开主站与各子站会自动跟随，不用再选一遍。</p>
+          <h4>主题跨站同步 + 服务器仪表盘</h4>
+          <p>四个站共用一套主题：在这里选一次，主站与子站打开都跟着换；本页新增服务器仪表盘，CPU、内存、网络与在线访客实时可看。所有页面改成不缓存，改完刷新即是最新版。</p>
+        </div>
+        <div class="tl">
+          <span class="d">2026-09-22</span>
+          <h4>主站能换主题了</h4>
+          <p>6 套配色 + 点击处圆形扩散动画，选择记在跨子域生效的 cookie 里。</p>
         </div>
         <div class="tl">
           <span class="d">2026-09-21</span>
@@ -502,11 +524,63 @@
           <p>主站补内容与 404 页面、8 款小游戏收录、留言箱上线、本页发布，统一配色与 IBM Plex Mono。</p>
         </div>
         <div class="tl">
+          <span class="d">2026-09-20</span>
+          <h4>站点上线，顺手补了个洞</h4>
+          <p>当天 17:16–17:34 有大约 18 分钟，留言箱的配置文件与数据库能被任何人直接下载；发现后立刻改成返回 404，并把敏感配置移出网站根目录。</p>
+        </div>
+        <div class="tl">
           <span class="d">2026-09-19</span>
           <h4>主站 PWA 化</h4>
           <p>离线缓存、自托管字体与深色主题 manifest，去掉境外字体 CDN 依赖。</p>
         </div>
+        <div class="tl">
+          <span class="d">2026-09-04</span>
+          <h4>日志里最忙的一天</h4>
+          <p>单日 17,537 次请求 —— 其中 12,000 次来自某个用 curl 的爬虫，真实访客远没有这么多。</p>
+        </div>
+        <div class="tl">
+          <span class="d">2026-08-26</span>
+          <h4>第一次留下访问日志</h4>
+          <p>15:49 记录到第一条请求；小游戏站的 2048 与贪吃蛇当天就有人玩，那会儿贪吃蛇还会返回 500。</p>
+        </div>
       </div>
+      <p style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line)">
+        更早的时间点来自服务器访问日志：过去 30 天累计 134,983 次请求，日志里出现过约 6,289 个来源地址（含 Cloudflare 节点与各路扫描器）。
+      </p>
+    </div>
+  </section>
+
+  <!-- 服务器仪表盘 -->
+  <section id="server">
+    <div class="sec-head"><span class="arrow">▸</span><span class="title">服务器仪表盘</span><span class="sub">live · 每 5 秒刷新</span></div>
+    <div class="card reveal">
+      <div class="dash" id="dash">
+        <div class="dash-cell">
+          <span class="dl">在线访客</span><b data-k="visitors">—</b><span class="ds">最近 60 秒内来过的人</span>
+        </div>
+        <div class="dash-cell">
+          <span class="dl">CPU</span><b data-k="cpu">—</b><div class="meter"><i data-m="cpu"></i></div>
+        </div>
+        <div class="dash-cell">
+          <span class="dl">内存</span><b data-k="mem">—</b><div class="meter"><i data-m="mem"></i></div>
+        </div>
+        <div class="dash-cell">
+          <span class="dl">磁盘</span><b data-k="disk">—</b><div class="meter"><i data-m="disk"></i></div>
+        </div>
+        <div class="dash-cell">
+          <span class="dl">下行</span><b data-k="rx">—</b><span class="ds">每秒接收</span>
+        </div>
+        <div class="dash-cell">
+          <span class="dl">上行</span><b data-k="tx">—</b><span class="ds">每秒发送</span>
+        </div>
+        <div class="dash-cell">
+          <span class="dl">请求</span><b data-k="req">—</b><span class="ds">每分钟</span>
+        </div>
+        <div class="dash-cell">
+          <span class="dl">负载 / 运行</span><b data-k="load">—</b><span class="ds" data-k="uptime">—</span>
+        </div>
+      </div>
+      <div class="dash-foot" id="dashFoot">正在连接服务器…</div>
     </div>
   </section>
 
@@ -924,6 +998,61 @@
     })();
     toast('彩蛋解锁：矩阵模式');
   }
+
+  // 11) 服务器仪表盘：每 5 秒拉一次聚合指标（页面切到后台就暂停，省流量）
+  (function dashboard() {
+    const box = document.getElementById('dash');
+    const foot = document.getElementById('dashFoot');
+    if (!box) return;
+
+    const put = (k, v) => { const el = box.querySelector('[data-k="' + k + '"]'); if (el) el.textContent = v; };
+    const bar = (k, p) => { const el = box.querySelector('[data-m="' + k + '"]'); if (el) el.style.width = Math.max(0, Math.min(100, p || 0)) + '%'; };
+    const pct = v => (v == null ? '—' : v.toFixed(1) + '%');
+    const speed = n => {
+      if (n == null) return '—';
+      if (n >= 1048576) return (n / 1048576).toFixed(1) + ' MB/s';
+      if (n >= 1024) return (n / 1024).toFixed(1) + ' KB/s';
+      return n + ' B/s';
+    };
+    const span = s => {
+      if (s == null) return '—';
+      return s >= 86400 ? (s / 86400).toFixed(1) + ' 天' : Math.floor(s / 3600) + ' 小时';
+    };
+
+    let timer = null, fails = 0;
+
+    async function tick() {
+      try {
+        const res = await fetch('./api/stats.php', { cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const d = await res.json();
+        fails = 0;
+        put('visitors', d.visitors_1m == null ? '—' : d.visitors_1m + ' 人');
+        put('cpu', pct(d.cpu_pct));   bar('cpu', d.cpu_pct);
+        put('mem', pct(d.mem_pct));   bar('mem', d.mem_pct);
+        put('disk', pct(d.disk_pct)); bar('disk', d.disk_pct);
+        put('rx', speed(d.rx_bps));
+        put('tx', speed(d.tx_bps));
+        put('req', d.requests_1m == null ? '—' : d.requests_1m + ' 次');
+        put('load', d.load1 == null ? '—' : d.load1.toFixed(2));
+        put('uptime', '已运行 ' + span(d.uptime_s));
+
+        const extra =
+          (d.mem_used_mb != null ? ' · 内存 ' + d.mem_used_mb + '/' + d.mem_total_mb + ' MB' : '') +
+          (d.disk_used_gb != null ? ' · 磁盘 ' + d.disk_used_gb + '/' + d.disk_total_gb + ' GB' : '');
+        const t = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+        foot.textContent = '每 5 秒从服务器 /proc 与 nginx 日志取一次聚合数字（不含任何访客信息）' + extra + ' · 更新于 ' + t;
+      } catch (e) {
+        fails++;
+        foot.textContent = fails > 2 ? '暂时取不到服务器数据（接口未就绪或被拦截）' : '正在连接服务器…';
+      }
+    }
+
+    function start() { if (timer) return; tick(); timer = setInterval(tick, 5000); }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    start();
+    document.addEventListener('visibilitychange', () => { document.hidden ? stop() : start(); });
+  })();
 </script>
 </body>
 </html>
