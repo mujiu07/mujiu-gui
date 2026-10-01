@@ -525,6 +525,14 @@ window.MUJIU = (function () {
   .hero-left .kicker { color: var(--primary); font-size: 12px; letter-spacing: 2px; margin-bottom: 12px; }
   .hero-left h1 { font-size: clamp(36px, 7vw, 64px); font-weight: 700; line-height: 1.1; letter-spacing: -1px; color: var(--text-100); margin-bottom: 6px; overflow-wrap: break-word; }
   .hero-left h1 .grad { background: linear-gradient(120deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  /* 名字整体不断行：不能让"樊旭阳"被自动换行切成"樊旭 / 阳"，放不下时整块挪到下一行。
+     中英文都适用——英文 "Fan Xuyang" 同样会被贪心换行断成 "Fan" / "Xuyang"。
+     实测 320px 最窄屏下英文名整块 206px、可用宽 216px，不会溢出卡片。 */
+  .hero-left h1 .nm { white-space: nowrap; }
+  /* 通用：一小段文字绝不断行（如页脚里的姓名） */
+  .nb { white-space: nowrap; }
+  /* 联系区的"樊旭阳 的信箱"：允许在空格处断行，但不许把名字从中间切开 */
+  html[data-lang="zh"] .mailbox a { word-break: keep-all; }
   .hero-left .role { color: var(--secondary); font-size: 16px; margin-bottom: 16px; }
   .hero-left .about-txt { color: var(--text-200); font-size: 14px; max-width: 460px; margin-bottom: 22px; }
   .cta { display: flex; gap: 12px; flex-wrap: wrap; }
@@ -837,7 +845,7 @@ window.MUJIU = (function () {
   <div class="hero">
     <div class="glass hero-left">
       <div class="kicker" data-i18n="hero.kicker">// 关于我</div>
-      <h1><span data-i18n="hero.greet">你好，我是</span> <span class="grad" id="typed" data-text="樊旭阳"></span><span class="caret" id="caret"></span></h1>
+      <h1><span data-i18n="hero.greet">你好，我是</span> <span class="nm"><span class="grad" id="typed" data-text="樊旭阳"></span><span class="caret" id="caret"></span></span></h1>
       <div class="role" data-i18n="hero.role">计算机科学学生 · CTF 与 AI 爱好者</div>
       <p class="about-txt" data-i18n-html="hero.about">
         我是一名计算机专业学生，热爱
@@ -1113,7 +1121,7 @@ window.MUJIU = (function () {
   </section>
 
   <footer>
-    <div>© <span id="year"></span> 樊旭阳 · <span class="g">mujiu.net</span> · <a href="https://mujiu.net" target="_blank" rel="noopener">mujiu.net</a></div>
+    <div>© <span id="year"></span> <span class="nb">樊旭阳</span> · <span class="g">mujiu.net</span> · <a href="https://mujiu.net" target="_blank" rel="noopener">mujiu.net</a></div>
     <div style="margin-top:6px"><span class="ver" data-i18n="foot.ver">v4.0</span> · <span data-i18n="foot.updated">更新于</span> 2026-10-01</div>
     <div style="margin-top:6px" data-i18n="foot.easter">试试键盘彩蛋：↑↑↓↓←→←→BA</div>
   </footer>
