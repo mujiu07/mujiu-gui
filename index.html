@@ -1,13 +1,378 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark" data-lang="zh">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="樊旭阳 · 图形化个人主页" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="description" content="樊旭阳的个人主页：教育背景、作品项目、更新日志与实时服务器状态。" />
 <title>樊旭阳 · 个人主页</title>
+<meta name="author" content="樊旭阳" />
+<meta name="theme-color" content="#1D2A35" />
+<meta name="color-scheme" content="dark light" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/avatar.jpg" />
+<link rel="canonical" href="https://gui.mujiu.net/" />
+
+<!-- 分享卡片：微信 / X / 其它平台抓这几个标签 -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="mujiu.net" />
+<meta property="og:url" content="https://gui.mujiu.net/" />
+<meta property="og:title" content="樊旭阳 · 个人主页" />
+<meta property="og:description" content="教育背景、作品项目、更新日志与实时服务器状态。" />
+<meta property="og:image" content="https://gui.mujiu.net/avatar.jpg" />
+<meta property="og:image:alt" content="樊旭阳 头像" />
+<meta property="og:locale" content="zh_CN" />
+<meta property="og:locale:alternate" content="en_US" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="樊旭阳 · 个人主页" />
+<meta name="twitter:description" content="教育背景、作品项目、更新日志与实时服务器状态。" />
+<meta name="twitter:image" content="https://gui.mujiu.net/avatar.jpg" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "樊旭阳",
+  "alternateName": "Fan Xuyang",
+  "url": "https://gui.mujiu.net/",
+  "email": "mailto:inbox@mujiu.net",
+  "jobTitle": "Computer Science Student",
+  "sameAs": ["https://github.com/mujiu07"],
+  "alumniOf": [
+    { "@type": "CollegeOrUniversity", "name": "Tianjin University" },
+    { "@type": "CollegeOrUniversity", "name": "The Hong Kong Polytechnic University" }
+  ]
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<!-- 首屏引导：主题与语言的初值必须在首帧前定下来，否则会先闪一下默认配色 / 中英跳变 -->
+<script>
+window.MUJIU = (function () {
+  'use strict';
+  var THEMES = {
+    'dark':         { body:'#1D2A35', primary:'#05CE91', secondary:'#FF9D00', t100:'#cbd5e1', t200:'#B2BDCC', t300:'#64748b', panel:'#22313f', sw:'#0b1220' },
+    'light':        { body:'#EFF3F3', primary:'#027474', secondary:'#FF9D00', t100:'#334155', t200:'#475569', t300:'#64748b', panel:'#e2e8e8', sw:'#eef2f2' },
+    'blue-matrix':  { body:'#101116', primary:'#00ff9c', secondary:'#60fdff', t100:'#ffffff', t200:'#c7c7c7', t300:'#76ff9f', panel:'#0b1720', sw:'#001a15' },
+    'espresso':     { body:'#323232', primary:'#E1E48B', secondary:'#A5C260', t100:'#F7F7F7', t200:'#EEEEEE', t300:'#5b5b5b', panel:'#3d3d3d', sw:'#443b3b' },
+    'green-goblin': { body:'#000000', primary:'#E5E500', secondary:'#04A500', t100:'#01FF00', t200:'#04A5B2', t300:'#E50101', panel:'#0d0d0d', sw:'#1a1a00' },
+    'ubuntu':       { body:'#2D0922', primary:'#80D932', secondary:'#80D932', t100:'#FFFFFF', t200:'#E1E9CC', t300:'#CDCDCD', panel:'#3a1230', sw:'#a34a22' }
+  };
+
+  var THEME_COOKIE = 'mujiu_theme', LANG_COOKIE = 'mujiu_lang', MAX_AGE = 31536000;
+  var theme = 'dark', lang = 'zh';
+
+  function readCookie(name) {
+    var m = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]+)'));
+    return m ? decodeURIComponent(m[1]) : '';
+  }
+
+  function writeStore(name, value) {
+    var secure = location.protocol === 'https:' ? '; Secure' : '';
+    var base = name + '=' + encodeURIComponent(value) + '; path=/; max-age=' + MAX_AGE + '; SameSite=Lax' + secure;
+    document.cookie = base + '; domain=.mujiu.net';
+    document.cookie = base;
+    try { localStorage.setItem(name, value); } catch (e) {}
+  }
+
+  function setThemeVars(t) {
+    var r = document.documentElement.style;
+    r.setProperty('--body', t.body);
+    r.setProperty('--body-2', t.body);
+    r.setProperty('--panel', t.panel);
+    r.setProperty('--card', t.panel);
+    r.setProperty('--primary', t.primary);
+    r.setProperty('--secondary', t.secondary);
+    r.setProperty('--text-100', t.t100);
+    r.setProperty('--text-200', t.t200);
+    r.setProperty('--text-300', t.t300);
+  }
+
+  function applyTheme(name, persist) {
+    var t = THEMES[name]; if (!t) return;
+    theme = name;
+    setThemeVars(t);
+    document.documentElement.setAttribute('data-theme', name);
+    var mt = document.querySelector('meta[name="theme-color"]');
+    if (mt) mt.setAttribute('content', t.body);
+    if (persist !== false) writeStore(THEME_COOKIE, name);
+    var dots = document.querySelectorAll('.theme-dot');
+    for (var i = 0; i < dots.length; i++) dots[i].classList.toggle('active', dots[i].dataset.t === name);
+  }
+
+  function pickTheme() {
+    var c = readCookie(THEME_COOKIE);
+    if (c && THEMES[c]) return c;
+    try { var l = localStorage.getItem(THEME_COOKIE); if (l && THEMES[l]) return l; } catch (e) {}
+    return 'dark';
+  }
+
+  function pickLang() {
+    var c = readCookie(LANG_COOKIE);
+    if (I18N[c]) return c;
+    try { var l = localStorage.getItem(LANG_COOKIE); if (l && I18N[l]) return l; } catch (e) {}
+    return /^zh\b/i.test(navigator.language || '') ? 'zh' : 'en';
+  }
+  // ---- 站内文案（中英双语）：key 与 DOM 上的 data-i18n / data-i18n-html 一一对应 ----
+  var I18N = {
+    zh: {
+      'meta.title': '樊旭阳 · 个人主页',
+      'meta.desc': '樊旭阳的个人主页：教育背景、作品项目、更新日志与实时服务器状态。',
+      'brand.sub': '图形化个人主页',
+      'nav.main': '主站', 'nav.games': '小游戏', 'nav.ask': '留言箱', 'nav.menu': '菜单',
+      'toc.education': '教育', 'toc.stack': '建站', 'toc.projects': '项目', 'toc.changelog': '日志',
+      'toc.server': '状态', 'toc.assistant': '小助手', 'toc.contact': '联系',
+      'lang.btn': 'EN', 'lang.aria': '切换到英文',
+      'hero.kicker': '// 关于我',
+      'hero.greet': '你好，我是',
+      'hero.name': '樊旭阳',
+      'hero.role': '计算机科学学生 · CTF 与 AI 爱好者',
+      'hero.about': '我是一名计算机专业学生，热爱 <b style="color:var(--primary)">CTF</b> 与 <b style="color:var(--secondary)">AI</b>，喜欢构建各种有趣的网络服务。',
+      'hero.chip1': '🎓 本科在读',
+      'hero.chip2': '🏫 天津大学（TJU）& 香港理工大学（PolyU）',
+      'hero.cta1': '✉ 给樊旭阳发邮件',
+      'stat.site': 'site stats', 'stat.subsites': '子站点', 'stat.games': '小游戏', 'stat.themes': '主题',
+      'stat.now': '现在在做什么',
+      'hero.nowlines': '在学 CTF｜在折腾 AI｜在维护 mujiu.net 各子站',
+      'stat.mail': '邮箱', 'stat.mailhint': '点输入框即可写信',
+      'edu.title': '教育背景', 'edu.sub': 'education',
+      'edu.h3': '计算机科学与技术 · 本科在读',
+      'edu.desc': '天津大学（TJU）& 香港理工大学（PolyU）',
+      'edu.tag1': '计算机科学与技术', 'edu.tag2': '本科在读',
+      'stack.title': '这个站怎么搭的', 'stack.sub': 'how this site is built',
+      'stack.front': '前端', 'stack.front.list': '页面本体',
+      'stack.fe': '单文件 HTML', 'stack.fc': '原生 CSS / JS', 'stack.ff': 'IBM Plex Mono', 'stack.ft': '6 套主题',
+      'stack.front.desc': '本页和几个子站都是一个 HTML 文件装完，不引框架、不用构建；主站则是 React + Vite 打包出来的终端风格页面。',
+      'stack.back': '后端与数据', 'stack.back.list': '跑在服务器上',
+      'stack.b1': 'PHP 8.2', 'stack.b2': 'SQLite', 'stack.b3': 'REST / JSON', 'stack.b4': '读 /proc 取指标',
+      'stack.back.desc': '留言箱用 PHP + SQLite 存留言；本页仪表盘的接口读系统状态与日志，对外只给聚合数字。',
+      'stack.ops': '服务器与部署', 'stack.ops.list': '上线流程',
+      'stack.o1': 'Debian 12', 'stack.o2': 'nginx 1.22', 'stack.o3': 'Cloudflare', 'stack.o4': 'rsync 发布', 'stack.o5': 'certbot', 'stack.o6': 'fail2ban',
+      'stack.ops.desc': '一台 VPS 跑全部站点：证书自动续签，Cloudflare 挡在前面，本地改完发布一下就能看到。',
+      'proj.title': '作品 / 项目', 'proj.sub': 'projects',
+      'proj.1.h': '交互式终端主页', 'proj.1.p': '用命令行风格打造的交互式终端主页，统领各子站点入口。',
+      'proj.2.h': '匿名留言箱', 'proj.2.p': '公开匿名留言箱，所有留言公开可见。',
+      'proj.3.h': '游戏中心', 'proj.3.p': '在线小游戏合集，点进去就能把玩。',
+      'proj.1.t1': 'React', 'proj.1.t2': '终端风格',
+      'proj.2.t1': '留言箱', 'proj.2.t2': '公开',
+      'proj.3.t1': '休闲', 'proj.3.t2': '在线',
+      'log.title': '更新日志', 'log.sub': 'changelog · 含服务器日志里的更早记录',
+      'log.4.t': '双语切换 + 站内小助手 + 分享卡片',
+      'log.4.p': '整页中英双语可切换；新增一个纯本地的小助手；补齐 SEO / 分享卡片 / favicon；顶栏改为吸顶并高亮当前板块；关掉 JavaScript 也能正常阅读。',
+      'log.3.t': '主题跨站同步 + 服务器仪表盘',
+      'log.3.p': '四个站共用一套主题：在这里选一次，主站与子站打开都跟着换；本页新增服务器仪表盘，CPU、内存、网络与在线访客实时可看。所有页面改成不缓存，改完刷新即是最新版。',
+      'log.2.t': '主站能换主题了',
+      'log.2.p': '6 套配色 + 点击处圆形扩散动画，选择记在跨子域生效的 cookie 里。',
+      'log.1b.t': '四个子站视觉统一 & 上线',
+      'log.1b.p': '主站补内容与 404 页面、8 款小游戏收录、留言箱上线、本页发布，统一配色与 IBM Plex Mono。',
+      'log.1c.t': '站点陆续上线',
+      'log.1c.p': '终端主页、留言箱与游戏站先后上线，nginx 配置与发布流程在这几天定型。',
+      'log.1d.t': '主站 PWA 化',
+      'log.1d.p': '离线缓存、自托管字体与深色主题 manifest，去掉境外字体 CDN 依赖。',
+      'log.1e.t': '日志里最忙的一天',
+      'log.1e.p': '单日 17,537 次请求 —— 其中 12,000 次来自某个用 curl 的爬虫，真实访客远没有这么多。',
+      'log.1f.t': '第一次留下访问日志',
+      'log.1f.p': '15:49 记录到第一条请求；小游戏站的 2048 与贪吃蛇当天就有人玩，那会儿贪吃蛇还会返回 500。',
+      'log.note': '再往前的日子没有留下访问记录，08-26 是日志里最早的一天；上面这些日期来自提交记录与服务器日志。',
+      'log.legend': '版本号 v1.0 → v4.0 是按几次大改归纳的，不是每次提交都编号。',
+      'server.title': '服务器仪表盘', 'server.sub': 'live · 每 5 秒刷新',
+      'server.visitors': '在线访客', 'server.visitors.sub': '最近 60 秒内来过的人',
+      'server.cpu': 'CPU', 'server.mem': '内存', 'server.disk': '磁盘',
+      'server.rx': '下行', 'server.rx.sub': '每秒接收', 'server.tx': '上行', 'server.tx.sub': '每秒发送',
+      'server.req': '请求', 'server.req.sub': '每分钟', 'server.load': '负载 / 运行',
+      'server.connecting': '正在连接服务器…',
+      'server.offline': '暂时取不到服务器数据（接口未就绪或被拦截）',
+      'server.foot': '每 5 秒从服务器 /proc 与 nginx 日志取一次聚合数字（不含任何访客信息）',
+      'asst.title': '站内小助手', 'asst.sub': 'local only · 不联网',
+      'asst.intro': '我是页面里的一段固定脚本：答案全部写在这个页面里，不联网、不调用任何大模型。',
+      'asst.ph': '输入问题，或点下面的问题…', 'asst.send': '发送',
+      'asst.q1': '你是谁？', 'asst.q2': '这个站怎么搭的？', 'asst.q3': '有哪些项目？',
+      'asst.q4': '最近更新了什么？', 'asst.q5': '服务器什么配置？', 'asst.q6': '怎么联系你？',
+      'asst.a1': '这里的主人是樊旭阳，计算机科学本科在读（天津大学 / 香港理工大学），平时玩 CTF 和 AI，顺手维护着 mujiu.net 这一堆子站。',
+      'asst.a2': '本页是一个单文件 HTML：不引框架、不用构建，主题和语言记在 .mujiu.net 的 cookie 里，跟主站共用一套配色。服务器是 Debian 12 + nginx + PHP + SQLite，Cloudflare 挡在最前面。',
+      'asst.a3': '三个：命令行风格的终端主页 mujiu.net、匿名留言箱 ask.mujiu.net、小游戏合集 game.mujiu.net。往上看「作品 / 项目」一节有直达链接。',
+      'asst.a4': '最近一次大改是 2026-10-01 的 v4.0：中英双语、站内小助手、分享卡片、吸顶导航，以及无 JavaScript 也能阅读。更早的记录都在「更新日志」里。',
+      'asst.a5': '一台 2 核 2G 的小 VPS，跑着全部站点；证书用 certbot 自动续签，每天凌晨自动备份一次。面板上的数字每 5 秒刷新一次，只给聚合值。',
+      'asst.a6': '发邮件到 inbox@mujiu.net，或者在 ask.mujiu.net 的留言箱里留言 —— 那里是公开的，写之前想一下。',
+      'asst.fallback': '这个问题超出我这个固定脚本的范围了。试试问：你是谁、这个站怎么搭的、有哪些项目、最近更新了什么、服务器什么配置、怎么联系你。',
+      'soc.title': '社交账号', 'soc.sub': 'socials', 'soc.desc': 'github.com/mujiu07',
+      'ct.title': '联系我', 'ct.sub': 'say hello',
+      'ct.h3': '聊聊想法？', 'ct.p': 'CTF、AI、网络服务…… 欢迎来信交流。',
+      'ct.cta': '✉ 写封邮件', 'ct.mailbox': '樊旭阳 的信箱',
+      'foot.easter': '试试键盘彩蛋：↑↑↓↓←→←→BA',
+      'foot.ver': 'v4.0', 'foot.updated': '更新于',
+      'unit.people': '人', 'unit.req': '次', 'unit.day': '天', 'unit.hour': '小时', 'unit.up': '已运行',
+      'toast.theme': '主题：{name}',
+      'toast.theme.sync': '主题：{name} · 已同步全站',
+      'toast.lang': '语言：{name}',
+      'noscript': '本页的滚动入场、仪表盘等效果需要 JavaScript；不开启也能正常阅读全部内容。'
+    },
+    en: {
+      'meta.title': 'Fan Xuyang · Personal Homepage',
+      'meta.desc': "Fan Xuyang's personal homepage: education, projects, changelog and live server status.",
+      'brand.sub': 'personal homepage',
+      'nav.main': 'Main', 'nav.games': 'Games', 'nav.ask': 'Guestbook', 'nav.menu': 'Menu',
+      'toc.education': 'Education', 'toc.stack': "How it's built", 'toc.projects': 'Projects', 'toc.changelog': 'Changelog',
+      'toc.server': 'Server', 'toc.assistant': 'Assistant', 'toc.contact': 'Contact',
+      'lang.btn': '中文', 'lang.aria': '切换到中文',
+      'hero.kicker': '// about me',
+      'hero.greet': "Hi, I'm",
+      'hero.name': 'Fan Xuyang',
+      'hero.role': 'CS student · CTF & AI enthusiast',
+      'hero.about': 'I am a computer science student who loves <b style="color:var(--primary)">CTF</b> and <b style="color:var(--secondary)">AI</b>, and enjoys building fun network services.',
+      'hero.chip1': '🎓 Undergraduate',
+      'hero.chip2': '🏫 Tianjin University (TJU) & The Hong Kong Polytechnic University (PolyU)',
+      'hero.cta1': '✉ Email Fan Xuyang',
+      'stat.site': 'site stats', 'stat.subsites': 'sub-sites', 'stat.games': 'mini-games', 'stat.themes': 'themes',
+      'stat.now': 'right now',
+      'hero.nowlines': 'Learning CTF｜Tinkering with AI｜Maintaining my mujiu.net sites',
+      'stat.mail': 'email', 'stat.mailhint': 'click to write',
+      'edu.title': 'Education', 'edu.sub': 'education',
+      'edu.h3': 'Computer Science · Undergraduate',
+      'edu.desc': 'Tianjin University (TJU) & The Hong Kong Polytechnic University (PolyU)',
+      'edu.tag1': 'Computer Science', 'edu.tag2': 'Undergraduate',
+      'stack.title': 'How this site is built', 'stack.sub': 'how this site is built',
+      'stack.front': 'Frontend', 'stack.front.list': 'the page itself',
+      'stack.fe': 'single-file HTML', 'stack.fc': 'vanilla CSS / JS', 'stack.ff': 'IBM Plex Mono', 'stack.ft': '6 themes',
+      'stack.front.desc': 'This page and its sibling sites each fit in one HTML file — no framework, no build step. The main site is a terminal-style page bundled with React + Vite.',
+      'stack.back': 'Backend & data', 'stack.back.list': 'on the server',
+      'stack.b1': 'PHP 8.2', 'stack.b2': 'SQLite', 'stack.b3': 'REST / JSON', 'stack.b4': 'metrics read from /proc',
+      'stack.back.desc': 'The guestbook stores messages in SQLite through PHP; the dashboard endpoint reads system state and logs, and only exposes aggregates.',
+      'stack.ops': 'Server & deploy', 'stack.ops.list': 'release flow',
+      'stack.o1': 'Debian 12', 'stack.o2': 'nginx 1.22', 'stack.o3': 'Cloudflare', 'stack.o4': 'rsync deploy', 'stack.o5': 'certbot', 'stack.o6': 'fail2ban',
+      'stack.ops.desc': 'One VPS runs every site: certificates renew automatically, Cloudflare sits in front, and a local edit goes live with one command.',
+      'proj.title': 'Projects', 'proj.sub': 'projects',
+      'proj.1.h': 'Interactive terminal homepage', 'proj.1.p': 'A terminal-style interactive homepage that links out to every sibling site.',
+      'proj.2.h': 'Anonymous guestbook', 'proj.2.p': 'A public anonymous guestbook where every message is visible to everyone.',
+      'proj.3.h': 'Game center', 'proj.3.p': 'A collection of small browser games — click in and play.',
+      'proj.1.t1': 'React', 'proj.1.t2': 'terminal style',
+      'proj.2.t1': 'guestbook', 'proj.2.t2': 'public',
+      'proj.3.t1': 'casual', 'proj.3.t2': 'online',
+      'log.title': 'Changelog', 'log.sub': 'changelog · including earlier entries from the server logs',
+      'log.4.t': 'Bilingual mode, in-page assistant & share cards',
+      'log.4.p': 'The whole page switches between Chinese and English; a local-only assistant; SEO, share cards and a favicon; a sticky header that highlights the current section; and full readability with JavaScript turned off.',
+      'log.3.t': 'Cross-site theme sync + server dashboard',
+      'log.3.p': 'All four sites share a single theme: pick it here and every site follows. This page gained a live dashboard for CPU, memory, network and online visitors. Pages are no longer cached, so a refresh always shows the newest version.',
+      'log.2.t': 'The main site can change themes',
+      'log.2.p': 'Six palettes plus a circular reveal from the click point; the choice is kept in a cookie shared across subdomains.',
+      'log.1b.t': 'Sibling sites unified & shipped',
+      'log.1b.p': 'The main site gained content and a 404 page, eight mini-games were listed, the guestbook went live and this page shipped — one palette, one typeface.',
+      'log.1c.t': 'Sites going live one by one',
+      'log.1c.p': 'The terminal homepage, guestbook and game site went live in turn; the nginx config and release flow settled during these days.',
+      'log.1d.t': 'The main site became a PWA',
+      'log.1d.p': 'Offline caching, self-hosted fonts and a dark manifest — no more overseas font CDN dependency.',
+      'log.1e.t': 'The busiest day in the logs',
+      'log.1e.p': '17,537 requests in one day — 12,000 of them from a single curl crawler. Real visitors were far fewer.',
+      'log.1f.t': 'The first access log entry',
+      'log.1f.p': 'The first request was recorded at 15:49; 2048 and Snake were played that same day, back when Snake still returned 500.',
+      'log.note': 'Nothing was logged before this: 08-26 is the earliest day in the logs. These dates come from commit history and server logs.',
+      'log.legend': 'Version numbers v1.0 → v4.0 group the big rewrites — not every commit gets a number.',
+      'server.title': 'Server dashboard', 'server.sub': 'live · refreshed every 5s',
+      'server.visitors': 'visitors', 'server.visitors.sub': 'unique in the last 60s',
+      'server.cpu': 'CPU', 'server.mem': 'memory', 'server.disk': 'disk',
+      'server.rx': 'down', 'server.rx.sub': 'per second', 'server.tx': 'up', 'server.tx.sub': 'per second',
+      'server.req': 'requests', 'server.req.sub': 'per minute', 'server.load': 'load / uptime',
+      'server.connecting': 'Connecting to the server…',
+      'server.offline': 'Cannot reach the server right now (endpoint unavailable or blocked)',
+      'server.foot': 'Aggregated from /proc and nginx logs every 5 seconds — no visitor data',
+      'asst.title': 'In-page assistant', 'asst.sub': 'local only · no network',
+      'asst.intro': 'I am a fixed script inside this page: every answer is written here, with no network call and no language model involved.',
+      'asst.ph': 'Type a question, or pick one below…', 'asst.send': 'Send',
+      'asst.q1': 'Who are you?', 'asst.q2': 'How was this site built?', 'asst.q3': 'What projects are there?',
+      'asst.q4': 'What is new?', 'asst.q5': 'What is the server like?', 'asst.q6': 'How can I reach you?',
+      'asst.a1': 'This site belongs to Fan Xuyang, an undergraduate in computer science (Tianjin University / The Hong Kong Polytechnic University) who plays with CTF and AI and maintains the mujiu.net family of sites.',
+      'asst.a2': 'This page is a single HTML file: no framework and no build step. Theme and language live in .mujiu.net cookies, so the palette is shared with the main site. The server runs Debian 12 with nginx, PHP and SQLite, all behind Cloudflare.',
+      'asst.a3': 'Three of them: the terminal-style homepage mujiu.net, the anonymous guestbook ask.mujiu.net, and the mini-game collection game.mujiu.net. See the Projects section for direct links.',
+      'asst.a4': 'The latest rewrite is v4.0 on 2026-10-01: bilingual Chinese/English, an in-page assistant, share cards, a sticky header, and readability without JavaScript. Earlier entries are in the Changelog.',
+      'asst.a5': 'One small 2-core, 2 GB VPS running every site; certificates renew automatically with certbot and a backup runs every night. The numbers on the dashboard refresh every 5 seconds and only show aggregates.',
+      'asst.a6': 'Write to inbox@mujiu.net, or leave a message in the guestbook at ask.mujiu.net — that one is public, so think before you type.',
+      'asst.fallback': 'That is outside what this fixed script can answer. Try asking: who are you, how was this site built, what projects are there, what is new, what is the server like, or how to get in touch.',
+      'soc.title': 'Social', 'soc.sub': 'socials', 'soc.desc': 'github.com/mujiu07',
+      'ct.title': 'Say hello', 'ct.sub': 'say hello',
+      'ct.h3': 'Got an idea?', 'ct.p': 'CTF, AI, network services — feel free to write.',
+      'ct.cta': '✉ Write an email', 'ct.mailbox': "Fan Xuyang's inbox",
+      'foot.easter': 'Keyboard easter egg: ↑↑↓↓←→←→BA',
+      'foot.ver': 'v4.0', 'foot.updated': 'updated',
+      'unit.people': 'online', 'unit.req': 'req', 'unit.day': 'd', 'unit.hour': 'h', 'unit.up': 'up',
+      'toast.theme': 'Theme: {name}',
+      'toast.theme.sync': 'Theme: {name} · synced everywhere',
+      'toast.lang': 'Language: {name}',
+      'noscript': 'Animations and the dashboard need JavaScript, but all the content is readable without it.'
+    }
+  };
+
+  function t(key, vars) {
+    var d = I18N[lang] || I18N.zh;
+    var s = d[key];
+    if (s == null) s = I18N.zh[key];
+    if (s == null) s = key;
+    if (vars) for (var k in vars) s = s.split('{' + k + '}').join(vars[k]);
+    return s;
+  }
+
+  // 五种刷法：文本 / HTML / title / aria-label / placeholder
+  function applyI18n() {
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+    document.documentElement.setAttribute('data-lang', lang);
+    document.title = t('meta.title');
+    var md = document.querySelector('meta[name="description"]');
+    if (md) md.setAttribute('content', t('meta.desc'));
+    var i, nodes;
+    nodes = document.querySelectorAll('[data-i18n]');
+    for (i = 0; i < nodes.length; i++) nodes[i].textContent = t(nodes[i].getAttribute('data-i18n'));
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) nodes[i].innerHTML = t(nodes[i].getAttribute('data-i18n-html'));
+    nodes = document.querySelectorAll('[data-i18n-title]');
+    for (i = 0; i < nodes.length; i++) nodes[i].setAttribute('title', t(nodes[i].getAttribute('data-i18n-title')));
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) nodes[i].setAttribute('aria-label', t(nodes[i].getAttribute('data-i18n-aria')));
+    nodes = document.querySelectorAll('[data-i18n-ph]');
+    for (i = 0; i < nodes.length; i++) nodes[i].setAttribute('placeholder', t(nodes[i].getAttribute('data-i18n-ph')));
+    var typed = document.getElementById('typed');
+    if (typed) typed.setAttribute('data-text', t('hero.name'));
+    var now = document.getElementById('nowLine');
+    if (now) now.setAttribute('data-lines', t('hero.nowlines'));
+    var lb = document.getElementById('langBtn');
+    if (lb) {
+      lb.textContent = lang === 'zh' ? 'EN' : '中文';
+      lb.setAttribute('aria-pressed', lang === 'en' ? 'true' : 'false');
+    }
+    if (typeof window.__mujiuAfterI18n === 'function') window.__mujiuAfterI18n();
+  }
+
+  function setLang(next, persist) {
+    if (!I18N[next] || next === lang) return;
+    lang = next;
+    if (persist !== false) writeStore(LANG_COOKIE, next);
+    applyI18n();
+  }
+
+  // 在别的子域换了主题/语言，切回本页时跟着变
+  function syncFromCookie() {
+    var c = readCookie(THEME_COOKIE);
+    if (c && THEMES[c] && c !== theme) applyTheme(c, false);
+    var l = readCookie(LANG_COOKIE);
+    if (l && I18N[l] && l !== lang) setLang(l, false);
+  }
+
+  // ---- 初始化：此刻 body 还没解析，先落地主题变量、lang 属性和 meta ----
+  applyTheme(pickTheme(), false);
+  lang = pickLang();
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+  document.documentElement.setAttribute('data-lang', lang);
+  document.addEventListener('DOMContentLoaded', function () { applyI18n(); });
+
+  return {
+    THEMES: THEMES, I18N: I18N,
+    t: t, applyI18n: applyI18n, applyTheme: applyTheme, setLang: setLang,
+    readCookie: readCookie, writeStore: writeStore, syncFromCookie: syncFromCookie,
+    get theme() { return theme; },
+    get lang() { return lang; }
+  };
+})();
+</script>
 <style>
   /* ---- 主题（沿用 mujiu 官方色值，dark 为默认）---- */
   :root {
@@ -23,6 +388,14 @@
     --danger: #f87171;
     --line: rgba(255,255,255,0.09);
     --line-strong: rgba(255,255,255,0.16);
+    /* 设计令牌：统一缓动 / 阴影 / 圆角，避免各处硬编码 */
+    --ease: cubic-bezier(.22, .61, .36, 1);
+    --r-sm: 10px; --r-md: 14px; --r-lg: 16px;
+    --shadow-1: 0 18px 50px rgba(0,0,0,0.25);
+    --shadow-2: 0 12px 30px rgba(0,0,0,0.35);
+    --tap: max(18px, env(safe-area-inset-left));
+    --tap-r: max(18px, env(safe-area-inset-right));
+    --tap-b: max(60px, env(safe-area-inset-bottom));
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -41,6 +414,7 @@
   ::selection { background: var(--primary); color: var(--body); }
   a { color: var(--primary); text-decoration: none; transition: color .2s; }
   a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  :focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; border-radius: 4px; }
 
   body::after {
     content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 40;
@@ -48,17 +422,19 @@
     mix-blend-mode: overlay; opacity: .5;
   }
 
-  .shell { max-width: 1020px; margin: 0 auto; padding: 22px 18px 60px; }
+  .shell { max-width: 1020px; margin: 0 auto; padding: 22px var(--tap-r) var(--tap-b) var(--tap); }
 
   /* ==== 顶栏 ==== */
   .menubar {
-    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    position: sticky; top: 8px; z-index: 30;
+    display: flex; align-items: center; flex-wrap: wrap; justify-content: space-between; gap: 12px 16px;
     padding: 12px 18px; margin-bottom: 22px;
     border: 1px solid var(--line); border-radius: 12px;
-    background: color-mix(in srgb, var(--panel) 70%, transparent);
-    backdrop-filter: blur(10px);
-    transition: background .35s ease;
+    background: color-mix(in srgb, var(--panel) 82%, transparent);
+    backdrop-filter: blur(12px);
+    transition: background .35s ease, box-shadow .3s ease, border-color .3s ease;
   }
+  .menubar.stuck { border-color: var(--line-strong); box-shadow: var(--shadow-2); }
   .menubar .brand { display: flex; align-items: center; gap: 12px; font-weight: 600; }
   .menubar .brand .logo {
     width: 34px; height: 34px; display: grid; place-items: center;
@@ -69,7 +445,7 @@
   .menubar .brand .t b { color: var(--text-100); font-size: 15px; letter-spacing: .5px; }
   .menubar .brand .t span { color: var(--text-300); font-size: 11px; }
 
-  .menubar .right { display: flex; align-items: center; gap: 16px; }
+  .menubar .right { display: flex; align-items: center; gap: 14px; }
   .theme-picker { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
   /* 统一主题色点尺寸，选中态不改变圆点大小 */
   .theme-dot {
@@ -80,18 +456,51 @@
   .theme-dot:hover { transform: scale(1.12); }
   .theme-dot.active { box-shadow: 0 0 0 2px var(--body-2), 0 0 0 4px var(--primary); }
 
+  /* 语言切换 + 汉堡菜单（≤640px 才显示汉堡） */
+  .lang-btn {
+    font: inherit; font-size: 12px; line-height: 1; cursor: pointer;
+    padding: 7px 11px; border-radius: 999px;
+    color: var(--text-100); background: color-mix(in srgb, var(--panel) 55%, transparent);
+    border: 1px solid var(--line-strong); transition: border-color .2s, color .2s;
+  }
+  .lang-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .burger {
+    display: none; font: inherit; font-size: 16px; line-height: 1; cursor: pointer;
+    width: 38px; height: 34px; border-radius: 9px; color: var(--text-100);
+    background: color-mix(in srgb, var(--panel) 55%, transparent);
+    border: 1px solid var(--line-strong);
+  }
+  .burger:hover { border-color: var(--primary); color: var(--primary); }
+
+  /* 第二行：板块锚点 + 子站入口 */
+  .navwrap {
+    flex: 0 0 100%; display: flex; align-items: center; justify-content: space-between;
+    gap: 10px 18px; flex-wrap: wrap;
+    border-top: 1px solid var(--line); padding-top: 10px;
+  }
+  .secnav { display: flex; gap: 4px; flex-wrap: wrap; }
+  .secnav a {
+    font-size: 12.5px; color: var(--text-200); padding: 5px 10px; border-radius: 999px;
+    border: 1px solid transparent; transition: color .2s, background .2s, border-color .2s;
+  }
+  .secnav a:hover { color: var(--primary); text-decoration: none; border-color: var(--line-strong); }
+  .secnav a.active {
+    color: var(--primary); border-color: color-mix(in srgb, var(--primary) 45%, transparent);
+    background: color-mix(in srgb, var(--primary) 12%, transparent);
+  }
+
   /* ==== Hero ==== */
   .hero {
     display: grid; grid-template-columns: 1.15fr 1fr; gap: 26px; align-items: stretch;
     margin-bottom: 24px;
   }
   .glass {
-    border: 1px solid var(--line); border-radius: 16px;
+    border: 1px solid var(--line); border-radius: var(--r-lg);
     background: color-mix(in srgb, var(--card) 82%, transparent);
     backdrop-filter: blur(8px);
     padding: 30px;
     transition: background .35s ease, border-color .2s;
-    box-shadow: 0 18px 50px rgba(0,0,0,0.25);
+    box-shadow: var(--shadow-1);
   }
   .hero-left { display: flex; flex-direction: column; align-items: flex-start; height: 100%; }
   /* 帅照主视觉（大图居右，随主题变色） */
@@ -115,14 +524,14 @@
   .chip { font-size: 12px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--text-200); background: color-mix(in srgb, var(--panel) 50%, transparent); }
   .hero-left .kicker { color: var(--primary); font-size: 12px; letter-spacing: 2px; margin-bottom: 12px; }
   .hero-left h1 { font-size: clamp(36px, 7vw, 64px); font-weight: 700; line-height: 1.1; letter-spacing: -1px; color: var(--text-100); margin-bottom: 6px; overflow-wrap: break-word; }
-  .hero-left h1 .grad { background: linear-gradient(120deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; white-space: nowrap; }
+  .hero-left h1 .grad { background: linear-gradient(120deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .hero-left .role { color: var(--secondary); font-size: 16px; margin-bottom: 16px; }
   .hero-left .about-txt { color: var(--text-200); font-size: 14px; max-width: 460px; margin-bottom: 22px; }
   .cta { display: flex; gap: 12px; flex-wrap: wrap; }
   .btn {
     display: inline-flex; align-items: center; gap: 8px;
-    padding: 12px 22px; border-radius: 10px; font-size: 14px; font-weight: 600;
-    cursor: pointer; border: 1px solid var(--line-strong); transition: all .18s; font-family: inherit;
+    padding: 12px 22px; border-radius: var(--r-sm); font-size: 14px; font-weight: 600;
+    cursor: pointer; border: 1px solid var(--line-strong); transition: transform .18s var(--ease), box-shadow .18s, border-color .18s, color .18s; font-family: inherit;
   }
   .btn:hover { transform: translateY(-2px); }
   .btn-primary { background: var(--primary); color: var(--body); border-color: transparent; box-shadow: 0 8px 22px color-mix(in srgb, var(--primary) 35%, transparent); }
@@ -132,13 +541,14 @@
 
   .hero-right { display: flex; flex-direction: column; gap: 16px; }
   .hero-right .stat-card { flex: 1; display: flex; flex-direction: column; justify-content: center; }
-  .stat-card { border: 1px solid var(--line); border-radius: 16px; background: color-mix(in srgb, var(--card) 82%, transparent); padding: 22px; transition: background .35s; }
+  .stat-card { border: 1px solid var(--line); border-radius: var(--r-lg); background: color-mix(in srgb, var(--card) 82%, transparent); padding: 22px; transition: background .35s; }
   .stat-card .label { color: var(--text-300); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
   .stat-card .value { font-size: 22px; font-weight: 700; color: var(--text-100); margin-bottom: 4px; }
   .stat-card .sub { font-size: 12px; color: var(--text-300); }
 
   /* ==== Section ==== */
   section { margin-bottom: 40px; }
+  section[id] { scroll-margin-top: 148px; }
   .sec-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
   .sec-head .arrow { color: var(--primary); font-size: 18px; }
   .sec-head .title { font-size: 17px; font-weight: 700; color: var(--text-100); letter-spacing: .5px; }
@@ -151,12 +561,12 @@
   .m3 { grid-template-columns: repeat(3, 1fr); }
   .m1 { grid-template-columns: minmax(0, 1fr); }
   .card {
-    border: 1px solid var(--line); border-radius: 14px;
+    border: 1px solid var(--line); border-radius: var(--r-md);
     background: color-mix(in srgb, var(--card) 82%, transparent);
-    padding: 22px; transition: transform .2s, border-color .2s, background .35s;
+    padding: 22px; transition: transform .2s var(--ease), border-color .2s, background .35s;
   }
   .card:hover { transform: translateY(-4px); border-color: var(--line-strong); }
-  .card .ic { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 10px; background: color-mix(in srgb, var(--primary) 16%, transparent); color: var(--primary); font-size: 22px; margin-bottom: 14px; }
+  .card .ic { width: 44px; height: 44px; display: grid; place-items: center; border-radius: var(--r-sm); background: color-mix(in srgb, var(--primary) 16%, transparent); color: var(--primary); font-size: 22px; margin-bottom: 14px; }
   .card h3 { font-size: 16px; color: var(--text-100); margin-bottom: 6px; }
   .card p { font-size: 13px; color: var(--text-200); line-height: 1.7; }
   .card .date { color: var(--secondary); font-size: 12px; margin-bottom: 8px; display: block; }
@@ -165,15 +575,18 @@
   .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
   .tag { font-size: 11px; padding: 4px 11px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--text-300); background: color-mix(in srgb, var(--panel) 50%, transparent); }
 
-  /* 项目大卡片 */
-  .proj-card { cursor: pointer; }
+  /* 项目大卡片（整卡就是链接：可中键新标签打开，也能被键盘聚焦） */
+  .proj-card { display: block; color: inherit; cursor: pointer; }
+  .proj-card:hover { text-decoration: none; }
   .proj-card .num { color: var(--secondary); font-size: 12px; font-weight: 700; }
   .proj-card:hover { border-color: var(--primary); box-shadow: 0 0 24px color-mix(in srgb, var(--primary) 14%, transparent); }
+  .proj-card .mini { color: var(--primary); }
+  .proj-card:focus-visible { border-color: var(--primary); }
 
   /* 联系卡 */
   .contact {
     display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
-    border: 1px solid var(--line); border-radius: 16px; padding: 28px;
+    border: 1px solid var(--line); border-radius: var(--r-lg); padding: 28px;
     background: linear-gradient(130deg, color-mix(in srgb, var(--primary) 12%, var(--card)), color-mix(in srgb, var(--secondary) 10%, var(--card)));
     transition: background .35s ease;
   }
@@ -185,8 +598,9 @@
 
   footer { text-align: center; padding-top: 24px; color: var(--text-300); font-size: 12px; border-top: 1px solid var(--line); }
   footer .g { color: var(--primary); }
+  footer .ver { color: var(--secondary); }
 
-  .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
   .reveal.in { opacity: 1; transform: translateY(0); }
 
   /* ==== 顶栏子站导航 ==== */
@@ -231,7 +645,7 @@
 
   /* ==== 数字滚动 ==== */
   .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .stat { text-align: center; padding: 8px 4px; border-radius: 10px; border: 1px solid var(--line); background: color-mix(in srgb, var(--panel) 45%, transparent); }
+  .stat { text-align: center; padding: 8px 4px; border-radius: var(--r-sm); border: 1px solid var(--line); background: color-mix(in srgb, var(--panel) 45%, transparent); }
   .stat b { display: block; font-size: 24px; font-weight: 700; color: var(--primary); font-variant-numeric: tabular-nums; }
   .stat span { font-size: 11px; color: var(--text-300); }
 
@@ -299,6 +713,33 @@
   .tl .d { color: var(--secondary); font-size: 12px; }
   .tl h4 { font-size: 14px; color: var(--text-100); margin: 2px 0 4px; }
   .tl p { font-size: 13px; color: var(--text-200); margin: 0; }
+  .tl .v { font-size: 10px; font-weight: 700; letter-spacing: .5px; vertical-align: 2px;
+    margin-left: 8px; padding: 2px 8px; border-radius: 999px;
+    color: var(--primary); border: 1px solid color-mix(in srgb, var(--primary) 45%, transparent);
+    background: color-mix(in srgb, var(--primary) 12%, transparent); }
+
+  /* ==== 站内小助手（纯本地预设问答）==== */
+  .asst { display: grid; gap: 14px; }
+  .asst .intro { color: var(--text-200); font-size: 13px; }
+  .asst .chips { margin: 0; }
+  .asst .chip {
+    cursor: pointer; font-family: inherit; color: var(--text-200);
+    transition: transform .18s, border-color .18s, box-shadow .18s, color .18s;
+  }
+  .asst .chip:hover { transform: translateY(-2px); border-color: var(--primary); color: var(--text-100);
+    box-shadow: 0 0 16px color-mix(in srgb, var(--primary) 22%, transparent); }
+  .asst .ask { display: flex; gap: 10px; flex-wrap: wrap; }
+  .asst .ask input {
+    flex: 1 1 240px; min-width: 0; font: inherit; font-size: 13px;
+    padding: 11px 14px; border-radius: var(--r-sm); color: var(--text-100);
+    background: color-mix(in srgb, var(--panel) 55%, transparent);
+    border: 1px solid var(--line-strong);
+  }
+  .asst .ask input::placeholder { color: var(--text-300); }
+  .asst .ask input:focus { border-color: var(--primary); outline: none; }
+  .asst .reply { color: var(--text-100); font-size: 13px; line-height: 1.8; min-height: 3.4em;
+    border-left: 2px solid var(--primary); padding: 2px 0 2px 14px;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--primary) 8%, transparent), transparent 70%); }
 
   /* ==== 现在在做什么 ==== */
   .now-line { color: var(--primary); font-size: 14px; min-height: 1.7em; }
@@ -307,7 +748,7 @@
   @media (prefers-reduced-motion: reduce) { .now-line::after { animation: none; } }
 
   /* ==== 回到顶部 ==== */
-  .totop { position: fixed; right: 20px; bottom: 20px; z-index: 46; width: 42px; height: 42px;
+  .totop { position: fixed; right: max(20px, env(safe-area-inset-right)); bottom: max(20px, env(safe-area-inset-bottom)); z-index: 46; width: 42px; height: 42px;
     border-radius: 12px; display: grid; place-items: center; cursor: pointer; font-family: inherit;
     font-size: 16px; color: var(--primary); background: color-mix(in srgb, var(--panel) 80%, transparent);
     border: 1px solid var(--line-strong); backdrop-filter: blur(8px);
@@ -319,9 +760,12 @@
   .toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 18px); z-index: 60;
     padding: 10px 18px; border-radius: 999px; font-size: 13px; color: var(--text-100);
     background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--primary);
-    box-shadow: 0 12px 30px rgba(0,0,0,.35); opacity: 0; transition: opacity .3s, transform .3s; }
+    box-shadow: var(--shadow-2); opacity: 0; transition: opacity .3s, transform .3s; }
   .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
+  /* ==== 无 JavaScript 兜底：去掉入场动画，正文照常可读 ==== */
+  .noscript-note { display: none; }
+  .nojs .noscript-note { display: block; }
   @media (prefers-reduced-motion: reduce) {
     .reveal { opacity: 1; transform: none; transition: none; }
     #fx, .glow { display: none; }
@@ -329,15 +773,27 @@
   }
 
   @media (max-width: 760px) {
-    .topnav { order: 3; width: 100%; justify-content: flex-start; }
-  }
-  @media (max-width: 760px) {
     .hero, .contact { grid-template-columns: 1fr; }
     .m1, .m2, .m3 { grid-template-columns: 1fr; }
     .dash { grid-template-columns: repeat(2, 1fr); }
-    .menubar { flex-wrap: wrap; }
+    section[id] { scroll-margin-top: 120px; }
+  }
+  @media (max-width: 640px) {
+    .topnav { display: none; }
+    .burger { display: block; }
+    .navwrap { display: none; }
+    .menubar.open .navwrap { display: flex; flex-direction: column; align-items: flex-start; }
+    .menubar.open .secnav, .menubar.open .topnav { flex-direction: column; align-items: flex-start; gap: 2px; }
+    .menubar.open .topnav { display: flex; }
   }
 </style>
+<noscript><style>
+  /* 关掉 JavaScript 时：入场动画直接放开，正文全部可读（否则 .reveal 永远 opacity:0） */
+  .reveal { opacity: 1 !important; transform: none !important; }
+  .caret, #fx, .glow { display: none !important; }
+  .noscript-note { display: block !important; }
+  .asst, .dash-foot { display: none; }
+</style></noscript>
 </head>
 <body>
 
@@ -347,427 +803,429 @@
 
 <div class="shell">
 
-  <!-- 顶栏 -->
-  <nav class="menubar">
+  <nav class="menubar" id="menubar" aria-label="主导航">
     <div class="brand">
       <div class="logo">M</div>
-      <div class="t"><b>mujiu</b><span>图形化个人主页</span></div>
+      <div class="t"><b>mujiu</b><span data-i18n="brand.sub">图形化个人主页</span></div>
     </div>
     <div class="right">
-      <nav class="topnav">
-        <a href="https://mujiu.net">主站</a>
-        <a href="https://game.mujiu.net">小游戏</a>
-        <a href="https://ask.mujiu.net">留言箱</a>
+      <button class="lang-btn" id="langBtn" type="button" aria-pressed="false">EN</button>
+      <div class="theme-picker" id="themePicker"></div>
+      <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="navwrap" data-i18n-aria="nav.menu">☰</button>
+    </div>
+    <div class="navwrap" id="navwrap">
+      <nav class="secnav" id="secnav" aria-label="页面板块">
+        <a href="#education" data-i18n="toc.education">教育</a>
+        <a href="#stack" data-i18n="toc.stack">建站</a>
+        <a href="#projects" data-i18n="toc.projects">项目</a>
+        <a href="#changelog" data-i18n="toc.changelog">日志</a>
+        <a href="#server" data-i18n="toc.server">状态</a>
+        <a href="#assistant" data-i18n="toc.assistant">小助手</a>
+        <a href="#contact" data-i18n="toc.contact">联系</a>
       </nav>
-      <div class="theme-picker" id="themePicker" title="主题（与 mujiu.net 同步）"></div>
+      <nav class="topnav" aria-label="子站">
+        <a href="https://mujiu.net" data-i18n="nav.main">主站</a>
+        <a href="https://game.mujiu.net" data-i18n="nav.games">小游戏</a>
+        <a href="https://ask.mujiu.net" data-i18n="nav.ask">留言箱</a>
+      </nav>
     </div>
   </nav>
+
+  <p class="card noscript-note" data-i18n="noscript" style="margin-bottom:22px">本页的滚动入场、仪表盘等效果需要 JavaScript；不开启也能正常阅读全部内容。</p>
 
   <!-- HERO -->
   <div class="hero">
     <div class="glass hero-left">
-      <div class="kicker">// 关于我</div>
-      <h1>你好，我是 <span class="grad" id="typed" data-text="樊旭阳"></span><span class="caret" id="caret"></span></h1>
-      <div class="role">计算机科学学生 · CTF 与 AI 爱好者</div>
-      <p class="about-txt">
+      <div class="kicker" data-i18n="hero.kicker">// 关于我</div>
+      <h1><span data-i18n="hero.greet">你好，我是</span> <span class="grad" id="typed" data-text="樊旭阳"></span><span class="caret" id="caret"></span></h1>
+      <div class="role" data-i18n="hero.role">计算机科学学生 · CTF 与 AI 爱好者</div>
+      <p class="about-txt" data-i18n-html="hero.about">
         我是一名计算机专业学生，热爱
         <span style="color:var(--primary)">CTF</span> 与
         <span style="color:var(--secondary)">AI</span>，
         喜欢构建各种有趣的网络服务。
       </p>
       <div class="chips">
-        <span class="chip">🎓 本科在读</span>
-        <span class="chip">🏫 天津大学（TJU）& 香港理工大学（PolyU）</span>
+        <span class="chip" data-i18n="hero.chip1">🎓 本科在读</span>
+        <span class="chip" data-i18n="hero.chip2">🏫 天津大学（TJU）& 香港理工大学（PolyU）</span>
         <span class="chip">💌 inbox@mujiu.net</span>
       </div>
       <div class="cta">
-        <a class="btn btn-primary" href="mailto:inbox@mujiu.net">✉ 给樊旭阳发邮件</a>
-        <a class="btn btn-ghost" href="https://github.com/mujiu07" target="_blank">GitHub ↗</a>
+        <a class="btn btn-primary" href="mailto:inbox@mujiu.net" data-i18n="hero.cta1">✉ 给樊旭阳发邮件</a>
+        <a class="btn btn-ghost" href="https://github.com/mujiu07" target="_blank" rel="noopener">GitHub ↗</a>
       </div>
     </div>
     <div class="hero-right">
-      <div class="portrait portrait-lg"><img src="avatar.jpg" alt="樊旭阳 侧脸速写" /></div>
+      <div class="portrait portrait-lg"><img src="avatar.jpg" width="380" height="380" alt="樊旭阳 侧脸速写" /></div>
       <div class="stat-card">
-        <div class="label">site stats</div>
+        <div class="label" data-i18n="stat.site">site stats</div>
         <div class="stats">
-          <div class="stat"><b class="cnt" data-to="3">0</b><span>子站点</span></div>
-          <div class="stat"><b class="cnt" data-to="8">0</b><span>小游戏</span></div>
-          <div class="stat"><b class="cnt" data-to="6">0</b><span>主题</span></div>
+          <div class="stat"><b class="cnt" data-to="3">0</b><span data-i18n="stat.subsites">子站点</span></div>
+          <div class="stat"><b class="cnt" data-to="8">0</b><span data-i18n="stat.games">小游戏</span></div>
+          <div class="stat"><b class="cnt" data-to="6">0</b><span data-i18n="stat.themes">主题</span></div>
         </div>
       </div>
       <div class="stat-card">
-        <div class="label">现在在做什么</div>
+        <div class="label" data-i18n="stat.now">现在在做什么</div>
         <div class="now-line" id="nowLine" data-lines="在学 CTF｜在折腾 AI｜在维护 mujiu.net 各子站"></div>
       </div>
       <div class="stat-card">
-        <div class="label">邮箱</div>
+        <div class="label" data-i18n="stat.mail">邮箱</div>
         <div class="value"><a href="mailto:inbox@mujiu.net" style="color:inherit">inbox@mujiu.net</a></div>
-        <div class="sub">点输入框即可写信</div>
+        <div class="sub" data-i18n="stat.mailhint">点输入框即可写信</div>
       </div>
     </div>
   </div>
-
   <!-- 教育背景 -->
   <section id="education">
-    <div class="sec-head"><span class="arrow">▸</span><span class="title">教育背景</span><span class="sub">education</span></div>
+    <div class="sec-head"><span class="arrow">▸</span><span class="title" data-i18n="edu.title">教育背景</span><span class="sub" data-i18n="edu.sub">education</span></div>
     <div class="grid m2">
       <div class="card reveal">
         <div class="ic">🎓</div>
-        <h3>计算机科学与技术 · 本科在读</h3>
+        <h3 data-i18n="edu.h3">计算机科学与技术 · 本科在读</h3>
         <span class="date">2026 ~ 2030</span>
-        <p>天津大学（TJU）& 香港理工大学（PolyU）</p>
-        <div class="tags"><span class="tag">计算机科学与技术</span><span class="tag">本科在读</span></div>
+        <p data-i18n="edu.desc">天津大学（TJU）& 香港理工大学（PolyU）</p>
+        <div class="tags"><span class="tag" data-i18n="edu.tag1">计算机科学与技术</span><span class="tag" data-i18n="edu.tag2">本科在读</span></div>
       </div>
     </div>
   </section>
 
   <!-- 这个站怎么搭的（只描述站点本身，不写个人能力清单） -->
   <section id="stack">
-    <div class="sec-head"><span class="arrow">▸</span><span class="title">这个站怎么搭的</span><span class="sub">how this site is built</span></div>
+    <div class="sec-head"><span class="arrow">▸</span><span class="title" data-i18n="stack.title">这个站怎么搭的</span><span class="sub" data-i18n="stack.sub">how this site is built</span></div>
     <div class="grid m3">
       <div class="card reveal">
         <div class="ic">🧩</div>
-        <h3>前端</h3>
+        <h3 data-i18n="stack.front">前端</h3>
         <div class="skill-group">
-          <span class="gl">页面本体</span>
+          <span class="gl" data-i18n="stack.front.list">页面本体</span>
           <div class="chips tight">
-            <span class="chip hot">单文件 HTML</span>
-            <span class="chip hot">原生 CSS / JS</span>
-            <span class="chip hot">IBM Plex Mono</span>
-            <span class="chip hot">6 套主题</span>
+            <span class="chip hot" data-i18n="stack.fe">单文件 HTML</span>
+            <span class="chip hot" data-i18n="stack.fc">原生 CSS / JS</span>
+            <span class="chip hot" data-i18n="stack.ff">IBM Plex Mono</span>
+            <span class="chip hot" data-i18n="stack.ft">6 套主题</span>
           </div>
         </div>
-        <p style="margin-top:12px">本页和几个子站都是一个 HTML 文件装完，不引框架、不用构建；主站则是 React + Vite 打包出来的终端风格页面。</p>
+        <p style="margin-top:12px" data-i18n="stack.front.desc">本页和几个子站都是一个 HTML 文件装完，不引框架、不用构建；主站则是 React + Vite 打包出来的终端风格页面。</p>
       </div>
       <div class="card reveal">
         <div class="ic">🗄️</div>
-        <h3>后端与数据</h3>
+        <h3 data-i18n="stack.back">后端与数据</h3>
         <div class="skill-group">
-          <span class="gl">跑在服务器上</span>
+          <span class="gl" data-i18n="stack.back.list">跑在服务器上</span>
           <div class="chips tight">
-            <span class="chip hot">PHP 8.2</span>
-            <span class="chip hot">SQLite</span>
-            <span class="chip hot">REST / JSON</span>
-            <span class="chip hot">读 /proc 取指标</span>
+            <span class="chip hot" data-i18n="stack.b1">PHP 8.2</span>
+            <span class="chip hot" data-i18n="stack.b2">SQLite</span>
+            <span class="chip hot" data-i18n="stack.b3">REST / JSON</span>
+            <span class="chip hot" data-i18n="stack.b4">读 /proc 取指标</span>
           </div>
         </div>
-        <p style="margin-top:12px">留言箱用 PHP + SQLite 存留言；本页仪表盘的接口读系统状态与日志，对外只给聚合数字。</p>
+        <p style="margin-top:12px" data-i18n="stack.back.desc">留言箱用 PHP + SQLite 存留言；本页仪表盘的接口读系统状态与日志，对外只给聚合数字。</p>
       </div>
       <div class="card reveal">
         <div class="ic">🌐</div>
-        <h3>服务器与部署</h3>
+        <h3 data-i18n="stack.ops">服务器与部署</h3>
         <div class="skill-group">
-          <span class="gl">上线流程</span>
+          <span class="gl" data-i18n="stack.ops.list">上线流程</span>
           <div class="chips tight">
-            <span class="chip hot">Debian 12</span>
-            <span class="chip hot">nginx 1.22</span>
-            <span class="chip hot">Cloudflare</span>
-            <span class="chip hot">rsync 发布</span>
-            <span class="chip hot">certbot</span>
-            <span class="chip hot">fail2ban</span>
+            <span class="chip hot" data-i18n="stack.o1">Debian 12</span>
+            <span class="chip hot" data-i18n="stack.o2">nginx 1.22</span>
+            <span class="chip hot" data-i18n="stack.o3">Cloudflare</span>
+            <span class="chip hot" data-i18n="stack.o4">rsync 发布</span>
+            <span class="chip hot" data-i18n="stack.o5">certbot</span>
+            <span class="chip hot" data-i18n="stack.o6">fail2ban</span>
           </div>
         </div>
-        <p style="margin-top:12px">一台 VPS 跑全部站点：证书自动续签，Cloudflare 挡在前面，本地改完发布一下就能看到。</p>
+        <p style="margin-top:12px" data-i18n="stack.ops.desc">一台 VPS 跑全部站点：证书自动续签，Cloudflare 挡在前面，本地改完发布一下就能看到。</p>
       </div>
     </div>
   </section>
 
-  <!-- 项目 -->
+  <!-- 项目（整卡是链接：可右键/中键新标签打开，也能用键盘 Tab 到） -->
   <section id="projects">
-    <div class="sec-head"><span class="arrow">▸</span><span class="title">作品 / 项目</span><span class="sub">projects</span></div>
+    <div class="sec-head"><span class="arrow">▸</span><span class="title" data-i18n="proj.title">作品 / 项目</span><span class="sub" data-i18n="proj.sub">projects</span></div>
     <div class="grid m3">
-      <div class="card proj-card reveal" onclick="window.open('https://mujiu.net','_blank')">
+      <a class="card proj-card reveal" href="https://mujiu.net" target="_blank" rel="noopener">
         <div class="ic">🖥️</div>
         <span class="num">01</span>
-        <h3>交互式终端主页</h3>
-        <p>用命令行风格打造的交互式终端主页，统领各子站点入口。</p>
-        <a class="mini" href="https://mujiu.net" target="_blank">mujiu.net ↗</a>
-        <div class="tags"><span class="tag">React</span><span class="tag">终端风格</span></div>
-      </div>
-      <div class="card proj-card reveal" onclick="window.open('https://ask.mujiu.net','_blank')">
+        <h3 data-i18n="proj.1.h">交互式终端主页</h3>
+        <p data-i18n="proj.1.p">用命令行风格打造的交互式终端主页，统领各子站点入口。</p>
+        <span class="mini">mujiu.net ↗</span>
+        <div class="tags"><span class="tag" data-i18n="proj.1.t1">React</span><span class="tag" data-i18n="proj.1.t2">终端风格</span></div>
+      </a>
+      <a class="card proj-card reveal" href="https://ask.mujiu.net" target="_blank" rel="noopener">
         <div class="ic">📮</div>
         <span class="num">02</span>
-        <h3>匿名留言箱</h3>
-        <p>公开匿名留言箱，所有留言公开可见。</p>
-        <a class="mini" href="https://ask.mujiu.net" target="_blank">ask.mujiu.net ↗</a>
-        <div class="tags"><span class="tag">留言箱</span><span class="tag">公开</span></div>
-      </div>
-      <div class="card proj-card reveal" onclick="window.open('https://game.mujiu.net','_blank')">
+        <h3 data-i18n="proj.2.h">匿名留言箱</h3>
+        <p data-i18n="proj.2.p">公开匿名留言箱，所有留言公开可见。</p>
+        <span class="mini">ask.mujiu.net ↗</span>
+        <div class="tags"><span class="tag" data-i18n="proj.2.t1">留言箱</span><span class="tag" data-i18n="proj.2.t2">公开</span></div>
+      </a>
+      <a class="card proj-card reveal" href="https://game.mujiu.net" target="_blank" rel="noopener">
         <div class="ic">🎮</div>
         <span class="num">03</span>
-        <h3>游戏中心</h3>
-        <p>在线小游戏合集，点进去就能把玩。</p>
-        <a class="mini" href="https://game.mujiu.net" target="_blank">game.mujiu.net ↗</a>
-        <div class="tags"><span class="tag">休闲</span><span class="tag">在线</span></div>
-      </div>
+        <h3 data-i18n="proj.3.h">游戏中心</h3>
+        <p data-i18n="proj.3.p">在线小游戏合集，点进去就能把玩。</p>
+        <span class="mini">game.mujiu.net ↗</span>
+        <div class="tags"><span class="tag" data-i18n="proj.3.t1">休闲</span><span class="tag" data-i18n="proj.3.t2">在线</span></div>
+      </a>
     </div>
   </section>
 
-  <!-- 更新日志 -->
+  <!-- 更新日志（版本号是按几次大改归纳的，不是每次提交都编号） -->
   <section id="changelog">
-    <div class="sec-head"><span class="arrow">▸</span><span class="title">更新日志</span><span class="sub">changelog · 含服务器日志里的更早记录</span></div>
+    <div class="sec-head"><span class="arrow">▸</span><span class="title" data-i18n="log.title">更新日志</span><span class="sub" data-i18n="log.sub">changelog · 含服务器日志里的更早记录</span></div>
     <div class="card reveal">
       <div class="timeline">
         <div class="tl">
+          <span class="d">2026-10-01</span>
+          <h4><span data-i18n="log.4.t">双语切换 + 站内小助手 + 分享卡片</span><span class="v">v4.0</span></h4>
+          <p data-i18n="log.4.p">整页中英双语可切换；新增一个纯本地的小助手；补齐 SEO / 分享卡片 / favicon；顶栏改为吸顶并高亮当前板块；关掉 JavaScript 也能正常阅读。</p>
+        </div>
+        <div class="tl">
           <span class="d">2026-09-24</span>
-          <h4>主题跨站同步 + 服务器仪表盘</h4>
-          <p>四个站共用一套主题：在这里选一次，主站与子站打开都跟着换；本页新增服务器仪表盘，CPU、内存、网络与在线访客实时可看。所有页面改成不缓存，改完刷新即是最新版。</p>
+          <h4><span data-i18n="log.3.t">主题跨站同步 + 服务器仪表盘</span><span class="v">v3.0</span></h4>
+          <p data-i18n="log.3.p">四个站共用一套主题：在这里选一次，主站与子站打开都跟着换；本页新增服务器仪表盘，CPU、内存、网络与在线访客实时可看。所有页面改成不缓存，改完刷新即是最新版。</p>
         </div>
         <div class="tl">
           <span class="d">2026-09-22</span>
-          <h4>主站能换主题了</h4>
-          <p>6 套配色 + 点击处圆形扩散动画，选择记在跨子域生效的 cookie 里。</p>
+          <h4><span data-i18n="log.2.t">主站能换主题了</span><span class="v">v2.1</span></h4>
+          <p data-i18n="log.2.p">6 套配色 + 点击处圆形扩散动画，选择记在跨子域生效的 cookie 里。</p>
         </div>
         <div class="tl">
           <span class="d">2026-09-21</span>
-          <h4>四个子站视觉统一 &amp; 上线</h4>
-          <p>主站补内容与 404 页面、8 款小游戏收录、留言箱上线、本页发布，统一配色与 IBM Plex Mono。</p>
+          <h4><span data-i18n="log.1b.t">四个子站视觉统一 & 上线</span><span class="v">v2.0</span></h4>
+          <p data-i18n="log.1b.p">主站补内容与 404 页面、8 款小游戏收录、留言箱上线、本页发布，统一配色与 IBM Plex Mono。</p>
         </div>
         <div class="tl">
           <span class="d">2026-09-20</span>
-          <h4>站点陆续上线</h4>
-          <p>终端主页、留言箱与游戏站先后上线，nginx 配置与发布流程在这几天定型。</p>
+          <h4><span data-i18n="log.1c.t">站点陆续上线</span><span class="v">v1.1</span></h4>
+          <p data-i18n="log.1c.p">终端主页、留言箱与游戏站先后上线，nginx 配置与发布流程在这几天定型。</p>
         </div>
         <div class="tl">
           <span class="d">2026-09-19</span>
-          <h4>主站 PWA 化</h4>
-          <p>离线缓存、自托管字体与深色主题 manifest，去掉境外字体 CDN 依赖。</p>
+          <h4><span data-i18n="log.1d.t">主站 PWA 化</span><span class="v">v1.0</span></h4>
+          <p data-i18n="log.1d.p">离线缓存、自托管字体与深色主题 manifest，去掉境外字体 CDN 依赖。</p>
         </div>
         <div class="tl">
           <span class="d">2026-09-04</span>
-          <h4>日志里最忙的一天</h4>
-          <p>单日 17,537 次请求 —— 其中 12,000 次来自某个用 curl 的爬虫，真实访客远没有这么多。</p>
+          <h4 data-i18n="log.1e.t">日志里最忙的一天</h4>
+          <p data-i18n="log.1e.p">单日 17,537 次请求 —— 其中 12,000 次来自某个用 curl 的爬虫，真实访客远没有这么多。</p>
         </div>
         <div class="tl">
           <span class="d">2026-08-26</span>
-          <h4>第一次留下访问日志</h4>
-          <p>15:49 记录到第一条请求；小游戏站的 2048 与贪吃蛇当天就有人玩，那会儿贪吃蛇还会返回 500。</p>
+          <h4 data-i18n="log.1f.t">第一次留下访问日志</h4>
+          <p data-i18n="log.1f.p">15:49 记录到第一条请求；小游戏站的 2048 与贪吃蛇当天就有人玩，那会儿贪吃蛇还会返回 500。</p>
         </div>
       </div>
       <p style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line)">
-        再往前的日子没有留下访问记录，08-26 是日志里最早的一天；上面这些日期来自提交记录与服务器日志。
+        <span data-i18n="log.note">再往前的日子没有留下访问记录，08-26 是日志里最早的一天；上面这些日期来自提交记录与服务器日志。</span>
+        <br /><span style="color:var(--text-300);font-size:12px" data-i18n="log.legend">版本号 v1.0 → v4.0 是按几次大改归纳的，不是每次提交都编号。</span>
       </p>
     </div>
   </section>
-
   <!-- 服务器仪表盘 -->
   <section id="server">
-    <div class="sec-head"><span class="arrow">▸</span><span class="title">服务器仪表盘</span><span class="sub">live · 每 5 秒刷新</span></div>
+    <div class="sec-head"><span class="arrow">▸</span><span class="title" data-i18n="server.title">服务器仪表盘</span><span class="sub" data-i18n="server.sub">live · 每 5 秒刷新</span></div>
     <div class="card reveal">
       <div class="dash" id="dash">
         <div class="dash-cell">
-          <span class="dl">在线访客</span><b data-k="visitors">—</b><span class="ds">最近 60 秒内来过的人</span>
+          <span class="dl" data-i18n="server.visitors">在线访客</span><b data-k="visitors">—</b><span class="ds" data-i18n="server.visitors.sub">最近 60 秒内来过的人</span>
         </div>
         <div class="dash-cell">
-          <span class="dl">CPU</span><b data-k="cpu">—</b><div class="meter"><i data-m="cpu"></i></div>
+          <span class="dl" data-i18n="server.cpu">CPU</span><b data-k="cpu">—</b><div class="meter"><i data-m="cpu"></i></div>
         </div>
         <div class="dash-cell">
-          <span class="dl">内存</span><b data-k="mem">—</b><div class="meter"><i data-m="mem"></i></div>
+          <span class="dl" data-i18n="server.mem">内存</span><b data-k="mem">—</b><div class="meter"><i data-m="mem"></i></div>
         </div>
         <div class="dash-cell">
-          <span class="dl">磁盘</span><b data-k="disk">—</b><div class="meter"><i data-m="disk"></i></div>
+          <span class="dl" data-i18n="server.disk">磁盘</span><b data-k="disk">—</b><div class="meter"><i data-m="disk"></i></div>
         </div>
         <div class="dash-cell">
-          <span class="dl">下行</span><b data-k="rx">—</b><span class="ds">每秒接收</span>
+          <span class="dl" data-i18n="server.rx">下行</span><b data-k="rx">—</b><span class="ds" data-i18n="server.rx.sub">每秒接收</span>
         </div>
         <div class="dash-cell">
-          <span class="dl">上行</span><b data-k="tx">—</b><span class="ds">每秒发送</span>
+          <span class="dl" data-i18n="server.tx">上行</span><b data-k="tx">—</b><span class="ds" data-i18n="server.tx.sub">每秒发送</span>
         </div>
         <div class="dash-cell">
-          <span class="dl">请求</span><b data-k="req">—</b><span class="ds">每分钟</span>
+          <span class="dl" data-i18n="server.req">请求</span><b data-k="req">—</b><span class="ds" data-i18n="server.req.sub">每分钟</span>
         </div>
         <div class="dash-cell">
-          <span class="dl">负载 / 运行</span><b data-k="load">—</b><span class="ds" data-k="uptime">—</span>
+          <span class="dl" data-i18n="server.load">负载 / 运行</span><b data-k="load">—</b><span class="ds" data-k="uptime">—</span>
         </div>
       </div>
-      <div class="dash-foot" id="dashFoot">正在连接服务器…</div>
+      <div class="dash-foot" id="dashFoot" data-i18n="server.connecting">正在连接服务器…</div>
+    </div>
+  </section>
+
+  <!-- 站内小助手：答案全部写在本页里，关键词匹配，不联网、不调用大模型 -->
+  <section id="assistant">
+    <div class="sec-head"><span class="arrow">▸</span><span class="title" data-i18n="asst.title">站内小助手</span><span class="sub" data-i18n="asst.sub">local only · 不联网</span></div>
+    <div class="card reveal">
+      <div class="asst">
+        <p class="intro" data-i18n="asst.intro">我是页面里的一段固定脚本：答案全部写在这个页面里，不联网、不调用任何大模型。</p>
+        <div class="chips" id="asstChips">
+          <button class="chip" type="button" data-q="q1" data-i18n="asst.q1">你是谁？</button>
+          <button class="chip" type="button" data-q="q2" data-i18n="asst.q2">这个站怎么搭的？</button>
+          <button class="chip" type="button" data-q="q3" data-i18n="asst.q3">有哪些项目？</button>
+          <button class="chip" type="button" data-q="q4" data-i18n="asst.q4">最近更新了什么？</button>
+          <button class="chip" type="button" data-q="q5" data-i18n="asst.q5">服务器什么配置？</button>
+          <button class="chip" type="button" data-q="q6" data-i18n="asst.q6">怎么联系你？</button>
+        </div>
+        <div class="ask">
+          <input id="asstInput" type="text" autocomplete="off" data-i18n-ph="asst.ph" placeholder="输入问题，或点下面的问题…" aria-label="向站内小助手提问" />
+          <button class="btn btn-primary" id="asstSend" type="button" data-i18n="asst.send">发送</button>
+        </div>
+        <div class="reply" id="asstReply" role="status" aria-live="polite"></div>
+      </div>
     </div>
   </section>
 
   <!-- 社交 -->
   <section id="socials">
-    <div class="sec-head"><span class="arrow">▸</span><span class="title">社交账号</span><span class="sub">socials</span></div>
+    <div class="sec-head"><span class="arrow">▸</span><span class="title" data-i18n="soc.title">社交账号</span><span class="sub" data-i18n="soc.sub">socials</span></div>
     <div class="grid m1">
       <div class="card reveal">
         <div class="ic">🐙</div>
         <h3>GitHub</h3>
-        <p>github.com/mujiu07</p>
-        <a class="mini" href="https://github.com/mujiu07" target="_blank">mujiu07 ↗</a>
+        <p data-i18n="soc.desc">github.com/mujiu07</p>
+        <a class="mini" href="https://github.com/mujiu07" target="_blank" rel="noopener">mujiu07 ↗</a>
       </div>
     </div>
   </section>
 
   <!-- 联系 -->
   <section id="contact">
-    <div class="sec-head"><span class="arrow">▸</span><span class="title">联系我</span><span class="sub">say hello</span></div>
+    <div class="sec-head"><span class="arrow">▸</span><span class="title" data-i18n="ct.title">联系我</span><span class="sub" data-i18n="ct.sub">say hello</span></div>
     <div class="contact reveal">
       <div>
-        <h3>聊聊想法？</h3>
-        <p>CTF、AI、网络服务…… 欢迎来信交流。</p>
+        <h3 data-i18n="ct.h3">聊聊想法？</h3>
+        <p data-i18n="ct.p">CTF、AI、网络服务…… 欢迎来信交流。</p>
         <div class="cta">
-          <a class="btn btn-primary" href="mailto:inbox@mujiu.net">✉ 写封邮件</a>
+          <a class="btn btn-primary" href="mailto:inbox@mujiu.net" data-i18n="ct.cta">✉ 写封邮件</a>
         </div>
       </div>
       <div class="mailbox">
         <span class="lbl">inbox@mujiu.net</span>
-        <a href="mailto:inbox@mujiu.net">樊旭阳 的信箱</a>
+        <a href="mailto:inbox@mujiu.net" data-i18n="ct.mailbox">樊旭阳 的信箱</a>
       </div>
     </div>
   </section>
 
   <footer>
-    <div>© <span id="year"></span> 樊旭阳 · <span class="g">图形化个人主页</span> · <a href="https://mujiu.net" target="_blank">mujiu.net</a></div>
-    <div style="margin-top:6px">试试键盘彩蛋：↑↑↓↓←→←→BA</div>
+    <div>© <span id="year"></span> 樊旭阳 · <span class="g">mujiu.net</span> · <a href="https://mujiu.net" target="_blank" rel="noopener">mujiu.net</a></div>
+    <div style="margin-top:6px"><span class="ver" data-i18n="foot.ver">v4.0</span> · <span data-i18n="foot.updated">更新于</span> 2026-10-01</div>
+    <div style="margin-top:6px" data-i18n="foot.easter">试试键盘彩蛋：↑↑↓↓←→←→BA</div>
   </footer>
 </div>
 
 <button class="totop" id="totop" type="button" aria-label="回到顶部" title="回到顶部">↑</button>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
 <script>
+(function () {
+  'use strict';
+
+  var MUJIU = window.MUJIU;
+  var THEMES = MUJIU.THEMES, I18N = MUJIU.I18N, t = MUJIU.t;
+
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // ---- 主题（沿用 mujiu 官方色值）----
-  const THEMES = {
-    'dark':         { body:'#1D2A35', primary:'#05CE91', secondary:'#FF9D00', t100:'#cbd5e1', t200:'#B2BDCC', t300:'#64748b', panel:'#22313f', sw:'#0b1220' },
-    'light':        { body:'#EFF3F3', primary:'#027474', secondary:'#FF9D00', t100:'#334155', t200:'#475569', t300:'#64748b', panel:'#e2e8e8', sw:'#eef2f2' },
-    'blue-matrix':  { body:'#101116', primary:'#00ff9c', secondary:'#60fdff', t100:'#ffffff', t200:'#c7c7c7', t300:'#76ff9f', panel:'#0b1720', sw:'#001a15' },
-    'espresso':     { body:'#323232', primary:'#E1E48B', secondary:'#A5C260', t100:'#F7F7F7', t200:'#EEEEEE', t300:'#5b5b5b', panel:'#3d3d3d', sw:'#443b3b' },
-    'green-goblin': { body:'#000000', primary:'#E5E500', secondary:'#04A500', t100:'#01FF00', t200:'#04A5B2', t300:'#E50101', panel:'#0d0d0d', sw:'#1a1a00' },
-    'ubuntu':       { body:'#2D0922', primary:'#80D932', secondary:'#80D932', t100:'#FFFFFF', t200:'#E1E9CC', t300:'#CDCDCD', panel:'#3a1230', sw:'#a34a22' },
-  };
-  let curTheme = 'dark';
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  var reduceFx = reduceMotion;
 
-  // ---- 主题存储：cookie 作用域 .mujiu.net，四个子域共享；localStorage 仅作回退/迁移 ----
-  const THEME_COOKIE = 'mujiu_theme';
-  const THEME_MAX_AGE = 31536000;
-  let primaryColor = '#05CE91';   // 缓存当前主题主色，避免粒子每帧读样式
+  // ================= 主题 =================
+  var curTheme = MUJIU.theme;
+  var primaryColor = THEMES[curTheme].primary;   // 缓存当前主色，粒子每帧直接读
 
-  function readThemeCookie() {
-    const m = document.cookie.match(/(?:^|;\s*)mujiu_theme=([^;]+)/);
-    return m ? decodeURIComponent(m[1]) : '';
-  }
-
-  function writeThemeCookie(name) {
-    const secure = location.protocol === 'https:' ? '; Secure' : '';
-    const base = `${THEME_COOKIE}=${encodeURIComponent(name)}; path=/; max-age=${THEME_MAX_AGE}; SameSite=Lax${secure}`;
-    document.cookie = `${base}; domain=.mujiu.net`;   // 主站与子域共享
-    document.cookie = base;                           // 本地预览(host 不匹配)时兜底
-    try { localStorage.setItem(THEME_COOKIE, name); } catch(e){}
-  }
-
-  function readSavedTheme() {
-    const c = readThemeCookie();
-    if (c && THEMES[c]) return c;
-    try { const ls = localStorage.getItem(THEME_COOKIE); if (ls && THEMES[ls]) return ls; } catch(e){}
-    return '';
-  }
-
-  function applyTheme(name, persist = true) {
-    const t = THEMES[name]; if (!t) return;
-    const r = document.documentElement.style;
-    r.setProperty('--body', t.body);
-    r.setProperty('--body-2', t.body);
-    r.setProperty('--panel', t.panel);
-    r.setProperty('--card', t.panel);
-    r.setProperty('--primary', t.primary);
-    r.setProperty('--secondary', t.secondary);
-    r.setProperty('--text-100', t.t100);
-    r.setProperty('--text-200', t.t200);
-    r.setProperty('--text-300', t.t300);
+  function applyTheme(name, persist) {
+    MUJIU.applyTheme(name, persist);
     curTheme = name;
-    primaryColor = t.primary;
-    if (persist) writeThemeCookie(name);
-    document.querySelectorAll('.theme-dot').forEach(d => d.classList.toggle('active', d.dataset.t === name));
+    primaryColor = THEMES[name].primary;
   }
 
   // 切换主题：浏览器支持时用 View Transitions 从点击处做圆形扩散
   function switchTheme(name, x, y) {
     if (name === curTheme || !THEMES[name]) return;
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!document.startViewTransition || reduce) { applyTheme(name); toast(`主题：${name}`); return; }
-    const px = typeof x === 'number' ? x : innerWidth - 80;
-    const py = typeof y === 'number' ? y : 40;
-    const vt = document.startViewTransition(() => applyTheme(name));
-    vt.ready.then(() => {
-      const r = Math.hypot(Math.max(px, innerWidth - px), Math.max(py, innerHeight - py));
+    if (!document.startViewTransition || reduceMotion) {
+      applyTheme(name, true);
+      toast(t('toast.theme', { name: name }));
+      return;
+    }
+    var px = typeof x === 'number' ? x : innerWidth - 80;
+    var py = typeof y === 'number' ? y : 40;
+    var vt = document.startViewTransition(function () { applyTheme(name, true); });
+    vt.ready.then(function () {
+      var r = Math.hypot(Math.max(px, innerWidth - px), Math.max(py, innerHeight - py));
       document.documentElement.animate(
-        { clipPath: [`circle(0px at ${px}px ${py}px)`, `circle(${r}px at ${px}px ${py}px)`] },
+        { clipPath: ['circle(0px at ' + px + 'px ' + py + 'px)', 'circle(' + r + 'px at ' + px + 'px ' + py + 'px)'] },
         { duration: 520, easing: 'ease-in-out', pseudoElement: '::view-transition-new(root)' }
       );
-    }).catch(() => {});
-    toast(`主题：${name} · 已同步全站`);
+    }).catch(function () {});
+    toast(t('toast.theme.sync', { name: name }));
   }
 
-  // 渲染主题选择器（用 button，键盘可 Tab + 回车切换）
-  const picker = document.getElementById('themePicker');
-  Object.keys(THEMES).forEach(name => {
-    const t = THEMES[name];
-    const b = document.createElement('button');
+  // 渲染主题选择器（button：可 Tab 聚焦 + 回车切换）
+  var picker = document.getElementById('themePicker');
+  Object.keys(THEMES).forEach(function (name) {
+    var th = THEMES[name];
+    var b = document.createElement('button');
     b.type = 'button';
     b.className = 'theme-dot';
     b.title = name;
     b.dataset.t = name;
-    b.setAttribute('aria-label', `切换到 ${name} 主题`);
-    b.style.background = `linear-gradient(135deg, ${t.primary}, ${t.secondary})`;
-    b.style.borderColor = t.body;
-    b.addEventListener('click', e => switchTheme(name, e.clientX, e.clientY));
+    b.setAttribute('aria-label', '主题 ' + name);
+    b.style.background = 'linear-gradient(135deg, ' + th.primary + ', ' + th.secondary + ')';
+    b.style.borderColor = th.body;
+    b.addEventListener('click', function (e) { switchTheme(name, e.clientX, e.clientY); });
     picker.appendChild(b);
   });
+  applyTheme(curTheme, false);   // 画上选中态（不重复写 cookie）
 
-  // 恢复：cookie（跨子域）优先 → localStorage（并迁移进 cookie）→ 默认 dark
-  (function restoreTheme() {
-    const saved = readSavedTheme();
-    if (saved) applyTheme(saved, readThemeCookie() !== saved);
-    else applyTheme('dark', false);
+  // ================= 滚动渐入 =================
+  (function reveal() {
+    var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+    if (!('IntersectionObserver' in window)) { els.forEach(function (el) { el.classList.add('in'); }); return; }
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('in'); });
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { io.observe(el); });
+    window.addEventListener('load', function () {
+      els.forEach(function (el) { if (el.getBoundingClientRect().top < innerHeight * 0.6) el.classList.add('in'); });
+    });
   })();
 
-  // 在别的子域换了主题，切回本页时跟着变
-  function syncThemeFromCookie() {
-    const c = readThemeCookie();
-    if (c && THEMES[c] && c !== curTheme) applyTheme(c, false);
-  }
-  window.addEventListener('focus', syncThemeFromCookie);
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) syncThemeFromCookie(); });
-
-  // 滚动渐入
-  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }), { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-  window.addEventListener('load', () => document.querySelectorAll('.reveal').forEach(el => { if (el.getBoundingClientRect().top < innerHeight*0.6) el.classList.add('in'); }));
-
-  // ================= 炫技效果（触屏 / 低配 / 减少动态自动降级） =================
-  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const glowEl = document.getElementById('glow');
-  const fxCanvas = document.getElementById('fx');
-  const ptr = { x: innerWidth / 2, y: innerHeight / 2, gx: innerWidth / 2, gy: innerHeight / 2 };
-  const tiltables = Array.from(document.querySelectorAll('.card, .glass, .stat-card, .contact'));
-  tiltables.forEach(el => el.classList.add('tiltable'));
+  // ================= 炫技效果（触屏 / 低配 / 减少动效自动降级） =================
+  var glowEl = document.getElementById('glow');
+  var fxCanvas = document.getElementById('fx');
+  var ptr = { x: innerWidth / 2, y: innerHeight / 2, gx: innerWidth / 2, gy: innerHeight / 2 };
+  var tiltables = Array.prototype.slice.call(document.querySelectorAll('.card, .glass, .stat-card, .contact'));
+  tiltables.forEach(function (el) { el.classList.add('tiltable'); });
 
   if (finePointer && !reduceMotion) {
     document.body.classList.add('pointer-on');
-    window.addEventListener('pointermove', e => { ptr.x = e.clientX; ptr.y = e.clientY; }, { passive: true });
+    window.addEventListener('pointermove', function (e) { ptr.x = e.clientX; ptr.y = e.clientY; }, { passive: true });
 
     // 1) 鼠标跟随光晕（缓动趋近）
     (function glowLoop() {
       ptr.gx += (ptr.x - ptr.gx) * 0.12;
       ptr.gy += (ptr.y - ptr.gy) * 0.12;
-      if (glowEl) glowEl.style.transform = `translate3d(${ptr.gx.toFixed(1)}px, ${ptr.gy.toFixed(1)}px, 0) translate(-50%, -50%)`;
+      if (glowEl) glowEl.style.transform = 'translate3d(' + ptr.gx.toFixed(1) + 'px, ' + ptr.gy.toFixed(1) + 'px, 0) translate(-50%, -50%)';
       requestAnimationFrame(glowLoop);
     })();
 
     // 2) 3D 卡片倾斜 + 光标高亮 + 边框流光
-    tiltables.forEach(el => {
-      el.addEventListener('pointermove', e => {
-        const r = el.getBoundingClientRect();
-        const mx = e.clientX - r.left, my = e.clientY - r.top;
+    tiltables.forEach(function (el) {
+      el.addEventListener('pointermove', function (e) {
+        var r = el.getBoundingClientRect();
+        var mx = e.clientX - r.left, my = e.clientY - r.top;
         el.style.setProperty('--mx', mx + 'px');
         el.style.setProperty('--my', my + 'px');
-        const rx = (my / r.height - 0.5) * -5;
-        const ry = (mx / r.width - 0.5) * 5;
-        el.style.transform = `perspective(900px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translateY(-3px)`;
+        var rx = (my / r.height - 0.5) * -5;
+        var ry = (mx / r.width - 0.5) * 5;
+        el.style.transform = 'perspective(900px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) translateY(-3px)';
       });
-      el.addEventListener('pointerleave', () => {
+      el.addEventListener('pointerleave', function () {
         el.style.transform = '';
         el.style.removeProperty('--mx');
         el.style.removeProperty('--my');
@@ -779,9 +1237,9 @@
   (function gridFx() {
     if (!fxCanvas) return;
     if (reduceMotion) { fxCanvas.remove(); return; }
-    const ctx = fxCanvas.getContext('2d');
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    let W = 0, H = 0, ps = [], raf = null;
+    var ctx = fxCanvas.getContext('2d');
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var W = 0, H = 0, ps = [], raf = null;
     function resize() {
       W = innerWidth; H = innerHeight;
       fxCanvas.width = W * dpr; fxCanvas.height = H * dpr;
@@ -790,38 +1248,40 @@
     }
     resize();
     addEventListener('resize', resize);
-    const N = innerWidth < 760 ? 16 : 40;
-    const LINK = innerWidth < 760 ? 90 : 130;
-    ps = Array.from({ length: N }, () => ({
-      x: Math.random() * innerWidth, y: Math.random() * innerHeight,
-      vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25,
-    }));
+    var N = innerWidth < 760 ? 16 : 40;
+    var LINK = innerWidth < 760 ? 90 : 130;
+    ps = Array.from({ length: N }, function () {
+      return {
+        x: Math.random() * innerWidth, y: Math.random() * innerHeight,
+        vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25
+      };
+    });
     function frame() {
-      const primary = primaryColor;   // 主题切换时缓存，省掉每帧读样式
+      var primary = primaryColor;   // 主题切换时缓存，省掉每帧读样式
       ctx.clearRect(0, 0, W, H);
 
       // 网格（随鼠标轻微视差）
-      const g = 48;
-      const ox = finePointer ? (ptr.x / W - .5) * 10 : 0;
-      const oy = finePointer ? (ptr.y / H - .5) * 10 : 0;
+      var g = 48;
+      var ox = finePointer ? (ptr.x / W - .5) * 10 : 0;
+      var oy = finePointer ? (ptr.y / H - .5) * 10 : 0;
       ctx.strokeStyle = 'rgba(255,255,255,0.045)';
       ctx.lineWidth = 1;
       ctx.beginPath();
-      for (let x = ox % g; x < W; x += g) { ctx.moveTo(x, 0); ctx.lineTo(x, H); }
-      for (let y = oy % g; y < H; y += g) { ctx.moveTo(0, y); ctx.lineTo(W, y); }
+      for (var x = ox % g; x < W; x += g) { ctx.moveTo(x, 0); ctx.lineTo(x, H); }
+      for (var y = oy % g; y < H; y += g) { ctx.moveTo(0, y); ctx.lineTo(W, y); }
       ctx.stroke();
 
       // 粒子 + 连线（含鼠标吸引线）
-      for (let i = 0; i < ps.length; i++) {
-        const p = ps[i];
+      for (var i = 0; i < ps.length; i++) {
+        var p = ps[i];
         p.x += p.vx; p.y += p.vy;
         if (p.x < 0 || p.x > W) p.vx *= -1;
         if (p.y < 0 || p.y > H) p.vy *= -1;
         ctx.fillStyle = primary;
         ctx.globalAlpha = .55;
         ctx.beginPath(); ctx.arc(p.x, p.y, 1.3, 0, Math.PI * 2); ctx.fill();
-        for (let j = i + 1; j < ps.length; j++) {
-          const q = ps[j], d = Math.hypot(p.x - q.x, p.y - q.y);
+        for (var j = i + 1; j < ps.length; j++) {
+          var q = ps[j], d = Math.hypot(p.x - q.x, p.y - q.y);
           if (d < LINK) {
             ctx.globalAlpha = (1 - d / LINK) * .3;
             ctx.strokeStyle = primary;
@@ -829,7 +1289,7 @@
           }
         }
         if (finePointer) {
-          const dm = Math.hypot(p.x - ptr.x, p.y - ptr.y);
+          var dm = Math.hypot(p.x - ptr.x, p.y - ptr.y);
           if (dm < 170) {
             ctx.globalAlpha = (1 - dm / 170) * .5;
             ctx.strokeStyle = primary;
@@ -841,129 +1301,139 @@
       raf = requestAnimationFrame(frame);
     }
     frame();
-    document.addEventListener('visibilitychange', () => {
+    document.addEventListener('visibilitychange', function () {
       if (document.hidden) { if (raf) cancelAnimationFrame(raf); raf = null; }
       else if (!raf) frame();
     });
   })();
 
-  // 4) 打字机标题
-  (function typewriter() {
-    const el = document.getElementById('typed');
-    const caret = document.getElementById('caret');
+  // 4) 打字机标题（切换语言时会重打一遍）
+  var typedTimer = null;
+  function startTyped() {
+    var el = document.getElementById('typed');
+    var caret = document.getElementById('caret');
     if (!el) return;
-    const text = el.dataset.text || '';
-    if (reduceMotion) { el.textContent = text; if (caret) caret.remove(); return; }
-    let i = 0;
+    var text = el.dataset.text || '';
+    clearTimeout(typedTimer);
+    el.textContent = '';
+    if (reduceMotion) { el.textContent = text; if (caret) caret.style.display = 'none'; return; }
+    if (caret) caret.style.display = '';
+    var i = 0;
     (function step() {
       el.textContent = text.slice(0, ++i);
-      if (i < text.length) setTimeout(step, 180);
-      else if (caret) setTimeout(() => caret.remove(), 1400);
+      if (i < text.length) typedTimer = setTimeout(step, 180);
+      else if (caret) typedTimer = setTimeout(function () { caret.style.display = 'none'; }, 1400);
     })();
-  })();
+  }
+  startTyped();
 
   // 5) 数字滚动
-  (function countUp() {
-    const els = Array.from(document.querySelectorAll('.cnt'));
+  function startCountUp() {
+    var els = Array.prototype.slice.call(document.querySelectorAll('.cnt'));
     function run(el) {
-      const to = parseInt(el.dataset.to || '0', 10);
+      var to = parseInt(el.dataset.to || '0', 10);
       if (reduceMotion) { el.textContent = to; return; }
-      const dur = 900, t0 = performance.now();
+      var dur = 900, t0 = performance.now();
       (function tick(now) {
-        const k = Math.min(1, (now - t0) / dur);
+        var k = Math.min(1, (now - t0) / dur);
         el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3)));
         if (k < 1) requestAnimationFrame(tick);
       })(t0);
     }
     if (!('IntersectionObserver' in window)) { els.forEach(run); return; }
-    const ob = new IntersectionObserver(es => es.forEach(e => {
-      if (e.isIntersecting) { run(e.target); ob.unobserve(e.target); }
-    }), { threshold: .4 });
-    els.forEach(el => ob.observe(el));
-  })();
+    var ob = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { run(e.target); ob.unobserve(e.target); } });
+    }, { threshold: .4 });
+    els.forEach(function (el) { ob.observe(el); });
+  }
+  startCountUp();
 
   // ================= 附加交互效果 =================
-  const reduceFx = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // 提示气泡
-  let toastTimer = null;
+  var toastTimer = null;
   function toast(msg) {
-    const el = document.getElementById('toast'); if (!el) return;
+    var el = document.getElementById('toast'); if (!el) return;
     el.textContent = msg;
     el.classList.add('show');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+    toastTimer = setTimeout(function () { el.classList.remove('show'); }, 2200);
   }
 
-  // 6) 滚动进度条 + 回到顶部
-  const bar = document.getElementById('progress');
-  const toTop = document.getElementById('totop');
+  // 6) 滚动进度条 + 回到顶部 + 顶栏吸顶状态
+  var bar = document.getElementById('progress');
+  var toTop = document.getElementById('totop');
+  var menubar = document.getElementById('menubar');
   function onScroll() {
-    const max = document.documentElement.scrollHeight - innerHeight;
-    const k = max > 0 ? Math.min(1, scrollY / max) : 0;
+    var max = document.documentElement.scrollHeight - innerHeight;
+    var k = max > 0 ? Math.min(1, scrollY / max) : 0;
     if (bar) bar.style.width = (k * 100).toFixed(2) + '%';
     if (toTop) toTop.classList.toggle('show', scrollY > 420);
+    if (menubar) menubar.classList.toggle('stuck', scrollY > 8);
   }
   addEventListener('scroll', onScroll, { passive: true });
   addEventListener('resize', onScroll);
   onScroll();
-  if (toTop) toTop.addEventListener('click', () => scrollTo({ top: 0, behavior: reduceFx ? 'auto' : 'smooth' }));
+  if (toTop) toTop.addEventListener('click', function () { scrollTo({ top: 0, behavior: reduceFx ? 'auto' : 'smooth' }); });
 
   // 7) 点击涟漪
   if (!reduceFx) {
-    addEventListener('pointerdown', e => {
+    addEventListener('pointerdown', function (e) {
       if (e.pointerType === 'mouse' && e.button !== 0) return;
-      const el = document.createElement('span');
+      var el = document.createElement('span');
       el.className = 'ripple';
       el.style.left = e.clientX + 'px';
       el.style.top = e.clientY + 'px';
       el.style.width = el.style.height = '120px';
       document.body.appendChild(el);
-      setTimeout(() => el.remove(), 620);
+      setTimeout(function () { el.remove(); }, 620);
     }, { passive: true });
   }
 
   // 8) 磁吸按钮（鼠标靠近时轻微跟随）
   if (finePointer && !reduceMotion) {
-    document.querySelectorAll('.btn').forEach(b => {
-      b.addEventListener('pointermove', e => {
-        const r = b.getBoundingClientRect();
-        const dx = (e.clientX - (r.left + r.width / 2)) * 0.16;
-        const dy = (e.clientY - (r.top + r.height / 2)) * 0.26;
-        b.style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px)`;
+    document.querySelectorAll('.btn').forEach(function (b) {
+      b.addEventListener('pointermove', function (e) {
+        var r = b.getBoundingClientRect();
+        var dx = (e.clientX - (r.left + r.width / 2)) * 0.16;
+        var dy = (e.clientY - (r.top + r.height / 2)) * 0.26;
+        b.style.transform = 'translate(' + dx.toFixed(1) + 'px, ' + dy.toFixed(1) + 'px)';
       });
-      b.addEventListener('pointerleave', () => { b.style.transform = ''; });
+      b.addEventListener('pointerleave', function () { b.style.transform = ''; });
     });
   }
 
-  // 9) "现在在做什么" 多行轮播打字机
-  (function nowTicker() {
-    const el = document.getElementById('nowLine'); if (!el) return;
-    const lines = (el.dataset.lines || '').split('｜').filter(Boolean);
+  // 9) "现在在做什么" 多行轮播打字机（切换语言时重置）
+  var nowTimer = null;
+  function startNow() {
+    var el = document.getElementById('nowLine'); if (!el) return;
+    clearTimeout(nowTimer);
+    var lines = (el.dataset.lines || '').split('｜').filter(Boolean);
     if (!lines.length) return;
     if (reduceFx) { el.textContent = lines.join(' / '); return; }
-    let li = 0, ci = 0, del = false;
+    var li = 0, ci = 0, del = false;
     (function step() {
-      const cur = lines[li];
+      var cur = lines[li];
       if (!del) {
         ci++;
         el.textContent = cur.slice(0, ci);
-        if (ci === cur.length) { del = true; return setTimeout(step, 1500); }
-        return setTimeout(step, 70);
+        if (ci === cur.length) { del = true; nowTimer = setTimeout(step, 1500); return; }
+        nowTimer = setTimeout(step, 70);
+        return;
       }
       ci--;
       el.textContent = cur.slice(0, ci);
-      if (ci === 0) { del = false; li = (li + 1) % lines.length; return setTimeout(step, 240); }
-      setTimeout(step, 32);
+      if (ci === 0) { del = false; li = (li + 1) % lines.length; nowTimer = setTimeout(step, 240); return; }
+      nowTimer = setTimeout(step, 32);
     })();
-  })();
-
+  }
+  startNow();
   // 10) 键盘彩蛋：↑↑↓↓←→←→BA → 矩阵雨
   (function konami() {
-    const seq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-    let i = 0;
-    addEventListener('keydown', e => {
-      const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    var seq = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    var i = 0;
+    addEventListener('keydown', function (e) {
+      var k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
       i = (k === seq[i]) ? i + 1 : (k === seq[0] ? 1 : 0);
       if (i === seq.length) { i = 0; matrixRain(); }
     });
@@ -971,23 +1441,23 @@
 
   function matrixRain() {
     if (reduceFx) { toast('彩蛋：矩阵模式（系统已开启减少动效，已跳过）'); return; }
-    const cv = document.createElement('canvas');
+    var cv = document.createElement('canvas');
     cv.setAttribute('aria-hidden', 'true');
     cv.style.cssText = 'position:fixed;inset:0;z-index:55;pointer-events:none;opacity:.85';
     cv.width = innerWidth; cv.height = innerHeight;
     document.body.appendChild(cv);
-    const c = cv.getContext('2d');
-    const size = 14;
-    const cols = Math.floor(innerWidth / size);
-    const drops = Array.from({ length: cols }, () => Math.random() * -40);
-    const glyphs = 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉ0123456789';
-    let frames = 0;
+    var c = cv.getContext('2d');
+    var size = 14;
+    var cols = Math.floor(innerWidth / size);
+    var drops = Array.from({ length: cols }, function () { return Math.random() * -40; });
+    var glyphs = 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉ0123456789';
+    var frames = 0;
     (function draw() {
       c.fillStyle = 'rgba(0,0,0,0.12)';
       c.fillRect(0, 0, cv.width, cv.height);
-      c.font = `${size - 1}px "IBM Plex Mono", monospace`;
-      for (let i = 0; i < cols; i++) {
-        const ch = glyphs[Math.floor(Math.random() * glyphs.length)];
+      c.font = (size - 1) + 'px "IBM Plex Mono", monospace';
+      for (var i = 0; i < cols; i++) {
+        var ch = glyphs[Math.floor(Math.random() * glyphs.length)];
         c.fillStyle = Math.random() > .96 ? '#ffffff' : primaryColor;
         c.fillText(ch, i * size, drops[i] * size);
         if (drops[i] * size > cv.height && Math.random() > .975) drops[i] = 0;
@@ -1001,58 +1471,182 @@
 
   // 11) 服务器仪表盘：每 5 秒拉一次聚合指标（页面切到后台就暂停，省流量）
   (function dashboard() {
-    const box = document.getElementById('dash');
-    const foot = document.getElementById('dashFoot');
+    var box = document.getElementById('dash');
+    var foot = document.getElementById('dashFoot');
     if (!box) return;
 
-    const put = (k, v) => { const el = box.querySelector('[data-k="' + k + '"]'); if (el) el.textContent = v; };
-    const bar = (k, p) => { const el = box.querySelector('[data-m="' + k + '"]'); if (el) el.style.width = Math.max(0, Math.min(100, p || 0)) + '%'; };
-    const pct = v => (v == null ? '—' : v.toFixed(1) + '%');
-    const speed = n => {
+    var put = function (k, v) { var el = box.querySelector('[data-k="' + k + '"]'); if (el) el.textContent = v; };
+    var setBar = function (k, p) { var el = box.querySelector('[data-m="' + k + '"]'); if (el) el.style.width = Math.max(0, Math.min(100, p || 0)) + '%'; };
+    var pct = function (v) { return v == null ? '—' : v.toFixed(1) + '%'; };
+    var speed = function (n) {
       if (n == null) return '—';
       if (n >= 1048576) return (n / 1048576).toFixed(1) + ' MB/s';
       if (n >= 1024) return (n / 1024).toFixed(1) + ' KB/s';
       return n + ' B/s';
     };
-    const span = s => {
+    var span = function (s) {
       if (s == null) return '—';
-      return s >= 86400 ? (s / 86400).toFixed(1) + ' 天' : Math.floor(s / 3600) + ' 小时';
+      return s >= 86400 ? (s / 86400).toFixed(1) + ' ' + t('unit.day') : Math.floor(s / 3600) + ' ' + t('unit.hour');
     };
 
-    let timer = null, fails = 0;
+    var last = null;
+
+    function render(d) {
+      last = d;
+      put('visitors', d.visitors_1m == null ? '—' : d.visitors_1m + ' ' + t('unit.people'));
+      put('cpu', pct(d.cpu_pct)); setBar('cpu', d.cpu_pct);
+      put('mem', pct(d.mem_pct)); setBar('mem', d.mem_pct);
+      put('disk', pct(d.disk_pct)); setBar('disk', d.disk_pct);
+      put('rx', speed(d.rx_bps));
+      put('tx', speed(d.tx_bps));
+      put('req', d.requests_1m == null ? '—' : d.requests_1m + ' ' + t('unit.req'));
+      put('load', d.load1 == null ? '—' : d.load1.toFixed(2));
+      put('uptime', t('unit.up') + ' ' + span(d.uptime_s));
+
+      var extra =
+        (d.mem_used_mb != null ? ' · ' + t('server.mem') + ' ' + d.mem_used_mb + '/' + d.mem_total_mb + ' MB' : '') +
+        (d.disk_used_gb != null ? ' · ' + t('server.disk') + ' ' + d.disk_used_gb + '/' + d.disk_total_gb + ' GB' : '');
+      var tm = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+      foot.textContent = t('server.foot') + extra + ' · ' + t('foot.updated') + ' ' + tm;
+    }
+
+    window.__mujiuRerenderDash = function () { if (last) render(last); };
+
+    var timer = null, fails = 0;
 
     async function tick() {
       try {
-        const res = await fetch('./api/stats.php', { cache: 'no-store' });
+        var res = await fetch('./api/stats.php', { cache: 'no-store' });
         if (!res.ok) throw new Error('HTTP ' + res.status);
-        const d = await res.json();
+        var d = await res.json();
         fails = 0;
-        put('visitors', d.visitors_1m == null ? '—' : d.visitors_1m + ' 人');
-        put('cpu', pct(d.cpu_pct));   bar('cpu', d.cpu_pct);
-        put('mem', pct(d.mem_pct));   bar('mem', d.mem_pct);
-        put('disk', pct(d.disk_pct)); bar('disk', d.disk_pct);
-        put('rx', speed(d.rx_bps));
-        put('tx', speed(d.tx_bps));
-        put('req', d.requests_1m == null ? '—' : d.requests_1m + ' 次');
-        put('load', d.load1 == null ? '—' : d.load1.toFixed(2));
-        put('uptime', '已运行 ' + span(d.uptime_s));
-
-        const extra =
-          (d.mem_used_mb != null ? ' · 内存 ' + d.mem_used_mb + '/' + d.mem_total_mb + ' MB' : '') +
-          (d.disk_used_gb != null ? ' · 磁盘 ' + d.disk_used_gb + '/' + d.disk_total_gb + ' GB' : '');
-        const t = new Date().toLocaleTimeString('zh-CN', { hour12: false });
-        foot.textContent = '每 5 秒从服务器 /proc 与 nginx 日志取一次聚合数字（不含任何访客信息）' + extra + ' · 更新于 ' + t;
+        render(d);
       } catch (e) {
         fails++;
-        foot.textContent = fails > 2 ? '暂时取不到服务器数据（接口未就绪或被拦截）' : '正在连接服务器…';
+        foot.textContent = fails > 2 ? t('server.offline') : t('server.connecting');
       }
     }
 
     function start() { if (timer) return; tick(); timer = setInterval(tick, 5000); }
     function stop() { if (timer) { clearInterval(timer); timer = null; } }
     start();
-    document.addEventListener('visibilitychange', () => { document.hidden ? stop() : start(); });
+    document.addEventListener('visibilitychange', function () { document.hidden ? stop() : start(); });
   })();
+
+  // 12) 站内小助手：纯本地关键词匹配，答案写死在 i18n 字典里
+  (function assistant() {
+    var input = document.getElementById('asstInput');
+    var send = document.getElementById('asstSend');
+    var reply = document.getElementById('asstReply');
+    if (!input || !reply || !send) return;
+
+    var MAP = [
+      { a: 1, k: ['你是谁', '自我介绍', '名字', 'who', 'name', 'you'] },
+      { a: 2, k: ['怎么搭', '技术', '栈', 'built', 'stack', 'tech', 'how'] },
+      { a: 3, k: ['项目', '作品', 'project'] },
+      { a: 4, k: ['更新', '最近', '新版', 'new', 'changelog', 'recent'] },
+      { a: 5, k: ['服务器', '配置', 'vps', 'server'] },
+      { a: 6, k: ['联系', '邮箱', '邮件', 'contact', 'email', 'mail'] }
+    ];
+
+    function say(key) { reply.dataset.k = key; reply.textContent = t(key); }
+
+    function answer(q) {
+      var s = (q || '').toLowerCase().trim();
+      if (!s) return 0;
+      for (var i = 0; i < MAP.length; i++) {
+        for (var j = 0; j < MAP[i].k.length; j++) {
+          if (s.indexOf(MAP[i].k[j].toLowerCase()) >= 0) return MAP[i].a;
+        }
+      }
+      return 0;
+    }
+
+    document.querySelectorAll('#asstChips .chip').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var n = (b.dataset.q || 'q1').slice(1);
+        input.value = b.textContent;
+        say('asst.a' + n);
+      });
+    });
+    function submit() {
+      var n = answer(input.value);
+      say(n ? 'asst.a' + n : 'asst.fallback');
+    }
+    send.addEventListener('click', submit);
+    input.addEventListener('keydown', function (e) { if (e.key === 'Enter') submit(); });
+  })();
+
+  // 13) 板块高亮（scrollspy）：当前所在板块在顶栏第二行加亮
+  (function scrollspy() {
+    var links = Array.prototype.slice.call(document.querySelectorAll('#secnav a'));
+    if (!links.length || !('IntersectionObserver' in window)) return;
+    var targets = [];
+    links.forEach(function (a) {
+      var el = document.getElementById((a.getAttribute('href') || '').slice(1));
+      if (el) targets.push(el);
+    });
+    if (!targets.length) return;
+    var ob = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        links.forEach(function (a) {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id);
+        });
+      });
+    }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+    targets.forEach(function (el) { ob.observe(el); });
+  })();
+
+  // 14) 手机汉堡菜单（≤640px）
+  (function mobileNav() {
+    var burger = document.getElementById('burger');
+    var mb = document.getElementById('menubar');
+    if (!burger || !mb) return;
+    function close() {
+      mb.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+      burger.textContent = '☰';
+    }
+    burger.addEventListener('click', function () {
+      var open = mb.classList.toggle('open');
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      burger.textContent = open ? '✕' : '☰';
+    });
+    document.querySelectorAll('#navwrap a').forEach(function (a) { a.addEventListener('click', close); });
+  })();
+
+  // 15) 语言切换
+  var langBtn = document.getElementById('langBtn');
+  if (langBtn) {
+    langBtn.addEventListener('click', function () {
+      MUJIU.setLang(MUJIU.lang === 'zh' ? 'en' : 'zh', true);
+    });
+  }
+
+  // 16) 在别的子域换了主题 / 语言，切回本页时跟着变
+  function syncFromCookie() {
+    var c = MUJIU.readCookie('mujiu_theme');
+    if (c && THEMES[c] && c !== curTheme) applyTheme(c, false);
+    var l = MUJIU.readCookie('mujiu_lang');
+    if (l && I18N[l] && l !== MUJIU.lang) MUJIU.setLang(l, false);
+  }
+  window.addEventListener('focus', syncFromCookie);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) syncFromCookie(); });
+
+  // 语言切换后需要重来的东西：打字机、轮播、仪表盘单位、按钮 aria
+  window.__mujiuAfterI18n = function () {
+    var lb = document.getElementById('langBtn');
+    if (lb) lb.setAttribute('aria-label', t('lang.aria'));
+    startTyped();
+    startNow();
+    if (typeof window.__mujiuRerenderDash === 'function') window.__mujiuRerenderDash();
+    var reply = document.getElementById('asstReply');
+    if (reply && reply.dataset.k) reply.textContent = t(reply.dataset.k);
+  };
+
+  MUJIU.applyI18n();   // 脚本位于 body 末尾，元素已就绪，先按当前语言刷一遍
+})();
 </script>
 </body>
 </html>
