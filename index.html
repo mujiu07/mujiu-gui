@@ -160,7 +160,9 @@ window.MUJIU = (function () {
       'proj.3.t1': '休闲', 'proj.3.t2': '在线',
       'log.title': '更新日志', 'log.sub': 'changelog · 含服务器日志里的更早记录',
       'log.4.t': '双语切换 + 站内小助手 + 分享卡片',
-      'log.4.p': '整页中英双语可切换；新增一个纯本地的小助手；补齐 SEO / 分享卡片 / favicon；顶栏改为吸顶并高亮当前板块；关掉 JavaScript 也能正常阅读。',
+      'log.4.p': '整页中英双语可切换；新增站内小助手；补齐 SEO / 分享卡片 / favicon；顶栏改为吸顶并高亮当前板块；关掉 JavaScript 也能正常阅读。',
+      'log.5.t': '小助手接上大模型',
+      'log.5.p': '站内小助手从写死的固定问答换成在线模型（DeepSeek），能接住没预设过的问题；对话经服务端转发，密钥不出服务器，另加每 IP 限速与每日额度两道闸。',
       'log.3.t': '主题跨站同步 + 服务器仪表盘',
       'log.3.p': '四个站共用一套主题：在这里选一次，主站与子站打开都跟着换；本页新增服务器仪表盘，CPU、内存、网络与在线访客实时可看。所有页面改成不缓存，改完刷新即是最新版。',
       'log.2.t': '主站能换主题了',
@@ -176,7 +178,7 @@ window.MUJIU = (function () {
       'log.1f.t': '第一次留下访问日志',
       'log.1f.p': '15:49 记录到第一条请求；小游戏站的 2048 与贪吃蛇当天就有人玩，那会儿贪吃蛇还会返回 500。',
       'log.note': '再往前的日子没有留下访问记录，08-26 是日志里最早的一天；上面这些日期来自提交记录与服务器日志。',
-      'log.legend': '版本号 v1.0 → v4.0 是按几次大改归纳的，不是每次提交都编号。',
+      'log.legend': '版本号 v1.0 → v4.1 是按几次大改归纳的，不是每次提交都编号。',
       'server.title': '服务器仪表盘', 'server.sub': 'live · 每 5 秒刷新',
       'server.visitors': '在线访客', 'server.visitors.sub': '最近 60 秒内来过的人',
       'server.cpu': 'CPU', 'server.mem': '内存', 'server.disk': '磁盘',
@@ -185,24 +187,20 @@ window.MUJIU = (function () {
       'server.connecting': '正在连接服务器…',
       'server.offline': '暂时取不到服务器数据（接口未就绪或被拦截）',
       'server.foot': '每 5 秒从服务器 /proc 与 nginx 日志取一次聚合数字（不含任何访客信息）',
-      'asst.title': '站内小助手', 'asst.sub': 'local only · 不联网',
-      'asst.intro': '我是页面里的一段固定脚本：答案全部写在这个页面里，不联网、不调用任何大模型。',
+      'asst.title': '站内小助手', 'asst.sub': '在线 · 大模型生成',
+      'asst.intro': '这里接了个大模型（DeepSeek），替樊旭阳回答关于这个站和他的问题。它可能会说错，要紧的事请发邮件确认。',
       'asst.ph': '输入问题，或点下面的问题…', 'asst.send': '发送',
       'asst.q1': '你是谁？', 'asst.q2': '这个站怎么搭的？', 'asst.q3': '有哪些项目？',
       'asst.q4': '最近更新了什么？', 'asst.q5': '服务器什么配置？', 'asst.q6': '怎么联系你？',
-      'asst.a1': '这里的主人是樊旭阳，计算机科学本科在读（天津大学 / 香港理工大学），顺手维护着 mujiu.net 这一堆子站。',
-      'asst.a2': '本页是一个单文件 HTML：不引框架、不用构建，主题和语言记在 .mujiu.net 的 cookie 里，跟主站共用一套配色。服务器是 Debian 12 + nginx + PHP + SQLite，Cloudflare 挡在最前面。',
-      'asst.a3': '三个：命令行风格的终端主页 mujiu.net、匿名留言箱 ask.mujiu.net、小游戏合集 game.mujiu.net。往上看「作品 / 项目」一节有直达链接。',
-      'asst.a4': '最近一次大改是 2026-10-01 的 v4.0：中英双语、站内小助手、分享卡片、吸顶导航，以及无 JavaScript 也能阅读。更早的记录都在「更新日志」里。',
-      'asst.a5': '一台 2 核 2G 的小 VPS，跑着全部站点；证书用 certbot 自动续签，每天凌晨自动备份一次。面板上的数字每 5 秒刷新一次，只给聚合值。',
-      'asst.a6': '发邮件到 inbox@mujiu.net，或者在 ask.mujiu.net 的留言箱里留言 —— 那里是公开的，写之前想一下。',
-      'asst.fallback': '这个问题超出我这个固定脚本的范围了。试试问：你是谁、这个站怎么搭的、有哪些项目、最近更新了什么、服务器什么配置、怎么联系你。',
+      'asst.thinking': '正在想…',
+      'asst.error': '连不上了，稍后再试；也可以直接发邮件 inbox@mujiu.net',
+      'asst.noscript': '站内小助手需要 JavaScript 才能用；想直接联系请往下看页面底部的邮箱。',
       'soc.title': '社交账号', 'soc.sub': 'socials', 'soc.desc': 'github.com/mujiu07',
       'ct.title': '联系我', 'ct.sub': 'say hello',
       'ct.h3': '聊聊想法？', 'ct.p': '网络服务、小工具、随便什么…… 欢迎来信交流。',
       'ct.cta': '✉ 写封邮件', 'ct.mailbox': '樊旭阳 的信箱',
       'foot.easter': '试试键盘彩蛋：↑↑↓↓←→←→BA',
-      'foot.ver': 'v4.0', 'foot.updated': '更新于',
+      'foot.ver': 'v4.1', 'foot.updated': '更新于',
       'unit.people': '人', 'unit.req': '次', 'unit.day': '天', 'unit.hour': '小时', 'unit.up': '已运行',
       'toast.theme': '主题：{name}',
       'toast.theme.sync': '主题：{name} · 已同步全站',
@@ -252,7 +250,9 @@ window.MUJIU = (function () {
       'proj.3.t1': 'casual', 'proj.3.t2': 'online',
       'log.title': 'Changelog', 'log.sub': 'changelog · including earlier entries from the server logs',
       'log.4.t': 'Bilingual mode, in-page assistant & share cards',
-      'log.4.p': 'The whole page switches between Chinese and English; a local-only assistant; SEO, share cards and a favicon; a sticky header that highlights the current section; and full readability with JavaScript turned off.',
+      'log.4.p': 'The whole page switches between Chinese and English; an in-page assistant; SEO, share cards and a favicon; a sticky header that highlights the current section; and full readability with JavaScript turned off.',
+      'log.5.t': 'The assistant goes online',
+      'log.5.p': 'The in-page assistant moved from hard-coded answers to a live model (DeepSeek), so it can handle questions nobody pre-wrote. Requests are proxied server-side, the key never leaves the server, and per-IP rate limits plus a daily budget keep it in check.',
       'log.3.t': 'Cross-site theme sync + server dashboard',
       'log.3.p': 'All four sites share a single theme: pick it here and every site follows. This page gained a live dashboard for CPU, memory, network and online visitors. Pages are no longer cached, so a refresh always shows the newest version.',
       'log.2.t': 'The main site can change themes',
@@ -268,7 +268,7 @@ window.MUJIU = (function () {
       'log.1f.t': 'The first access log entry',
       'log.1f.p': 'The first request was recorded at 15:49; 2048 and Snake were played that same day, back when Snake still returned 500.',
       'log.note': 'Nothing was logged before this: 08-26 is the earliest day in the logs. These dates come from commit history and server logs.',
-      'log.legend': 'Version numbers v1.0 → v4.0 group the big rewrites — not every commit gets a number.',
+      'log.legend': 'Version numbers v1.0 → v4.1 group the big rewrites — not every commit gets a number.',
       'server.title': 'Server dashboard', 'server.sub': 'live · refreshed every 5s',
       'server.visitors': 'visitors', 'server.visitors.sub': 'unique in the last 60s',
       'server.cpu': 'CPU', 'server.mem': 'memory', 'server.disk': 'disk',
@@ -277,24 +277,20 @@ window.MUJIU = (function () {
       'server.connecting': 'Connecting to the server…',
       'server.offline': 'Cannot reach the server right now (endpoint unavailable or blocked)',
       'server.foot': 'Aggregated from /proc and nginx logs every 5 seconds — no visitor data',
-      'asst.title': 'In-page assistant', 'asst.sub': 'local only · no network',
-      'asst.intro': 'I am a fixed script inside this page: every answer is written here, with no network call and no language model involved.',
+      'asst.title': 'In-page assistant', 'asst.sub': 'online · model-generated',
+      'asst.intro': 'This is wired to a language model (DeepSeek) that answers questions about this site and its author on his behalf. It can get things wrong, so trust email for anything that matters.',
       'asst.ph': 'Type a question, or pick one below…', 'asst.send': 'Send',
       'asst.q1': 'Who are you?', 'asst.q2': 'How was this site built?', 'asst.q3': 'What projects are there?',
       'asst.q4': 'What is new?', 'asst.q5': 'What is the server like?', 'asst.q6': 'How can I reach you?',
-      'asst.a1': 'This site belongs to Fan Xuyang, an undergraduate in computer science (Tianjin University / The Hong Kong Polytechnic University) who maintains the mujiu.net family of sites.',
-      'asst.a2': 'This page is a single HTML file: no framework and no build step. Theme and language live in .mujiu.net cookies, so the palette is shared with the main site. The server runs Debian 12 with nginx, PHP and SQLite, all behind Cloudflare.',
-      'asst.a3': 'Three of them: the terminal-style homepage mujiu.net, the anonymous guestbook ask.mujiu.net, and the mini-game collection game.mujiu.net. See the Projects section for direct links.',
-      'asst.a4': 'The latest rewrite is v4.0 on 2026-10-01: bilingual Chinese/English, an in-page assistant, share cards, a sticky header, and readability without JavaScript. Earlier entries are in the Changelog.',
-      'asst.a5': 'One small 2-core, 2 GB VPS running every site; certificates renew automatically with certbot and a backup runs every night. The numbers on the dashboard refresh every 5 seconds and only show aggregates.',
-      'asst.a6': 'Write to inbox@mujiu.net, or leave a message in the guestbook at ask.mujiu.net — that one is public, so think before you type.',
-      'asst.fallback': 'That is outside what this fixed script can answer. Try asking: who are you, how was this site built, what projects are there, what is new, what is the server like, or how to get in touch.',
+      'asst.thinking': 'Thinking…',
+      'asst.error': 'Cannot reach it right now — try again later, or just email inbox@mujiu.net',
+      'asst.noscript': 'The in-page assistant needs JavaScript; for a direct reply see the email address at the bottom of the page.',
       'soc.title': 'Social', 'soc.sub': 'socials', 'soc.desc': 'github.com/mujiu07',
       'ct.title': 'Say hello', 'ct.sub': 'say hello',
       'ct.h3': 'Got an idea?', 'ct.p': 'Network services, small tools, anything — feel free to write.',
       'ct.cta': '✉ Write an email', 'ct.mailbox': "Fan Xuyang's inbox",
       'foot.easter': 'Keyboard easter egg: ↑↑↓↓←→←→BA',
-      'foot.ver': 'v4.0', 'foot.updated': 'updated',
+      'foot.ver': 'v4.1', 'foot.updated': 'updated',
       'unit.people': 'online', 'unit.req': 'req', 'unit.day': 'd', 'unit.hour': 'h', 'unit.up': 'up',
       'toast.theme': 'Theme: {name}',
       'toast.theme.sync': 'Theme: {name} · synced everywhere',
@@ -726,7 +722,7 @@ window.MUJIU = (function () {
     color: var(--primary); border: 1px solid color-mix(in srgb, var(--primary) 45%, transparent);
     background: color-mix(in srgb, var(--primary) 12%, transparent); }
 
-  /* ==== 站内小助手（纯本地预设问答）==== */
+  /* ==== 站内小助手（在线，走 api/chat.php）==== */
   .asst { display: grid; gap: 14px; }
   .asst .intro { color: var(--text-200); font-size: 13px; }
   .asst .chips { margin: 0; }
@@ -746,8 +742,10 @@ window.MUJIU = (function () {
   .asst .ask input::placeholder { color: var(--text-300); }
   .asst .ask input:focus { border-color: var(--primary); outline: none; }
   .asst .reply { color: var(--text-100); font-size: 13px; line-height: 1.8; min-height: 3.4em;
+    white-space: pre-wrap;   /* 模型输出里有换行和"空格断意群"，原样保留 */
     border-left: 2px solid var(--primary); padding: 2px 0 2px 14px;
     background: linear-gradient(90deg, color-mix(in srgb, var(--primary) 8%, transparent), transparent 70%); }
+  .asst .reply.dim { color: var(--text-300); }
 
   /* ==== 现在在做什么 ==== */
   .now-line { color: var(--primary); font-size: 14px; min-height: 1.7em; }
@@ -983,9 +981,14 @@ window.MUJIU = (function () {
     <div class="card reveal">
       <div class="timeline">
         <div class="tl">
+          <span class="d">2026-10-02</span>
+          <h4><span data-i18n="log.5.t">小助手接上大模型</span><span class="v">v4.1</span></h4>
+          <p data-i18n="log.5.p">站内小助手从写死的固定问答换成在线模型（DeepSeek），能接住没预设过的问题；对话经服务端转发，密钥不出服务器，另加每 IP 限速与每日额度两道闸。</p>
+        </div>
+        <div class="tl">
           <span class="d">2026-10-01</span>
           <h4><span data-i18n="log.4.t">双语切换 + 站内小助手 + 分享卡片</span><span class="v">v4.0</span></h4>
-          <p data-i18n="log.4.p">整页中英双语可切换；新增一个纯本地的小助手；补齐 SEO / 分享卡片 / favicon；顶栏改为吸顶并高亮当前板块；关掉 JavaScript 也能正常阅读。</p>
+          <p data-i18n="log.4.p">整页中英双语可切换；新增站内小助手；补齐 SEO / 分享卡片 / favicon；顶栏改为吸顶并高亮当前板块；关掉 JavaScript 也能正常阅读。</p>
         </div>
         <div class="tl">
           <span class="d">2026-09-24</span>
@@ -1063,12 +1066,13 @@ window.MUJIU = (function () {
     </div>
   </section>
 
-  <!-- 站内小助手：答案全部写在本页里，关键词匹配，不联网、不调用大模型 -->
+  <!-- 站内小助手：对话发给 api/chat.php，密钥在服务器上，前端只收流式文本 -->
   <section id="assistant">
-    <div class="sec-head"><span class="arrow">▸</span><span class="title" data-i18n="asst.title">站内小助手</span><span class="sub" data-i18n="asst.sub">local only · 不联网</span></div>
+    <div class="sec-head"><span class="arrow">▸</span><span class="title" data-i18n="asst.title">站内小助手</span><span class="sub" data-i18n="asst.sub">在线 · 大模型生成</span></div>
     <div class="card reveal">
       <div class="asst">
-        <p class="intro" data-i18n="asst.intro">我是页面里的一段固定脚本：答案全部写在这个页面里，不联网、不调用任何大模型。</p>
+        <p class="intro" data-i18n="asst.intro">这里接了个大模型（DeepSeek），替樊旭阳回答关于这个站和他的问题。它可能会说错，要紧的事请发邮件确认。</p>
+        <noscript><p class="intro" data-i18n="asst.noscript">站内小助手需要 JavaScript 才能用；想直接联系请往下看页面底部的邮箱。</p></noscript>
         <div class="chips" id="asstChips">
           <button class="chip" type="button" data-q="q1" data-i18n="asst.q1">你是谁？</button>
           <button class="chip" type="button" data-q="q2" data-i18n="asst.q2">这个站怎么搭的？</button>
@@ -1119,7 +1123,7 @@ window.MUJIU = (function () {
 
   <footer>
     <div>© <span id="year"></span> <span class="nb">樊旭阳</span> · <span class="g">mujiu.net</span> · <a href="https://mujiu.net" target="_blank" rel="noopener">mujiu.net</a></div>
-    <div style="margin-top:6px"><span class="ver" data-i18n="foot.ver">v4.0</span> · <span data-i18n="foot.updated">更新于</span> 2026-10-01</div>
+    <div style="margin-top:6px"><span class="ver" data-i18n="foot.ver">v4.1</span> · <span data-i18n="foot.updated">更新于</span> 2026-10-02</div>
     <div style="margin-top:6px" data-i18n="foot.easter">试试键盘彩蛋：↑↑↓↓←→←→BA</div>
   </footer>
 </div>
@@ -1538,45 +1542,93 @@ window.MUJIU = (function () {
     document.addEventListener('visibilitychange', function () { document.hidden ? stop() : start(); });
   })();
 
-  // 12) 站内小助手：纯本地关键词匹配，答案写死在 i18n 字典里
+  // 12) 站内小助手：对话发给 ./api/chat.php，密钥在服务器上，前端只收流式纯文本
   (function assistant() {
     var input = document.getElementById('asstInput');
     var send = document.getElementById('asstSend');
     var reply = document.getElementById('asstReply');
+    var chips = document.getElementById('asstChips');
     if (!input || !reply || !send) return;
 
-    var MAP = [
-      { a: 1, k: ['你是谁', '自我介绍', '名字', 'who', 'name', 'you'] },
-      { a: 2, k: ['怎么搭', '技术', '栈', 'built', 'stack', 'tech', 'how'] },
-      { a: 3, k: ['项目', '作品', 'project'] },
-      { a: 4, k: ['更新', '最近', '新版', 'new', 'changelog', 'recent'] },
-      { a: 5, k: ['服务器', '配置', 'vps', 'server'] },
-      { a: 6, k: ['联系', '邮箱', '邮件', 'contact', 'email', 'mail'] }
-    ];
+    var MAX_MSGS = 8;        // 最多带回服务端多少条历史
+    var history = [];
+    var busy = false;
 
-    function say(key) { reply.dataset.k = key; reply.textContent = t(key); }
+    function trim() { if (history.length > MAX_MSGS) history = history.slice(-MAX_MSGS); }
+    function show(text, dim) { reply.textContent = text; reply.classList.toggle('dim', !!dim); }
 
-    function answer(q) {
-      var s = (q || '').toLowerCase().trim();
-      if (!s) return 0;
-      for (var i = 0; i < MAP.length; i++) {
-        for (var j = 0; j < MAP[i].k.length; j++) {
-          if (s.indexOf(MAP[i].k[j].toLowerCase()) >= 0) return MAP[i].a;
+    function submit() {
+      var q = (input.value || '').trim();
+      if (!q || busy) return;
+      busy = true;
+      input.value = '';
+      send.disabled = true;
+      show(t('asst.thinking'), true);
+
+      history.push({ role: 'user', content: q });
+      trim();
+
+      var acc = '';
+      var answered = false;
+
+      fetch('./api/chat.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: history })
+      }).then(function (res) {
+        if (!res.ok || !res.body) throw new Error('http ' + res.status);
+        var reader = res.body.getReader();
+        var dec = new TextDecoder('utf-8');
+        var buf = '';
+        function pump() {
+          return reader.read().then(function (r) {
+            if (r.done) return;
+            buf += dec.decode(r.value, { stream: true });
+            var i;
+            while ((i = buf.indexOf('\n\n')) >= 0) {
+              var block = buf.slice(0, i);
+              buf = buf.slice(i + 2);
+              var line = '';
+              block.split('\n').forEach(function (l) {
+                if (!line && l.indexOf('data:') === 0) line = l.slice(5).trim();
+              });
+              if (!line) continue;
+              var j;
+              try { j = JSON.parse(line); } catch (err) { continue; }
+              if (j.d) {
+                if (!answered) { answered = true; acc = ''; }
+                acc += j.d;
+                show(acc, false);
+              } else if (j.e) {
+                answered = false;
+                acc = '';
+                show(j.e, true);
+              }
+            }
+            return pump();
+          });
         }
-      }
-      return 0;
+        return pump();
+      }).catch(function () {
+        answered = false;
+        acc = '';
+        show(t('asst.error'), true);
+      }).then(function () {
+        if (answered && acc) { history.push({ role: 'assistant', content: acc }); trim(); }
+        else history.pop();          // 没答上就把这条提问从上下文里撤掉
+        busy = false;
+        send.disabled = false;
+      });
     }
 
-    document.querySelectorAll('#asstChips .chip').forEach(function (b) {
-      b.addEventListener('click', function () {
-        var n = (b.dataset.q || 'q1').slice(1);
-        input.value = b.textContent;
-        say('asst.a' + n);
+    if (chips) {
+      chips.querySelectorAll('.chip').forEach(function (b) {
+        b.addEventListener('click', function () {
+          if (busy) return;
+          input.value = (b.textContent || '').trim();
+          submit();
+        });
       });
-    });
-    function submit() {
-      var n = answer(input.value);
-      say(n ? 'asst.a' + n : 'asst.fallback');
     }
     send.addEventListener('click', submit);
     input.addEventListener('keydown', function (e) { if (e.key === 'Enter') submit(); });
