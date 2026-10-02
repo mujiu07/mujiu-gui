@@ -32,6 +32,7 @@ const DEFAULTS = [
     'DAILY_BUDGET_CNY' => '2',      // 每日花费上限（元）；0 = 不限制
     'MAX_PER_IP'       => '20',     // 每 IP 每窗口最多几次
     'IP_WINDOW'        => '3600',   // 窗口秒数
+    'IP_WHITELIST'     => '',       // 免限速 IP，逗号/空格分隔，支持单个 IP 或 1.2.3.0/24
     'MAX_INPUT_CHARS'  => '600',    // 单条提问最长字符
     'HISTORY_TURNS'    => '8',      // 最多带多少条历史消息
     'MAX_TOKENS'       => '512',    // 单次回复上限
@@ -174,6 +175,50 @@ function rate_allow(string $ip, int $max, int $window): bool
     return $ok;
 }
 
+/**
+ * IP 是否在免限速白名单里。
+ * $list 用逗号/空格分隔；每项可以是单个 IP（v4/v6），或 IPv4 CIDR（如 1.2.3.0/24）。
+ */
+function ip_whitelisted(string $ip, string $list): bool
+{
+    if (trim($list) === '') {
+        return false;
+    }
+    foreach (preg_split('/[\s,]+/', trim($list), -1, PREG_SPLIT_NO_EMPTY) as $item) {
+        if (strpos($item, '/') === false) {
+            if ($item === $ip) {
+                return true;
+            }
+            continue;
+        }
+        [$net, $bits] = explode('/', $item, 2);
+        $bits   = (int) $bits;
+        $ipBin  = @inet_pton($ip);
+        $netBin = @inet_pton($net);
+        if ($ipBin === false || $netBin === false || strlen($ipBin) !== strlen($netBin)) {
+            continue;
+        }
+        $total = strlen($ipBin) * 8;
+        if ($bits < 0 || $bits > $total) {
+            continue;
+        }
+        $full = intdiv($bits, 8);
+        $rem  = $bits % 8;
+        if ($full > 0 && substr($ipBin, 0, $full) !== substr($netBin, 0, $full)) {
+            continue;
+        }
+        if ($rem === 0) {
+            return true;
+        }
+        $mask = 0xff & (0xff << (8 - $rem));
+        if ((ord($ipBin[$full]) & $mask) === (ord($netBin[$full]) & $mask)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function budget_state(): array
 {
     $day = today();
@@ -313,7 +358,8 @@ if ($apiKey === '') {
 }
 
 $ip = client_ip();
-if (!rate_allow($ip, $maxPerIp, $window)) {
+$whitelisted = ip_whitelisted($ip, trim($conf['IP_WHITELIST']));
+if (!$whitelisted && !rate_allow($ip, $maxPerIp, $window)) {
     emit_error('问得有点快 歇一会儿再问');
     exit;
 }
