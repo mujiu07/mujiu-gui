@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark" data-lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>工具盒 · mujiu</title>
+<meta name="description" content="一些自己顺手做的小工具：程序化背景音乐、摸鱼计时器、密码生成器。" />
+<meta name="theme-color" content="#1D2A35" />
+<meta name="robots" content="noindex, follow" />
+<link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<!-- 主题与语言：与主页共用 mujiu_theme / mujiu_lang 两个 cookie，切哪边都是同一套 -->
+<script>
+window.MUJIU = (function () {
+  'use strict';
+  var THEMES = {
+    'dark':         { body:'#1D2A35', primary:'#05CE91', secondary:'#FF9D00', t100:'#cbd5e1', t200:'#B2BDCC', t300:'#64748b', panel:'#22313f', sw:'#0b1220' },
+    'light':        { body:'#EFF3F3', primary:'#027474', secondary:'#FF9D00', t100:'#334155', t200:'#475569', t300:'#64748b', panel:'#e2e8e8', sw:'#eef2f2' },
+    'blue-matrix':  { body:'#101116', primary:'#00ff9c', secondary:'#60fdff', t100:'#ffffff', t200:'#c7c7c7', t300:'#76ff9f', panel:'#0b1720', sw:'#001a15' },
+    'espresso':     { body:'#323232', primary:'#E1E48B', secondary:'#A5C260', t100:'#F7F7F7', t200:'#EEEEEE', t300:'#5b5b5b', panel:'#3d3d3d', sw:'#443b3b' },
+    'green-goblin': { body:'#000000', primary:'#E5E500', secondary:'#04A500', t100:'#01FF00', t200:'#04A5B2', t300:'#E50101', panel:'#0d0d0d', sw:'#1a1a00' },
+    'ubuntu':       { body:'#2D0922', primary:'#80D932', secondary:'#80D932', t100:'#FFFFFF', t200:'#E1E9CC', t300:'#CDCDCD', panel:'#3a1230', sw:'#a34a22' }
+  };
+  var THEME_COOKIE = 'mujiu_theme', LANG_COOKIE = 'mujiu_lang', MAX_AGE = 31536000;
+
+  // ---- 工具页自己的文案（中英双语），key 与 DOM 上的 data-i18n 一一对应 ----
+  var I18N = {
+    zh: {
+      'meta.title': '工具盒 · mujiu.net',
+      'meta.desc': '一些自己顺手做的小工具：程序化背景音乐、摸鱼计时器、密码生成器。',
+      'brand.sub': '工具盒',
+      'nav.home': '返回主页',
+      'nav.main': '主站', 'nav.games': '小游戏', 'nav.tools': '工具', 'nav.ask': '留言箱',
+      'hero.title': '工具盒',
+      'hero.sub': '一些自己顺手做的小东西。全部在浏览器里跑，不联网、不上传。',
+      'music.name': '背景音乐',
+      'music.desc': '没有音频文件——这段声音是浏览器现场合成的。点一下才开始（浏览器不许自动播放）。',
+      'music.play': '播放', 'music.pause': '暂停',
+      'music.vol': '音量',
+      'music.preset': '音景',
+      'preset.night': '静夜', 'preset.rain': '雨', 'preset.space': '深空',
+      'music.nosupport': '这个浏览器不支持 Web Audio，放不了。',
+      'timer.name': '摸鱼计时器',
+      'timer.desc': '25 分钟专注、5 分钟休息。到点了会在标签页标题上闪一下——不弹窗、不打扰。',
+      'timer.start': '开始', 'timer.pause': '暂停', 'timer.reset': '重置',
+      'timer.work': '专注中', 'timer.break': '休息中', 'timer.idle': '待机',
+      'timer.done': '今天已经摸完 {n} 个',
+      'timer.paused': '已暂停',
+      'pwd.name': '密码生成器',
+      'pwd.desc': '本地用 crypto 随机数生成，改完即走，不留痕。',
+      'pwd.len': '长度',
+      'pwd.upper': '大写', 'pwd.lower': '小写', 'pwd.digit': '数字', 'pwd.symbol': '符号',
+      'pwd.gen': '生成', 'pwd.copy': '复制', 'pwd.copied': '已复制', 'pwd.copyfail': '复制失败，手动选吧',
+      'pwd.needone': '至少要勾一类字符',
+      'foot.note': '全部本地运行 · 不联网 · 不上传',
+      'foot.back': '回到 mujiu.net'
+    },
+    en: {
+      'meta.title': 'Toolbox · mujiu.net',
+      'meta.desc': 'A few small tools I built for myself: generative background music, a focus timer, a password generator.',
+      'brand.sub': 'toolbox',
+      'nav.home': 'Home',
+      'nav.main': 'Main', 'nav.games': 'Games', 'nav.tools': 'Tools', 'nav.ask': 'Guestbook',
+      'hero.title': 'Toolbox',
+      'hero.sub': 'Small things I built for myself. Everything runs in the browser — no requests, no uploads.',
+      'music.name': 'Background music',
+      'music.desc': 'No audio file — this sound is synthesized live in your browser. It starts on click (browsers block autoplay).',
+      'music.play': 'Play', 'music.pause': 'Pause',
+      'music.vol': 'Volume',
+      'music.preset': 'Soundscape',
+      'preset.night': 'Night', 'preset.rain': 'Rain', 'preset.space': 'Deep space',
+      'music.nosupport': 'This browser has no Web Audio support.',
+      'timer.name': 'Focus timer',
+      'timer.desc': '25 minutes of focus, 5 minutes of rest. When it ends the tab title blinks — no popups.',
+      'timer.start': 'Start', 'timer.pause': 'Pause', 'timer.reset': 'Reset',
+      'timer.work': 'Focusing', 'timer.break': 'Breaking', 'timer.idle': 'Idle',
+      'timer.done': '{n} done today',
+      'timer.paused': 'paused',
+      'pwd.name': 'Password generator',
+      'pwd.desc': 'Generated locally with crypto random. Nothing is stored or sent.',
+      'pwd.len': 'Length',
+      'pwd.upper': 'A-Z', 'pwd.lower': 'a-z', 'pwd.digit': '0-9', 'pwd.symbol': 'Symbols',
+      'pwd.gen': 'Generate', 'pwd.copy': 'Copy', 'pwd.copied': 'Copied', 'pwd.copyfail': 'Copy failed — select it manually',
+      'pwd.needone': 'Pick at least one character class',
+      'foot.note': 'runs locally · no network · no uploads',
+      'foot.back': 'back to mujiu.net'
+    }
+  };
+
+  var theme = 'dark', lang = 'zh';
+
+  function readCookie(name) {
+    var m = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]+)'));
+    return m ? decodeURIComponent(m[1]) : '';
+  }
+  function writeStore(name, value) {
+    var secure = location.protocol === 'https:' ? '; Secure' : '';
+    var base = name + '=' + encodeURIComponent(value) + '; path=/; max-age=' + MAX_AGE + '; SameSite=Lax' + secure;
+    document.cookie = base + '; domain=.mujiu.net';
+    document.cookie = base;
+    try { localStorage.setItem(name, value); } catch (e) {}
+  }
+  function setThemeVars(t) {
+    var r = document.documentElement.style, map = {
+      '--body': t.body, '--body-2': t.body, '--panel': t.panel, '--card': t.panel,
+      '--primary': t.primary, '--secondary': t.secondary,
+      '--text-100': t.t100, '--text-200': t.t200, '--text-300': t.t300, '--sw': t.sw
+    };
+    for (var k in map) r.setProperty(k, map[k]);
+  }
+  function applyTheme(name, persist) {
+    var t = THEMES[name]; if (!t) return;
+    theme = name;
+    setThemeVars(t);
+    document.documentElement.setAttribute('data-theme', name);
+    var mt = document.querySelector('meta[name="theme-color"]');
+    if (mt) mt.setAttribute('content', t.body);
+    if (persist !== false) writeStore(THEME_COOKIE, name);
+    var dots = document.querySelectorAll('.theme-dot');
+    for (var i = 0; i < dots.length; i++) dots[i].classList.toggle('active', dots[i].dataset.t === name);
+  }
+  function pickTheme() {
+    var c = readCookie(THEME_COOKIE);
+    if (c && THEMES[c]) return c;
+    try { var l = localStorage.getItem(THEME_COOKIE); if (l && THEMES[l]) return l; } catch (e) {}
+    return 'dark';
+  }
+  function pickLang() {
+    var c = readCookie(LANG_COOKIE);
+    if (I18N[c]) return c;
+    try { var l = localStorage.getItem(LANG_COOKIE); if (l && I18N[l]) return l; } catch (e) {}
+    return /^zh\b/i.test(navigator.language || '') ? 'zh' : 'en';
+  }
+  function t(key, vars) {
+    var d = I18N[lang] || I18N.zh;
+    var s = d[key];
+    if (s == null) s = I18N.zh[key];
+    if (s == null) s = key;
+    if (vars) for (var k in vars) s = s.split('{' + k + '}').join(vars[k]);
+    return s;
+  }
+  function applyI18n() {
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+    document.documentElement.setAttribute('data-lang', lang);
+    document.title = t('meta.title');
+    var md = document.querySelector('meta[name="description"]');
+    if (md) md.setAttribute('content', t('meta.desc'));
+    var i, nodes;
+    nodes = document.querySelectorAll('[data-i18n]');
+    for (i = 0; i < nodes.length; i++) nodes[i].textContent = t(nodes[i].getAttribute('data-i18n'));
+    nodes = document.querySelectorAll('[data-i18n-title]');
+    for (i = 0; i < nodes.length; i++) nodes[i].setAttribute('title', t(nodes[i].getAttribute('data-i18n-title')));
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) nodes[i].setAttribute('aria-label', t(nodes[i].getAttribute('data-i18n-aria')));
+    var lb = document.getElementById('langBtn');
+    if (lb) {
+      lb.textContent = lang === 'zh' ? 'EN' : '中文';
+      lb.setAttribute('aria-pressed', lang === 'en' ? 'true' : 'false');
+    }
+    if (typeof window.__afterI18n === 'function') window.__afterI18n();
+  }
+  function setLang(next, persist) {
+    if (!I18N[next] || next === lang) return;
+    lang = next;
+    if (persist !== false) writeStore(LANG_COOKIE, next);
+    applyI18n();
+  }
+  function syncFromCookie() {
+    var c = readCookie(THEME_COOKIE);
+    if (c && THEMES[c] && c !== theme) applyTheme(c, false);
+    var l = readCookie(LANG_COOKIE);
+    if (l && I18N[l] && l !== lang) setLang(l, false);
+  }
+
+  applyTheme(pickTheme(), false);
+  lang = pickLang();
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+  document.documentElement.setAttribute('data-lang', lang);
+  document.addEventListener('DOMContentLoaded', function () { applyI18n(); });
+
+  return {
+    THEMES: THEMES, I18N: I18N,
+    t: t, applyI18n: applyI18n, applyTheme: applyTheme, setLang: setLang,
+    readCookie: readCookie, writeStore: writeStore, syncFromCookie: syncFromCookie,
+    get theme() { return theme; },
+    get lang() { return lang; }
+  };
+})();
+</script>
+
+<style>
+  :root {
+    --body: #1D2A35; --body-2: #16212b; --panel: #22313f; --card: #22313f;
+    --primary: #05CE91; --secondary: #FF9D00;
+    --text-100: #cbd5e1; --text-200: #B2BDCC; --text-300: #64748b;
+    --line: rgba(255,255,255,0.09); --line-strong: rgba(255,255,255,0.16);
+    --ease: cubic-bezier(.22,.61,.36,1);
+    --r-sm: 10px; --r-md: 14px; --r-lg: 16px;
+    --shadow-1: 0 18px 50px rgba(0,0,0,0.25);
+    --d: var(--primary);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "IBM Plex Mono", "SFMono-Regular", JetBrains Mono, Consolas, monospace;
+    color: var(--text-100);
+    background:
+      radial-gradient(760px 520px at 92% -8%, color-mix(in srgb, var(--secondary) 10%, transparent), transparent 62%),
+      radial-gradient(680px 480px at -5% 18%, color-mix(in srgb, var(--primary) 9%, transparent), transparent 58%),
+      var(--body);
+    background-attachment: fixed;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  a { color: var(--primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  button { font: inherit; cursor: pointer; color: inherit; }
+
+  .shell { width: min(1060px, 100%); margin: 0 auto; padding: 22px max(18px, env(safe-area-inset-left)) 70px; }
+
+  /* ---- 顶栏，与主页同款 ---- */
+  .menubar {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    padding: 12px 16px; margin-bottom: 26px;
+    background: color-mix(in srgb, var(--panel) 82%, transparent);
+    border: 1px solid var(--line); border-radius: var(--r-md);
+    box-shadow: var(--shadow-1);
+    position: sticky; top: 10px; z-index: 20;
+    backdrop-filter: blur(10px);
+  }
+  .brand { display: flex; align-items: center; gap: 11px; }
+  .logo {
+    width: 34px; height: 34px; border-radius: 9px; flex: none;
+    display: grid; place-items: center; font-weight: 700;
+    color: var(--body); background: linear-gradient(135deg, var(--primary), var(--secondary));
+  }
+  .brand .t { display: flex; flex-direction: column; line-height: 1.25; }
+  .brand .t b { font-size: 15px; }
+  .brand .t span { font-size: 11px; color: var(--text-300); letter-spacing: .04em; }
+  .menubar .right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .lang-btn {
+    background: transparent; border: 1px solid var(--line-strong); border-radius: 8px;
+    padding: 4px 10px; font-size: 12px; color: var(--text-200); transition: .18s var(--ease);
+  }
+  .lang-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .theme-picker { display: flex; gap: 7px; }
+  .theme-dot {
+    width: 15px; height: 15px; border-radius: 50%; padding: 0;
+    border: 2px solid var(--line-strong); transition: .18s var(--ease);
+  }
+  .theme-dot:hover { transform: scale(1.18); }
+  .theme-dot.active { border-color: var(--primary); box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 30%, transparent); }
+  .home-link { font-size: 12px; color: var(--text-200); border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px; }
+  .home-link:hover { color: var(--primary); border-color: var(--primary); text-decoration: none; }
+
+  /* ---- 头图 ---- */
+  .hero { margin-bottom: 26px; }
+  .hero h1 { font-size: clamp(26px, 5vw, 38px); letter-spacing: .02em; }
+  .hero h1::before { content: "/ "; color: var(--primary); }
+  .hero p { color: var(--text-200); font-size: 14px; max-width: 62ch; }
+
+  /* ---- 卡片网格 ---- */
+  .grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); }
+  .card {
+    background: color-mix(in srgb, var(--panel) 88%, transparent);
+    border: 1px solid var(--line); border-radius: var(--r-lg);
+    padding: 20px 20px 22px; box-shadow: var(--shadow-1);
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .card > h2 { font-size: 16px; display: flex; align-items: baseline; gap: 9px; }
+  .card > h2 .no { color: var(--primary); font-size: 12px; letter-spacing: .1em; }
+  .card .desc { font-size: 12.5px; color: var(--text-300); line-height: 1.7; }
+  .card.wide { grid-column: 1 / -1; }
+
+  .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .row.tight { gap: 8px; }
+  .lbl { font-size: 12px; color: var(--text-300); letter-spacing: .04em; }
+
+  .btn {
+    border: 1px solid var(--line-strong); background: transparent; color: var(--text-100);
+    border-radius: var(--r-sm); padding: 8px 16px; font-size: 13px;
+    transition: .18s var(--ease);
+  }
+  .btn:hover { border-color: var(--primary); color: var(--primary); }
+  .btn.primary { background: var(--primary); color: var(--body); border-color: var(--primary); font-weight: 600; }
+  .btn.primary:hover { filter: brightness(1.1); color: var(--body); }
+  .btn[disabled] { opacity: .45; cursor: not-allowed; }
+
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: var(--r-sm); overflow: hidden; }
+  .seg button { border: 0; background: transparent; padding: 7px 14px; font-size: 12.5px; color: var(--text-200); transition: .18s var(--ease); }
+  .seg button + button { border-left: 1px solid var(--line); }
+  .seg button.active { background: color-mix(in srgb, var(--primary) 20%, transparent); color: var(--primary); font-weight: 600; }
+
+  input[type=range] { -webkit-appearance: none; appearance: none; height: 4px; border-radius: 3px; background: var(--line-strong); outline: none; width: 150px; }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 15px; height: 15px; border-radius: 50%;
+    background: var(--primary); border: 0; cursor: pointer;
+  }
+  input[type=range]::-moz-range-thumb { width: 15px; height: 15px; border: 0; border-radius: 50%; background: var(--primary); cursor: pointer; }
+
+  .check { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--text-200); cursor: pointer; user-select: none; }
+  .check input { accent-color: var(--primary); }
+
+  .readout {
+    font-size: clamp(40px, 9vw, 62px); font-weight: 600; letter-spacing: .02em;
+    font-variant-numeric: tabular-nums; line-height: 1.1;
+    color: var(--text-100);
+  }
+  .readout .unit { font-size: 13px; color: var(--text-300); font-weight: 400; margin-left: 8px; }
+
+  .mono-out {
+    font-size: 15px; word-break: break-all; letter-spacing: .04em;
+    background: color-mix(in srgb, var(--body-2) 70%, transparent);
+    border: 1px solid var(--line); border-radius: var(--r-sm);
+    padding: 11px 13px; min-height: 44px; color: var(--secondary);
+  }
+
+  .bar { height: 3px; border-radius: 3px; background: var(--line); overflow: hidden; }
+  .bar > i { display: block; height: 100%; width: 0; background: var(--primary); transition: width .3s linear; }
+
+  .note { font-size: 11.5px; color: var(--text-300); }
+  .wave { display: flex; align-items: flex-end; gap: 3px; height: 22px; }
+  .wave i { width: 3px; height: 4px; background: var(--primary); opacity: .35; border-radius: 2px; transition: height .18s var(--ease), opacity .18s var(--ease); }
+  .wave.on i { opacity: 1; }
+
+  footer { margin-top: 34px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 12px; color: var(--text-300); display: flex; gap: 10px; flex-wrap: wrap; justify-content: space-between; }
+
+  .subnav { display: flex; gap: 16px; flex-wrap: wrap; margin: 2px 0 24px; font-size: 13px; }
+  .subnav a { color: var(--text-200); }
+  .subnav a::before { content: "↗ "; color: var(--text-300); }
+  .subnav a:hover { color: var(--primary); text-decoration: none; }
+  .subnav .cur { color: var(--primary); }
+  .subnav .cur::before { content: "• "; }
+
+  @media (max-width: 620px) {
+    .menubar { position: static; }
+    .hero h1 { font-size: 26px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <nav class="menubar" aria-label="导航">
+    <div class="brand">
+      <div class="logo">M</div>
+      <div class="t"><b>mujiu</b><span data-i18n="brand.sub">工具盒</span></div>
+    </div>
+    <div class="right">
+      <a class="home-link" href="./" data-i18n="nav.home">返回主页</a>
+      <button class="lang-btn" id="langBtn" type="button" aria-pressed="false">EN</button>
+      <div class="theme-picker" id="themePicker"></div>
+    </div>
+  </nav>
+
+  <nav class="subnav" aria-label="子站">
+    <a href="https://mujiu.net" data-i18n="nav.main">主站</a>
+    <a href="https://game.mujiu.net" data-i18n="nav.games">小游戏</a>
+    <span class="cur" data-i18n="nav.tools">工具</span>
+    <a href="https://ask.mujiu.net" data-i18n="nav.ask">留言箱</a>
+  </nav>
+
+  <header class="hero">
+    <h1 data-i18n="hero.title">工具盒</h1>
+    <p data-i18n="hero.sub">一些自己顺手做的小东西。全部在浏览器里跑，不联网、不上传。</p>
+  </header>
+
+  <main class="grid">
+
+    <!-- 01 背景音乐 -->
+    <section class="card wide" aria-labelledby="t-music">
+      <h2 id="t-music"><span class="no">01</span><span data-i18n="music.name">背景音乐</span></h2>
+      <p class="desc" data-i18n="music.desc">没有音频文件——这段声音是浏览器现场合成的。点一下才开始。</p>
+      <div class="row">
+        <button class="btn primary" id="mPlay" type="button" data-i18n="music.play">播放</button>
+        <span class="lbl" data-i18n="music.preset">音景</span>
+        <div class="seg" id="mPreset" role="group">
+          <button type="button" data-p="night" class="active" data-i18n="preset.night">静夜</button>
+          <button type="button" data-p="rain" data-i18n="preset.rain">雨</button>
+          <button type="button" data-p="space" data-i18n="preset.space">深空</button>
+        </div>
+        <span class="lbl" data-i18n="music.vol">音量</span>
+        <input type="range" id="mVol" min="0" max="100" value="55" aria-label="volume" />
+        <span class="wave" id="mWave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      </div>
+      <p class="note" id="mNote"></p>
+    </section>
+
+    <!-- 02 摸鱼计时器 -->
+    <section class="card" aria-labelledby="t-timer">
+      <h2 id="t-timer"><span class="no">02</span><span data-i18n="timer.name">摸鱼计时器</span></h2>
+      <p class="desc" data-i18n="timer.desc">25 分钟专注、5 分钟休息。到点了标签页标题会闪一下。</p>
+      <div class="readout"><span id="tmText">25:00</span><span class="unit" id="tmState" data-i18n="timer.idle">待机</span></div>
+      <div class="bar"><i id="tmBar"></i></div>
+      <div class="row tight">
+        <button class="btn primary" id="tmStart" type="button" data-i18n="timer.start">开始</button>
+        <button class="btn" id="tmReset" type="button" data-i18n="timer.reset">重置</button>
+        <span class="note" id="tmDone"></span>
+      </div>
+    </section>
+
+    <!-- 03 密码生成器 -->
+    <section class="card" aria-labelledby="t-pwd">
+      <h2 id="t-pwd"><span class="no">03</span><span data-i18n="pwd.name">密码生成器</span></h2>
+      <p class="desc" data-i18n="pwd.desc">本地用 crypto 随机数生成，不留痕。</p>
+      <div class="mono-out" id="pwOut" aria-live="polite"></div>
+      <div class="row">
+        <span class="lbl" data-i18n="pwd.len">长度</span>
+        <input type="range" id="pwLen" min="8" max="48" value="18" aria-label="length" />
+        <span class="lbl" id="pwLenVal">18</span>
+      </div>
+      <div class="row tight">
+        <label class="check"><input type="checkbox" id="pwUpper" checked /><span data-i18n="pwd.upper">大写</span></label>
+        <label class="check"><input type="checkbox" id="pwLower" checked /><span data-i18n="pwd.lower">小写</span></label>
+        <label class="check"><input type="checkbox" id="pwDigit" checked /><span data-i18n="pwd.digit">数字</span></label>
+        <label class="check"><input type="checkbox" id="pwSymbol" checked /><span data-i18n="pwd.symbol">符号</span></label>
+      </div>
+      <div class="row tight">
+        <button class="btn primary" id="pwGen" type="button" data-i18n="pwd.gen">生成</button>
+        <button class="btn" id="pwCopy" type="button" data-i18n="pwd.copy">复制</button>
+        <span class="note" id="pwMsg"></span>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span data-i18n="foot.note">全部本地运行 · 不联网 · 不上传</span>
+    <a href="./" data-i18n="foot.back">回到 mujiu.net</a>
+  </footer>
+
+</div>
+<script>
+(function () {
+  'use strict';
+  var M = window.MUJIU;
+  var T = function (k, v) { return M.t(k, v); };
+  var $ = function (id) { return document.getElementById(id); };
+
+  // ============================================================ 顶栏
+  (function buildThemePicker() {
+    var box = $('themePicker');
+    if (!box) return;
+    Object.keys(M.THEMES).forEach(function (name) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'theme-dot';
+      b.dataset.t = name;
+      b.title = name;
+      b.setAttribute('aria-label', 'theme: ' + name);
+      b.style.background = M.THEMES[name].sw || M.THEMES[name].primary;
+      b.addEventListener('click', function () { M.applyTheme(name); });
+      box.appendChild(b);
+    });
+    var dots = document.querySelectorAll('.theme-dot');
+    for (var i = 0; i < dots.length; i++) dots[i].classList.toggle('active', dots[i].dataset.t === M.theme);
+  })();
+
+  $('langBtn').addEventListener('click', function () {
+    M.setLang(M.lang === 'zh' ? 'en' : 'zh');
+  });
+
+  // ============================================================ 01 背景音乐
+  // 全部现场合成：没有音频文件，也就没有版权和加载的问题。
+  var Music = (function () {
+    var ctx = null, master = null, analyser = null, freq = null;
+    var current = null, preset = 'night', playing = false, vol = 0.55, raf = 0;
+
+    function AC() { return window.AudioContext || window.webkitAudioContext; }
+
+    function ensure() {
+      if (ctx) return true;
+      var Ctor = AC();
+      if (!Ctor) return false;
+      try {
+        ctx = new Ctor();
+        master = ctx.createGain();
+        master.gain.value = 0;
+        analyser = ctx.createAnalyser();
+        analyser.fftSize = 128;
+        analyser.smoothingTimeConstant = 0.82;
+        freq = new Uint8Array(analyser.frequencyBinCount);
+        master.connect(analyser);
+        master.connect(ctx.destination);
+      } catch (e) { ctx = null; return false; }
+      return true;
+    }
+
+    function target() { return vol * 0.5; }
+
+    function rampTo(v, secs) {
+      if (!ctx) return;
+      var t0 = ctx.currentTime;
+      master.gain.cancelScheduledValues(t0);
+      master.gain.setValueAtTime(master.gain.value, t0);
+      master.gain.linearRampToValueAtTime(v, t0 + secs);
+    }
+
+    function noise(seconds) {
+      var n = Math.floor(ctx.sampleRate * seconds);
+      var buf = ctx.createBuffer(1, n, ctx.sampleRate);
+      var d = buf.getChannelData(0);
+      for (var i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+      return buf;
+    }
+
+    // 三个音景，每个都返回一个 stop()
+    var builders = {
+      // 静夜：几个声部叠成和弦，低通滤镜慢慢呼吸
+      night: function () {
+        var kill = [];
+        var out = ctx.createGain(); out.gain.value = 1;
+        var lp = ctx.createBiquadFilter();
+        lp.type = 'lowpass'; lp.frequency.value = 820; lp.Q.value = 0.7;
+        out.connect(lp); lp.connect(master);
+
+        var lfo = ctx.createOscillator(); lfo.frequency.value = 0.045;
+        var lfoG = ctx.createGain(); lfoG.gain.value = 340;
+        lfo.connect(lfoG); lfoG.connect(lp.frequency); lfo.start();
+        kill.push(lfo);
+
+        var chord = [110, 164.81, 220, 277.18, 329.63];
+        chord.forEach(function (f, i) {
+          [-3, 3].forEach(function (det) {
+            var o = ctx.createOscillator();
+            o.type = i === 0 ? 'sine' : 'triangle';
+            o.frequency.value = f * Math.pow(2, det / 1200);
+            var g = ctx.createGain(); g.gain.value = i === 0 ? 0.18 : 0.06;
+            var amp = ctx.createGain(); amp.gain.value = 1;
+            var aLfo = ctx.createOscillator(); aLfo.frequency.value = 0.026 + i * 0.009;
+            var aG = ctx.createGain(); aG.gain.value = 0.45;
+            aLfo.connect(aG); aG.connect(amp.gain); aLfo.start();
+            o.connect(g); g.connect(amp); amp.connect(out); o.start();
+            kill.push(o, aLfo);
+          });
+        });
+        return function () { kill.forEach(function (n) { try { n.stop(); } catch (e) {} }); };
+      },
+
+      // 雨：白噪过带通当雨声，底下垫一层很低的轰鸣
+      rain: function () {
+        var kill = [];
+        var out = ctx.createGain(); out.gain.value = 1; out.connect(master);
+
+        var src = ctx.createBufferSource();
+        src.buffer = noise(4); src.loop = true;
+        var bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1500; bp.Q.value = 0.45;
+        var hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 420;
+        var ng = ctx.createGain(); ng.gain.value = 0.3;
+        src.connect(bp); bp.connect(hp); hp.connect(ng); ng.connect(out); src.start();
+        kill.push(src);
+
+        var drone = ctx.createOscillator(); drone.type = 'sine'; drone.frequency.value = 58;
+        var dg = ctx.createGain(); dg.gain.value = 0.1;
+        drone.connect(dg); dg.connect(out); drone.start();
+        kill.push(drone);
+        return function () { kill.forEach(function (n) { try { n.stop(); } catch (e) {} }); };
+      },
+
+      // 深空：低频 drone + 时不时冒一颗高音
+      space: function () {
+        var kill = [];
+        var out = ctx.createGain(); out.gain.value = 1; out.connect(master);
+        [55, 82.41, 110.5].forEach(function (f, i) {
+          var o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = f;
+          var g = ctx.createGain(); g.gain.value = [0.2, 0.11, 0.06][i];
+          o.connect(g); g.connect(out); o.start(); kill.push(o);
+        });
+        var scale = [523.25, 587.33, 698.46, 783.99, 880];
+        var spark = setInterval(function () {
+          if (!playing || !ctx) return;
+          var o = ctx.createOscillator(); o.type = 'sine';
+          o.frequency.value = scale[Math.floor(Math.random() * scale.length)];
+          var g = ctx.createGain();
+          var t0 = ctx.currentTime;
+          g.gain.setValueAtTime(0.0001, t0);
+          g.gain.linearRampToValueAtTime(0.1, t0 + 0.05);
+          g.gain.exponentialRampToValueAtTime(0.0001, t0 + 2.6);
+          o.connect(g); g.connect(out); o.start(t0); o.stop(t0 + 2.8);
+        }, 2400);
+        return function () {
+          clearInterval(spark);
+          kill.forEach(function (n) { try { n.stop(); } catch (e) {} });
+        };
+      }
+    };
+
+    function paintWave() {
+      if (!playing || !analyser) { raf = 0; return; }
+      analyser.getByteFrequencyData(freq);
+      var bars = document.querySelectorAll('#mWave i');
+      var n = bars.length, usable = Math.floor(freq.length * 0.62);
+      for (var i = 0; i < n; i++) {
+        var v = freq[Math.floor(i * usable / n)] / 255;
+        bars[i].style.height = (4 + v * 18).toFixed(1) + 'px';
+      }
+      raf = requestAnimationFrame(paintWave);
+    }
+
+    function start(p) {
+      if (p) preset = p;
+      if (!ensure()) { $('mNote').textContent = T('music.nosupport'); return; }
+      if (current) { current(); current = null; }
+      if (ctx.state === 'suspended') { try { ctx.resume(); } catch (e) {} }
+      current = builders[preset]();
+      rampTo(target(), 1.6);
+      playing = true;
+      $('mWave').classList.add('on');
+      if (!raf) raf = requestAnimationFrame(paintWave);
+      syncPlayBtn();
+    }
+
+    function stop() {
+      if (!ctx) return;
+      playing = false;
+      rampTo(0, 0.9);
+      var c = current; current = null;
+      if (c) setTimeout(c, 1000);
+      $('mWave').classList.remove('on');
+      var bars = document.querySelectorAll('#mWave i');
+      for (var i = 0; i < bars.length; i++) bars[i].style.height = '4px';
+      syncPlayBtn();
+    }
+
+    function syncPlayBtn() {
+      var b = $('mPlay');
+      if (b) b.textContent = T(playing ? 'music.pause' : 'music.play');
+    }
+
+    // 事件
+    $('mPlay').addEventListener('click', function () { playing ? stop() : start(); });
+    $('mVol').addEventListener('input', function () {
+      vol = Math.max(0, Math.min(100, +this.value)) / 100;
+      if (playing) rampTo(target(), 0.2);
+    });
+    Array.prototype.forEach.call($('mPreset').querySelectorAll('button'), function (b) {
+      b.addEventListener('click', function () {
+        Array.prototype.forEach.call($('mPreset').querySelectorAll('button'), function (o) { o.classList.remove('active'); });
+        b.classList.add('active');
+        if (playing) start(b.dataset.p); else preset = b.dataset.p;
+      });
+    });
+
+    return {
+      ctx: function () { ensure(); return ctx; },
+      onLang: syncPlayBtn
+    };
+  })();
+
+  // ============================================================ 02 摸鱼计时器
+  var Timer = (function () {
+    var WORK = 25 * 60, REST = 5 * 60;
+    var phase = 'work', left = WORK, endAt = 0, running = false, finished = false;
+    var tick = null, blink = null, savedTitle = '';
+    var COUNT_KEY = 'mujiu_tomato_' + new Date().toISOString().slice(0, 10).replace(/-/g, '');
+
+    function total() { return phase === 'work' ? WORK : REST; }
+    function fmt(s) {
+      s = Math.max(0, Math.round(s));
+      var m = Math.floor(s / 60), x = s % 60;
+      return (m < 10 ? '0' : '') + m + ':' + (x < 10 ? '0' : '') + x;
+    }
+    function count() { try { return +(localStorage.getItem(COUNT_KEY) || 0); } catch (e) { return 0; } }
+    function bump() { try { localStorage.setItem(COUNT_KEY, String(count() + 1)); } catch (e) {} }
+
+    function beep() {
+      var c = Music.ctx();
+      if (!c) return;
+      [880, 1174.66].forEach(function (f, i) {
+        var o = c.createOscillator(), g = c.createGain();
+        o.type = 'sine'; o.frequency.value = f;
+        var t0 = c.currentTime + i * 0.19;
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.linearRampToValueAtTime(0.16, t0 + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.38);
+        o.connect(g); g.connect(c.destination);
+        o.start(t0); o.stop(t0 + 0.42);
+      });
+    }
+
+    function flashTitle() {
+      if (blink) return;
+      savedTitle = document.title;
+      var on = false, n = 0;
+      blink = setInterval(function () {
+        on = !on;
+        document.title = on ? (phase === 'work' ? '● ' + fmt(left) : '☕ ' + fmt(left)) : savedTitle;
+        if (++n >= 10) { clearInterval(blink); blink = null; document.title = T('meta.title'); }
+      }, 700);
+    }
+
+    function render() {
+      $('tmText').textContent = fmt(left);
+      $('tmBar').style.width = (100 * (1 - left / total())).toFixed(2) + '%';
+      var st;
+      if (running || finished) st = phase === 'work' ? 'timer.work' : 'timer.break';
+      else if (left === total()) st = 'timer.idle';
+      else st = 'timer.paused';
+      $('tmState').textContent = T(st);
+      $('tmStart').textContent = T(running ? 'timer.pause' : 'timer.start');
+      $('tmDone').textContent = count() ? T('timer.done', { n: count() }) : '';
+    }
+
+    function loop() {
+      var remain = (endAt - Date.now()) / 1000;
+      left = Math.max(0, remain);
+      if (remain <= 0) { finish(); return; }
+      render();
+    }
+
+    function finish() {
+      clearInterval(tick); tick = null;
+      running = false; finished = true; left = 0; render();
+      beep(); flashTitle();
+      if (phase === 'work') bump();
+      phase = phase === 'work' ? 'rest' : 'work';
+      left = total();
+      render();
+    }
+
+    function start() {
+      if (running) { // 暂停
+        clearInterval(tick); tick = null;
+        running = false;
+        endAt = 0;
+        render();
+        return;
+      }
+      Music.ctx(); // 借用户这次点击把音频上下文热起来，到点才响得出声
+      finished = false;
+      endAt = Date.now() + left * 1000;
+      running = true;
+      tick = setInterval(loop, 250);
+      render();
+    }
+
+    function reset() {
+      clearInterval(tick); tick = null;
+      running = false; finished = false; endAt = 0; phase = 'work'; left = WORK;
+      if (blink) { clearInterval(blink); blink = null; document.title = T('meta.title'); }
+      render();
+    }
+
+    $('tmStart').addEventListener('click', start);
+    $('tmReset').addEventListener('click', reset);
+
+    render();
+    return {
+      onLang: function () {
+        if (!blink) document.title = T('meta.title');
+        render();
+      }
+    };
+  })();
+
+  // ============================================================ 03 密码生成器
+  var Pwd = (function () {
+    var SETS = {
+      upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+      lower: 'abcdefghijklmnopqrstuvwxyz',
+      digit: '0123456789',
+      symbol: '!@#$%^&*()-_=+[]{};:,.?/'
+    };
+    var msgTimer = null;
+
+    function randInt(max) { // 无模偏差
+      var limit = Math.floor(4294967296 / max) * max;
+      var a = new Uint32Array(1), v;
+      do { crypto.getRandomValues(a); v = a[0]; } while (v >= limit);
+      return v % max;
+    }
+    function pick(s) { return s.charAt(randInt(s.length)); }
+
+    function activeSets() {
+      var out = [];
+      if ($('pwUpper').checked) out.push(SETS.upper);
+      if ($('pwLower').checked) out.push(SETS.lower);
+      if ($('pwDigit').checked) out.push(SETS.digit);
+      if ($('pwSymbol').checked) out.push(SETS.symbol);
+      return out;
+    }
+
+    function msg(s) {
+      $('pwMsg').textContent = s;
+      if (msgTimer) clearTimeout(msgTimer);
+      msgTimer = setTimeout(function () { $('pwMsg').textContent = ''; }, 1800);
+    }
+
+    function gen() {
+      var len = Math.max(8, Math.min(48, +$('pwLen').value));
+      var sets = activeSets();
+      if (!sets.length) { msg(T('pwd.needone')); return; }
+      var all = sets.join(''), out = [];
+      sets.forEach(function (s) { out.push(pick(s)); });         // 每类先保一个
+      while (out.length < len) out.push(pick(all));
+      for (var i = out.length - 1; i > 0; i--) {                  // 洗牌
+        var j = randInt(i + 1), tmp = out[i]; out[i] = out[j]; out[j] = tmp;
+      }
+      $('pwOut').textContent = out.slice(0, len).join('');
+    }
+
+    function copy() {
+      var s = $('pwOut').textContent;
+      if (!s) { gen(); s = $('pwOut').textContent; }
+      var done = function () { msg(T('pwd.copied')); };
+      var fail = function () {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = s; ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta); ta.select();
+          document.execCommand('copy'); document.body.removeChild(ta);
+          done();
+        } catch (e) { msg(T('pwd.copyfail')); }
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(s).then(done, fail);
+      } else { fail(); }
+    }
+
+    $('pwLen').addEventListener('input', function () {
+      $('pwLenVal').textContent = this.value;
+      gen();
+    });
+    ['pwUpper', 'pwLower', 'pwDigit', 'pwSymbol'].forEach(function (id) {
+      $(id).addEventListener('change', gen);
+    });
+    $('pwGen').addEventListener('click', gen);
+    $('pwCopy').addEventListener('click', copy);
+
+    gen();
+    return { onLang: function () { $('pwLenVal').textContent = $('pwLen').value; } };
+  })();
+
+  window.__afterI18n = function () {
+    Music.onLang(); Timer.onLang(); Pwd.onLang();
+  };
+})();
+</script>
+</body>
+</html>
