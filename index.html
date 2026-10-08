@@ -129,6 +129,8 @@ window.MUJIU = (function () {
       'hero.greet': '你好，我是',
       'hero.name': '樊旭阳',
       'hero.role': '计算机科学学生 · 在搭一堆小站',
+      'hero.motto': '去看世界，去直面危险，去看墙背后的风景，去靠近彼此，去感受。这就是生活的意义。',
+      'hero.mottoBy': '——《白日梦想家》',
       'hero.about': '我是一名计算机专业学生，喜欢构建各种有趣的网络服务，顺手搭了一堆小站。',
       'hero.chip1': '🎓 本科在读',
       'hero.chip2': '🏫 天津大学（TJU）& 香港理工大学（PolyU）',
@@ -161,6 +163,8 @@ window.MUJIU = (function () {
       'log.title': '更新日志', 'log.sub': 'changelog · 含服务器日志里的更早记录',
       'log.4.t': '双语切换 + 站内小助手 + 分享卡片',
       'log.4.p': '整页中英双语可切换；新增站内小助手；补齐 SEO / 分享卡片 / favicon；顶栏改为吸顶并高亮当前板块；关掉 JavaScript 也能正常阅读。',
+      'log.6.t': '方向分流门 + 生活向 + 照片墙',
+      'log.6.p': '首屏先问一句想看哪个方向：技术向、生活向、两个都看；生活向新增五张卡、一张走过的地图和六张手机拍的照片（点开有大图）；首次访问会先放一段终端开机日志，按任意键即可跳过。',
       'log.5.t': '小助手接上大模型',
       'log.5.p': '站内小助手从写死的固定问答换成在线模型，能接住没预设过的问题；对话经服务端转发，密钥不出服务器，另加每 IP 限速与每日额度两道闸。',
       'log.3.t': '主题跨站同步 + 服务器仪表盘',
@@ -178,7 +182,7 @@ window.MUJIU = (function () {
       'log.1f.t': '第一次留下访问日志',
       'log.1f.p': '15:49 记录到第一条请求；小游戏站的 2048 与贪吃蛇当天就有人玩，那会儿贪吃蛇还会返回 500。',
       'log.note': '再往前的日子没有留下访问记录，08-26 是日志里最早的一天；上面这些日期来自提交记录与服务器日志。',
-      'log.legend': '版本号 v1.0 → v4.1 是按几次大改归纳的，不是每次提交都编号。',
+      'log.legend': '版本号 v1.0 → v4.2 是按几次大改归纳的，不是每次提交都编号。',
       'server.title': '服务器仪表盘', 'server.sub': 'live · 每 5 秒刷新',
       'server.visitors': '在线访客', 'server.visitors.sub': '最近 60 秒内来过的人',
       'server.cpu': 'CPU', 'server.mem': '内存', 'server.disk': '磁盘',
@@ -200,12 +204,79 @@ window.MUJIU = (function () {
       'ct.h3': '聊聊想法？', 'ct.p': '网络服务、小工具、随便什么…… 欢迎来信交流。',
       'ct.cta': '✉ 写封邮件', 'ct.mailbox': '樊旭阳 的信箱',
       'foot.easter': '试试键盘彩蛋：↑↑↓↓←→←→BA',
-      'foot.ver': 'v4.1', 'foot.updated': '更新于',
+      'foot.ver': 'v4.2', 'foot.updated': '更新于',
       'unit.people': '人', 'unit.req': '次', 'unit.day': '天', 'unit.hour': '小时', 'unit.up': '已运行',
       'toast.theme': '主题：{name}',
       'toast.theme.sync': '主题：{name} · 已同步全站',
       'toast.lang': '语言：{name}',
-      'noscript': '本页的滚动入场、仪表盘等效果需要 JavaScript；不开启也能正常阅读全部内容。'
+      'noscript': '本页的滚动入场、仪表盘等效果需要 JavaScript；不开启也能正常阅读全部内容。',
+      'boot.1': '初始化',
+      'boot.2': '载入个人档案',
+      'boot.3': '载入照片',
+      'boot.4': '就绪',
+      'gate.title': '你想看哪个方向？',
+      'gate.sub': '同一份履历，两种打开方式。选一个，随时能换。',
+      'gate.tech': '技术向',
+      'gate.techSub': '项目、技能、这个站怎么搭的',
+      'gate.life': '生活向',
+      'gate.lifeSub': '我是谁、从哪来、平时喜欢什么',
+      'gate.all': '两个都看',
+      'gate.allSub': '不筛选，把技术向和生活向一次摊开',
+      'gate.foot': '选择只存在你自己的浏览器里，不会上传',
+      'mode.label': '方向',
+      'mode.switch': '切换浏览方向',
+      'mode.tech': '技术向', 'mode.life': '生活向', 'mode.all': '全部',
+      'toc.life': '生活',
+      'life.title': '生活里的我',
+      'life.sub': 'off the clock',
+      'life.me': '不聊代码的时候',
+      'life.me.desc': 'INFP 摩羯，慢热，话不多但认理。不太爱把生活铺开来讲，这里就放几件真会做的事。',
+      'life.zodiac': '摩羯座',
+      'life.pet.title': '家里两只',
+      'life.pet.desc': '一只鹦鹉，一只鸡。对，真的养了只鸡。',
+      'life.pet.bird': '墨墨 · 蓝鹦鹉',
+      'life.pet.chicken': '小黄 · 小公鸡',
+      'life.out.title': '出门的时候',
+      'life.home.title': '宅着的时候',
+      'life.home.desc': '耳机和手柄。',
+      'life.k.photo': '摄影',
+      'life.k.bike': '骑行',
+      'life.k.music': '听歌',
+      'life.k.game': '游戏',
+      'life.ph.landscape': '风光',
+      'life.ph.portrait': '人像',
+      'life.ph.street': '街拍',
+      'life.ph.arch': '建筑',
+      'life.ph.desc': '用手机拍。',
+      'life.bike.desc': '骑共享单车逛城市，不追求速度和装备。',
+      'life.mu.pop': '华语流行',
+      'life.mu.folk': '民谣',
+      'life.mu.inst': '纯音乐',
+      'life.gm.mobile': '手游',
+      'life.gm.pc': 'PC 单机',
+      'life.gm.console': '主机',
+      'life.gm.comp': '竞技类',
+      'life.gm.indie': '独立游戏',
+      'life.travel': '去过的地方',
+      'life.travel.desc': '数了数，20 个。',
+      'life.map.on': '去过',
+      'life.map.off': '还没去',
+      'life.map.sz': '深圳',
+      'life.road.title': '从天津到深圳',
+      'life.road.desc': '老家在天津，之前念书也在天津，现在人在深圳。',
+      'life.road.from': '天津 · 老家 / 念书',
+      'life.road.now': '深圳 · 现在',
+      'life.ph.title': '随手拍的',
+      'life.ph.desc': '出门带个手机，看到什么拍什么。点开能看大图。',
+      'life.ph.1': '黄山 · 新安江廊桥',
+      'life.ph.2': '黄山 · 风景区',
+      'life.ph.3': '张家界土司城',
+      'life.ph.4': '恩施 · 鹤峰屏山峡谷',
+      'life.ph.5': '贵阳 · 黔灵山',
+      'life.ph.6': '天津 · 金海湖公园',
+      'ph.close': '关闭',
+      'ph.prev': '上一张',
+      'ph.next': '下一张'
     },
     en: {
       'meta.title': 'Fan Xuyang · Personal Homepage',
@@ -219,6 +290,8 @@ window.MUJIU = (function () {
       'hero.greet': "Hi, I'm",
       'hero.name': 'Fan Xuyang',
       'hero.role': 'CS student · building small sites',
+      'hero.motto': 'To see the world, things dangerous to come to, to see behind walls, to draw closer, to find each other and to feel. That is the purpose of life.',
+      'hero.mottoBy': '— The Secret Life of Walter Mitty',
       'hero.about': 'I am a computer science student who enjoys building fun network services and tinkering with small sites.',
       'hero.chip1': '🎓 Undergraduate',
       'hero.chip2': '🏫 Tianjin University (TJU) & The Hong Kong Polytechnic University (PolyU)',
@@ -251,6 +324,8 @@ window.MUJIU = (function () {
       'log.title': 'Changelog', 'log.sub': 'changelog · including earlier entries from the server logs',
       'log.4.t': 'Bilingual mode, in-page assistant & share cards',
       'log.4.p': 'The whole page switches between Chinese and English; an in-page assistant; SEO, share cards and a favicon; a sticky header that highlights the current section; and full readability with JavaScript turned off.',
+      'log.6.t': 'Direction gate + life side + photo wall',
+      'log.6.p': 'The first screen asks which way you want to look: tech, life, or both; the life side gains five cards, a map of places he has been and six phone photos (click for full size); first visits start with a short boot log you can skip with any key.',
       'log.5.t': 'The assistant goes online',
       'log.5.p': 'The in-page assistant moved from hard-coded answers to a live model, so it can handle questions nobody pre-wrote. Requests are proxied server-side, the key never leaves the server, and per-IP rate limits plus a daily budget keep it in check.',
       'log.3.t': 'Cross-site theme sync + server dashboard',
@@ -268,7 +343,7 @@ window.MUJIU = (function () {
       'log.1f.t': 'The first access log entry',
       'log.1f.p': 'The first request was recorded at 15:49; 2048 and Snake were played that same day, back when Snake still returned 500.',
       'log.note': 'Nothing was logged before this: 08-26 is the earliest day in the logs. These dates come from commit history and server logs.',
-      'log.legend': 'Version numbers v1.0 → v4.1 group the big rewrites — not every commit gets a number.',
+      'log.legend': 'Version numbers v1.0 → v4.2 group the big rewrites — not every commit gets a number.',
       'server.title': 'Server dashboard', 'server.sub': 'live · refreshed every 5s',
       'server.visitors': 'visitors', 'server.visitors.sub': 'unique in the last 60s',
       'server.cpu': 'CPU', 'server.mem': 'memory', 'server.disk': 'disk',
@@ -290,12 +365,79 @@ window.MUJIU = (function () {
       'ct.h3': 'Got an idea?', 'ct.p': 'Network services, small tools, anything — feel free to write.',
       'ct.cta': '✉ Write an email', 'ct.mailbox': "Fan Xuyang's inbox",
       'foot.easter': 'Keyboard easter egg: ↑↑↓↓←→←→BA',
-      'foot.ver': 'v4.1', 'foot.updated': 'updated',
+      'foot.ver': 'v4.2', 'foot.updated': 'updated',
       'unit.people': 'online', 'unit.req': 'req', 'unit.day': 'd', 'unit.hour': 'h', 'unit.up': 'up',
       'toast.theme': 'Theme: {name}',
       'toast.theme.sync': 'Theme: {name} · synced everywhere',
       'toast.lang': 'Language: {name}',
-      'noscript': 'Animations and the dashboard need JavaScript, but all the content is readable without it.'
+      'noscript': 'Animations and the dashboard need JavaScript, but all the content is readable without it.',
+      'boot.1': 'initializing',
+      'boot.2': 'loading profile',
+      'boot.3': 'loading photos',
+      'boot.4': 'ready',
+      'gate.title': 'Which side do you want?',
+      'gate.sub': 'The same résumé, two ways in. Pick one — you can switch anytime.',
+      'gate.tech': 'Technical',
+      'gate.techSub': 'Projects, skills, how this site is built',
+      'gate.life': 'Personal',
+      'gate.lifeSub': 'Who I am, where I am from, what I like',
+      'gate.all': 'Show me both',
+      'gate.allSub': 'No filter — the technical and the personal side at once',
+      'gate.foot': 'Your choice stays in your own browser — nothing is uploaded',
+      'mode.label': 'View',
+      'mode.switch': 'Switch view',
+      'mode.tech': 'Technical', 'mode.life': 'Personal', 'mode.all': 'All',
+      'toc.life': 'Life',
+      'life.title': 'Off the clock',
+      'life.sub': 'the personal side',
+      'life.me': 'When I am not on the terminal',
+      'life.me.desc': 'INFP, Capricorn. Slow to warm up, quiet, but stubborn about what I think is right. I do not put much of my life on display — these are the few things I actually do.',
+      'life.zodiac': 'Capricorn',
+      'life.pet.title': 'Two at home',
+      'life.pet.desc': 'A parrot and a chicken. Yes, really a chicken.',
+      'life.pet.bird': 'Momo · a blue parrot',
+      'life.pet.chicken': 'Xiaohuang · a little rooster',
+      'life.out.title': 'Out and about',
+      'life.home.title': 'At home',
+      'life.home.desc': 'Headphones and a controller.',
+      'life.k.photo': 'Photography',
+      'life.k.bike': 'Cycling',
+      'life.k.music': 'Music',
+      'life.k.game': 'Games',
+      'life.ph.landscape': 'Landscape',
+      'life.ph.portrait': 'Portrait',
+      'life.ph.street': 'Street',
+      'life.ph.arch': 'Architecture',
+      'life.ph.desc': 'Shot on a phone.',
+      'life.bike.desc': 'Exploring the city on a shared bike — no speed, no gear.',
+      'life.mu.pop': 'Mandarin pop',
+      'life.mu.folk': 'Folk',
+      'life.mu.inst': 'Instrumental',
+      'life.gm.mobile': 'Mobile',
+      'life.gm.pc': 'PC single-player',
+      'life.gm.console': 'Console',
+      'life.gm.comp': 'Competitive',
+      'life.gm.indie': 'Indie',
+      'life.travel': 'Places I have been',
+      'life.travel.desc': 'Twenty so far.',
+      'life.map.on': 'Visited',
+      'life.map.off': 'Not yet',
+      'life.map.sz': 'Shenzhen',
+      'life.road.title': 'From Tianjin to Shenzhen',
+      'life.road.desc': 'Tianjin is home, and where I went to school; now I am in Shenzhen.',
+      'life.road.from': 'Tianjin · home / school',
+      'life.road.now': 'Shenzhen · now',
+      'life.ph.title': 'Shot on my phone',
+      'life.ph.desc': 'Just things I saw while out. Tap to enlarge.',
+      'life.ph.1': "Huangshan · Xin'an Bridge",
+      'life.ph.2': 'Huangshan · Scenic Area',
+      'life.ph.3': 'Zhangjiajie Tusi City',
+      'life.ph.4': 'Enshi · Pingshan Canyon',
+      'life.ph.5': 'Guiyang · Qianling',
+      'life.ph.6': 'Tianjin · Jinhai Lake',
+      'ph.close': 'Close',
+      'ph.prev': 'Previous',
+      'ph.next': 'Next'
     }
   };
 
@@ -359,6 +501,17 @@ window.MUJIU = (function () {
   document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
   document.documentElement.setAttribute('data-lang', lang);
   document.addEventListener('DOMContentLoaded', function () { applyI18n(); });
+
+  // 启动动画只在「真正的第一次访问」放：带 ?mode= 进来（分享链接）或系统设了
+  // 「减少动态效果」都直接跳过。此刻 body 还没解析，属性先落下，开头才不会闪一下。
+  (function bootFlag() {
+    try {
+      if (/(?:^|[?&])mode=(?:tech|life|all)(?:&|$)/.test(location.search)) return;
+      if (localStorage.getItem('mujiu_boot')) return;
+      if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      document.documentElement.setAttribute('data-boot', '1');
+    } catch (e) {}
+  })();
 
   return {
     THEMES: THEMES, I18N: I18N,
@@ -792,6 +945,169 @@ window.MUJIU = (function () {
     .menubar.open .secnav, .menubar.open .topnav { flex-direction: column; align-items: flex-start; gap: 2px; }
     .menubar.open .topnav { display: flex; }
   }
+
+  /* ---------- 启动动画：首次访问时的终端开机日志 ---------- */
+  html[data-boot="1"], html[data-boot="1"] body { overflow: hidden; }
+  .boot { display: none; }
+  html[data-boot="1"] .boot {
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+    position: fixed; inset: 0; z-index: 300; background: #0b1015;
+    transition: opacity .62s var(--ease);
+  }
+  html[data-boot="1"] .boot.out { opacity: 0; }
+  .boot-log { width: 100%; max-width: 330px; font-size: 13px; line-height: 1.95; color: #7d8b99; }
+  .boot-line {
+    display: flex; align-items: baseline; gap: 8px; white-space: nowrap;
+    opacity: 0; transform: translateY(3px);
+    transition: opacity .42s ease, transform .42s ease;
+  }
+  .boot-line.on { opacity: 1; transform: none; }
+  .boot-k { color: #a8b8c6; }
+  .boot-lead { flex: 1 1 auto; min-width: 14px; border-bottom: 1px dotted #2d3c48; transform: translateY(-3px); }
+  .boot-ok { color: var(--primary); }
+  .boot-plain { color: #586672; }
+  .boot-done .boot-k { color: var(--primary); }
+  .boot-caret { display: inline-block; width: 7px; height: 13px; background: var(--primary); animation: bootBlink 1s steps(1) infinite; }
+  @keyframes bootBlink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .boot-line { transition: none; } .boot-caret { animation: none; } }
+
+  /* ---------- 方向分流门（技术向 / 生活向）---------- */
+  .gate {
+    position: fixed; inset: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+    background: color-mix(in srgb, var(--body) 93%, transparent);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    animation: gateIn .32s var(--ease) both;
+  }
+  .gate[hidden] { display: none; }
+  .gate.leaving { animation: gateOut .26s var(--ease) both; pointer-events: none; }
+  @keyframes gateIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes gateOut { from { opacity: 1; } to { opacity: 0; } }
+  .gate-inner { width: 100%; max-width: 720px; text-align: center; }
+  .gate-brand { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 30px; }
+  .gate-brand .logo { width: 34px; height: 34px; }
+  .gate-brand b { font-size: 16px; color: var(--text-100); letter-spacing: .5px; }
+  .gate-title { font-size: clamp(23px, 5vw, 33px); font-weight: 700; color: var(--text-100); margin: 0 0 10px; letter-spacing: -.5px; }
+  .gate-sub { color: var(--text-200); font-size: 14px; margin: 0 0 30px; }
+  .gate-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .gate-card {
+    cursor: pointer; font: inherit; color: inherit; text-align: left;
+    padding: 26px 22px; border-radius: var(--r-lg);
+    border: 1px solid var(--line-strong);
+    background: color-mix(in srgb, var(--panel) 70%, transparent);
+    display: flex; flex-direction: column; gap: 9px;
+    transition: transform .18s var(--ease), border-color .18s, box-shadow .18s;
+  }
+  .gate-card:hover, .gate-card:focus-visible {
+    transform: translateY(-3px); border-color: var(--primary);
+    box-shadow: 0 14px 32px color-mix(in srgb, var(--primary) 20%, transparent);
+  }
+  .gate-card .gic { font-size: 30px; line-height: 1; }
+  .gate-card b { font-size: 18px; color: var(--text-100); }
+  .gate-card small { color: var(--text-300); font-size: 12.5px; line-height: 1.6; }
+  .gate-all {
+    display: block; width: 100%; margin-top: 12px; padding: 13px 16px;
+    text-align: left; cursor: pointer; font: inherit;
+    background: none; border: 1px dashed var(--line-strong); border-radius: 12px;
+    color: var(--text-200); transition: border-color .15s, background .15s, color .15s;
+  }
+  .gate-all:hover { border-color: var(--primary); color: var(--text-100); background: color-mix(in srgb, var(--primary) 7%, transparent); }
+  .gate-all b { display: block; font-size: 14.5px; color: var(--text-100); }
+  .gate-all small { display: block; margin-top: 3px; color: var(--text-300); font-size: 12px; line-height: 1.55; }
+  .gate-foot { margin-top: 22px; color: var(--text-300); font-size: 12px; }
+
+  /* 座右铭 */
+  .motto {
+    margin: 14px 0 0; padding-left: 12px;
+    border-left: 2px solid var(--line-strong);
+    font-size: 13px; line-height: 1.65; font-style: italic; color: var(--text-300);
+  }
+  .motto .by { display: block; margin-top: 5px; font-style: normal; font-size: 11.5px; opacity: .72; }
+
+  /* 顶栏里的方向开关 */
+  .mode-switch {
+    display: inline-flex; align-items: center;
+    border: 1px solid var(--line-strong); border-radius: 999px; overflow: hidden;
+    background: color-mix(in srgb, var(--panel) 60%, transparent);
+  }
+  .mode-switch button {
+    cursor: pointer; font: inherit; font-size: 12px; padding: 5px 12px;
+    background: none; border: 0; color: var(--text-300);
+    transition: background .15s, color .15s;
+  }
+  .mode-switch button.active { background: var(--primary); color: var(--body); font-weight: 600; }
+
+  /* 两种方向各自显示哪些内容（未设 data-mode 时全部可见，保证关掉 JS 也能读） */
+  html[data-mode="tech"] [data-mode="life"] { display: none !important; }
+  html[data-mode="life"] [data-mode="tech"] { display: none !important; }
+
+  /* 去过的地方：中国地图（右下角为南海诸岛缩略框） */
+  .cn-map-wrap { position: relative; margin-top: 14px; }
+  .cn-map { display: block; width: 100%; height: auto; }
+  .cn-map path { stroke-linejoin: round; transition: fill .25s; }
+  .cn-map path.off {
+    fill: color-mix(in srgb, var(--text-300) 15%, transparent);
+    stroke: var(--line-strong); stroke-width: .8; vector-effect: non-scaling-stroke;
+  }
+  .cn-map path.on {
+    fill: color-mix(in srgb, var(--primary) 58%, transparent);
+    stroke: var(--primary); stroke-width: .9; vector-effect: non-scaling-stroke;
+  }
+  .cn-map path.on:hover { fill: var(--primary); }
+  .cn-inset {
+    position: absolute; right: 1.5%; bottom: 8%; width: 12.5%; height: auto;
+    border: 1px solid var(--line-strong); border-radius: 5px;
+    background: color-mix(in srgb, var(--panel) 82%, transparent);
+  }
+  .cn-inset .p.line { fill: none; stroke: var(--text-300); stroke-width: 1; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke; }
+  .cn-inset .p.on { fill: color-mix(in srgb, var(--primary) 70%, transparent); stroke: var(--primary); stroke-width: .8; vector-effect: non-scaling-stroke; }
+  .cn-inset .p.off { fill: color-mix(in srgb, var(--text-300) 18%, transparent); stroke: var(--line-strong); stroke-width: .8; vector-effect: non-scaling-stroke; }
+  .cn-inset circle { fill: color-mix(in srgb, var(--primary) 70%, transparent); stroke: var(--primary); stroke-width: .7; vector-effect: non-scaling-stroke; }
+  .cn-map .cn-pin .dot { fill: var(--secondary); stroke: var(--panel); stroke-width: 1.6; vector-effect: non-scaling-stroke; }
+  .cn-map .cn-pin .ring { fill: none; stroke: var(--secondary); stroke-width: 1.3; opacity: .5; vector-effect: non-scaling-stroke; }
+  .cn-map .cn-pin .pin-label {
+    font-size: 11px; font-weight: 600; fill: var(--secondary);
+    paint-order: stroke; stroke: var(--panel); stroke-width: 3px; stroke-linejoin: round;
+  }
+  .cn-legend { display: flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 12.5px; color: var(--text-300); flex-wrap: wrap; }
+  .cn-legend .k { width: 11px; height: 11px; border-radius: 3px; display: inline-block; flex: none; }
+  .cn-legend .k.on { background: color-mix(in srgb, var(--primary) 58%, transparent); border: 1px solid var(--primary); }
+  .cn-legend .k.off { background: color-mix(in srgb, var(--text-300) 15%, transparent); border: 1px solid var(--line-strong); }
+  .cn-legend .k.sz { border-radius: 50%; background: var(--secondary); }
+  .cn-legend span:not(.k) { margin-right: 12px; }
+  .cn-note { margin-top: 12px; color: var(--text-300); font-size: 12.5px; }
+
+  /* 照片墙 */
+  .ph-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
+  .ph { position: relative; display: block; padding: 0; border: 0; cursor: zoom-in; background: var(--panel);
+        border-radius: 10px; overflow: hidden; aspect-ratio: 4 / 5; box-shadow: 0 1px 2px rgba(0,0,0,.28); }
+  .ph img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .35s ease; }
+  .ph:hover img { transform: scale(1.05); }
+  .ph:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  .ph-cap { position: absolute; left: 6px; bottom: 6px; padding: 2px 8px; border-radius: 999px; font-size: 12px;
+            line-height: 1.6; background: rgba(0,0,0,.55); color: #fff; pointer-events: none;
+            max-width: calc(100% - 12px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* 灯箱 */
+  .ph-lb { position: fixed; inset: 0; z-index: 120; display: flex; align-items: center; justify-content: center;
+           background: rgba(8,12,16,.9); }
+  .ph-lb[hidden] { display: none; }
+  .ph-lb > img { max-width: 92vw; max-height: 86vh; border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,.6); }
+  .lb-btn { position: absolute; border: 0; background: rgba(255,255,255,.14); color: #fff; cursor: pointer;
+            border-radius: 999px; width: 42px; height: 42px; font-size: 22px; line-height: 1; display: grid; place-items: center; }
+  .lb-btn:hover { background: rgba(255,255,255,.26); }
+  .lb-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  .lb-close { top: 18px; right: 18px; font-size: 17px; }
+  .lb-prev { left: 18px; top: 50%; transform: translateY(-50%); }
+  .lb-next { right: 18px; top: 50%; transform: translateY(-50%); }
+  .lb-cap { position: absolute; bottom: 20px; left: 0; right: 0; text-align: center; color: #fff; font-size: 14px; opacity: .9; }
+
+  @media (max-width: 640px) {
+    .mode-switch { order: -1; }
+    .ph-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .lb-prev { left: 8px; }
+    .lb-next { right: 8px; }
+  }
 </style>
 <noscript><style>
   /* 关掉 JavaScript 时：入场动画直接放开，正文全部可读（否则 .reveal 永远 opacity:0） */
@@ -802,6 +1118,55 @@ window.MUJIU = (function () {
 </style></noscript>
 </head>
 <body>
+
+<!-- 启动动画：只在首次访问时由脚本亮出来（关掉 JS / 已看过 / 系统设了「减少动态效果」都不会显示） -->
+<div class="boot" id="boot" aria-hidden="true">
+  <div class="boot-log" id="bootLog">
+    <div class="boot-line boot-plain">mujiu@gui:~$ ./start</div>
+    <div class="boot-line"><span class="boot-k" data-i18n="boot.1">初始化</span><i class="boot-lead"></i><span class="boot-ok">ok</span></div>
+    <div class="boot-line"><span class="boot-k" data-i18n="boot.2">载入个人档案</span><i class="boot-lead"></i><span class="boot-ok">ok</span></div>
+    <div class="boot-line"><span class="boot-k" data-i18n="boot.3">载入照片</span><i class="boot-lead"></i><span class="boot-ok">ok</span></div>
+    <div class="boot-line boot-done"><span class="boot-k" data-i18n="boot.4">就绪</span><span class="boot-caret"></span></div>
+  </div>
+</div>
+
+<!-- 方向分流门：默认隐藏，由脚本决定要不要显示（关掉 JS 时不会挡住任何内容） -->
+<div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle" hidden>
+  <div class="gate-inner">
+    <div class="gate-brand">
+      <span class="logo">M</span>
+      <b>mujiu</b>
+    </div>
+    <h2 class="gate-title" id="gateTitle" data-i18n="gate.title">你想看哪个方向？</h2>
+    <p class="gate-sub" data-i18n="gate.sub">同一份履历，两种打开方式。选一个，随时能换。</p>
+    <div class="gate-cards">
+      <button class="gate-card" type="button" data-pick="tech">
+        <span class="gic" aria-hidden="true">🖥</span>
+        <b data-i18n="gate.tech">技术向</b>
+        <small data-i18n="gate.techSub">项目、技能、这个站怎么搭的</small>
+      </button>
+      <button class="gate-card" type="button" data-pick="life">
+        <span class="gic" aria-hidden="true">🌊</span>
+        <b data-i18n="gate.life">生活向</b>
+        <small data-i18n="gate.lifeSub">我是谁、从哪来、平时喜欢什么</small>
+      </button>
+    </div>
+    <button class="gate-all" type="button" data-pick="all">
+      <b data-i18n="gate.all">两个都看</b>
+      <small data-i18n="gate.allSub">不筛选，把技术向和生活向一次摊开</small>
+    </button>
+    <div class="gate-foot" data-i18n="gate.foot">选择只存在你自己的浏览器里，不会上传</div>
+  </div>
+</div>
+
+<!-- 照片墙灯箱：默认隐藏，点照片才出现 -->
+<div class="ph-lb" id="phLb" role="dialog" aria-modal="true" aria-label="照片预览" hidden>
+  <button class="lb-btn lb-close" type="button" data-i18n-aria="ph.close" aria-label="关闭">✕</button>
+  <button class="lb-btn lb-prev" type="button" data-i18n-aria="ph.prev" aria-label="上一张">‹</button>
+  <img alt="" decoding="async">
+  <button class="lb-btn lb-next" type="button" data-i18n-aria="ph.next" aria-label="下一张">›</button>
+  <div class="lb-cap"></div>
+</div>
 
 <canvas id="fx" aria-hidden="true"></canvas>
 <div class="glow" id="glow" aria-hidden="true"></div>
@@ -815,6 +1180,11 @@ window.MUJIU = (function () {
       <div class="t"><b>mujiu</b><span data-i18n="brand.sub">图形化个人主页</span></div>
     </div>
     <div class="right">
+      <div class="mode-switch" id="modeSwitch" role="group" data-i18n-aria="mode.switch">
+        <button type="button" data-mode-btn="tech" data-i18n="mode.tech">技术向</button>
+        <button type="button" data-mode-btn="life" data-i18n="mode.life">生活向</button>
+        <button type="button" data-mode-btn="all" data-i18n="mode.all">全部</button>
+      </div>
       <button class="lang-btn" id="langBtn" type="button" aria-pressed="false">EN</button>
       <div class="theme-picker" id="themePicker"></div>
       <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="navwrap" data-i18n-aria="nav.menu">☰</button>
@@ -822,10 +1192,11 @@ window.MUJIU = (function () {
     <div class="navwrap" id="navwrap">
       <nav class="secnav" id="secnav" aria-label="页面板块">
         <a href="#education" data-i18n="toc.education">教育</a>
-        <a href="#stack" data-i18n="toc.stack">建站</a>
-        <a href="#projects" data-i18n="toc.projects">项目</a>
-        <a href="#changelog" data-i18n="toc.changelog">日志</a>
-        <a href="#server" data-i18n="toc.server">状态</a>
+        <a href="#life" data-i18n="toc.life" data-mode="life">生活</a>
+        <a href="#stack" data-i18n="toc.stack" data-mode="tech">建站</a>
+        <a href="#projects" data-i18n="toc.projects" data-mode="tech">项目</a>
+        <a href="#changelog" data-i18n="toc.changelog" data-mode="tech">日志</a>
+        <a href="#server" data-i18n="toc.server" data-mode="tech">状态</a>
         <a href="#assistant" data-i18n="toc.assistant">小助手</a>
         <a href="#contact" data-i18n="toc.contact">联系</a>
       </nav>
@@ -846,6 +1217,10 @@ window.MUJIU = (function () {
       <div class="kicker" data-i18n="hero.kicker">// 关于我</div>
       <h1><span data-i18n="hero.greet">你好，我是</span> <span class="nm"><span class="grad" id="typed" data-text="樊旭阳"></span><span class="caret" id="caret"></span></span></h1>
       <div class="role" data-i18n="hero.role">计算机科学学生 · 在搭一堆小站</div>
+      <p class="motto">
+        <span data-i18n="hero.motto">去看世界，去直面危险，去看墙背后的风景，去靠近彼此，去感受。这就是生活的意义。</span>
+        <span class="by" data-i18n="hero.mottoBy">——《白日梦想家》</span>
+      </p>
       <p class="about-txt" data-i18n-html="hero.about">
         我是一名计算机专业学生，喜欢构建各种有趣的网络服务，顺手搭了一堆小站。
       </p>
@@ -894,8 +1269,159 @@ window.MUJIU = (function () {
     </div>
   </section>
 
+  <!-- 生活向：只在生活方式下出现 -->
+  <section id="life" data-mode="life">
+    <div class="sec-head"><span class="arrow">▸</span><span class="title" data-i18n="life.title">生活里的我</span><span class="sub" data-i18n="life.sub">off the clock</span></div>
+    <div class="grid m2">
+      <div class="card reveal">
+        <div class="ic">🧭</div>
+        <h3 data-i18n="life.me">不聊代码的时候</h3>
+        <p data-i18n="life.me.desc">INFP 摩羯，慢热，话不多但认理。不太爱把生活铺开来讲，这里就放几件真会做的事。</p>
+        <div class="tags"><span class="tag">INFP</span><span class="tag" data-i18n="life.zodiac">摩羯座</span></div>
+      </div>
+      <div class="card reveal">
+        <div class="ic">🐦</div>
+        <h3 data-i18n="life.pet.title">家里两只</h3>
+        <p data-i18n="life.pet.desc">一只鹦鹉，一只鸡。对，真的养了只鸡。</p>
+        <div class="tags">
+          <span class="tag" data-i18n="life.pet.bird">墨墨 · 蓝鹦鹉</span>
+          <span class="tag" data-i18n="life.pet.chicken">小黄 · 小公鸡</span>
+        </div>
+      </div>
+      <div class="card reveal">
+        <div class="ic">📷</div>
+        <h3 data-i18n="life.out.title">出门的时候</h3>
+        <div class="skill-group">
+          <span class="gl" data-i18n="life.k.photo">摄影</span>
+          <div class="chips tight">
+            <span class="chip hot" data-i18n="life.ph.landscape">风光</span>
+            <span class="chip hot" data-i18n="life.ph.portrait">人像</span>
+            <span class="chip hot" data-i18n="life.ph.street">街拍</span>
+            <span class="chip hot" data-i18n="life.ph.arch">建筑</span>
+          </div>
+          <p style="margin-top:6px" data-i18n="life.ph.desc">用手机拍。</p>
+        </div>
+        <div class="skill-group">
+          <span class="gl" data-i18n="life.k.bike">骑行</span>
+          <p data-i18n="life.bike.desc">骑共享单车逛城市，不追求速度和装备。</p>
+        </div>
+      </div>
+      <div class="card reveal">
+        <div class="ic">🎧</div>
+        <h3 data-i18n="life.home.title">宅着的时候</h3>
+        <div class="skill-group">
+          <span class="gl" data-i18n="life.k.music">听歌</span>
+          <div class="chips tight">
+            <span class="chip" data-i18n="life.mu.pop">华语流行</span>
+            <span class="chip" data-i18n="life.mu.folk">民谣</span>
+            <span class="chip" data-i18n="life.mu.inst">纯音乐</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <span class="gl" data-i18n="life.k.game">游戏</span>
+          <div class="chips tight">
+            <span class="chip" data-i18n="life.gm.mobile">手游</span>
+            <span class="chip" data-i18n="life.gm.pc">PC 单机</span>
+            <span class="chip" data-i18n="life.gm.console">主机</span>
+            <span class="chip" data-i18n="life.gm.comp">竞技类</span>
+            <span class="chip" data-i18n="life.gm.indie">独立游戏</span>
+          </div>
+        </div>
+      </div>
+      <div class="card reveal" style="grid-column:1/-1">
+        <div class="ic">📸</div>
+        <h3 data-i18n="life.ph.title">随手拍的</h3>
+        <p data-i18n="life.ph.desc">出门带个手机，看到什么拍什么。点开能看大图。</p>
+        <div class="ph-grid">
+          <button class="ph" type="button" data-full="assets/photos/huangshan-tunxi.jpg">
+            <img src="assets/photos/huangshan-tunxi-s.jpg" alt="黄山 · 新安江廊桥" loading="lazy" decoding="async" width="480" height="640">
+            <span class="ph-cap" data-i18n="life.ph.1">黄山 · 新安江廊桥</span>
+          </button>
+          <button class="ph" type="button" data-full="assets/photos/huangshan-scenic.jpg">
+            <img src="assets/photos/huangshan-scenic-s.jpg" alt="黄山 · 风景区" loading="lazy" decoding="async" width="640" height="480">
+            <span class="ph-cap" data-i18n="life.ph.2">黄山 · 风景区</span>
+          </button>
+          <button class="ph" type="button" data-full="assets/photos/zhangjiajie.jpg">
+            <img src="assets/photos/zhangjiajie-s.jpg" alt="张家界土司城" loading="lazy" decoding="async" width="480" height="640">
+            <span class="ph-cap" data-i18n="life.ph.3">张家界土司城</span>
+          </button>
+          <button class="ph" type="button" data-full="assets/photos/enshi-hefeng-pingshan.jpg">
+            <img src="assets/photos/enshi-hefeng-pingshan-s.jpg" alt="恩施 · 鹤峰屏山峡谷" loading="lazy" decoding="async" width="464" height="640">
+            <span class="ph-cap" data-i18n="life.ph.4">恩施 · 鹤峰屏山峡谷</span>
+          </button>
+          <button class="ph" type="button" data-full="assets/photos/guiyang-qianling.jpg">
+            <img src="assets/photos/guiyang-qianling-s.jpg" alt="贵阳 · 黔灵山" loading="lazy" decoding="async" width="480" height="640">
+            <span class="ph-cap" data-i18n="life.ph.5">贵阳 · 黔灵山</span>
+          </button>
+          <button class="ph" type="button" data-full="assets/photos/tianjin-jinhaihu.jpg">
+            <img src="assets/photos/tianjin-jinhaihu-s.jpg" alt="天津 · 金海湖公园" loading="lazy" decoding="async" width="480" height="640">
+            <span class="ph-cap" data-i18n="life.ph.6">天津 · 金海湖公园</span>
+          </button>
+        </div>
+      </div>
+      <div class="card reveal" style="grid-column:1/-1">
+        <div class="ic">🗺</div>
+        <h3 data-i18n="life.road.title">从天津到深圳</h3>
+        <p data-i18n="life.road.desc">老家在天津，之前念书也在天津，现在人在深圳。</p>
+        <div class="tags">
+          <span class="tag" data-i18n="life.road.from">天津 · 老家 / 念书</span>
+          <span class="tag" data-i18n="life.road.now">深圳 · 现在</span>
+        </div>
+        <div class="cn-map-wrap">
+        <svg class="cn-map" viewBox="0 0 1000 706" role="img" aria-label="中国地图，去过的省份高亮">
+        <path class="on" data-p="北京" d="M709 260L712 259L703 258L699 254L698 251L697 253L695 252L695 254L693 253L695 257L692 256L690 259L684 261L684 263L687 266L685 269L684 268L679 271L678 273L681 275L679 276L680 279L682 279L685 281L686 279L691 280L692 281L695 283L694 281L696 280L700 280L703 276L700 274L700 271L704 271L709 269L710 267L707 264L707 262L709 260Z"><title>北京</title></path>
+        <path class="on" data-p="天津" d="M716 283L718 283L719 280L716 279L715 281L714 280L714 278L712 274L712 272L716 272L716 270L713 267L710 267L709 269L707 270L706 274L708 275L706 275L707 279L703 279L703 277L701 279L700 282L702 283L701 284L702 285L702 289L700 290L700 296L701 296L702 297L705 297L705 299L707 298L708 300L715 297L714 295L717 294L718 289L721 287L717 284L712 284L713 283L716 283Z"><title>天津</title></path>
+        <path class="on" data-p="河北" d="M711 259L711 260L707 262L707 264L709 267L713 267L716 270L716 272L712 272L712 273L712 276L714 278L714 279L715 281L716 279L719 280L717 284L720 286L720 287L722 288L723 290L726 291L728 293L729 292L728 289L729 289L735 288L735 289L740 284L742 277L744 275L744 274L750 272L748 270L748 268L746 267L745 261L740 261L738 259L739 258L737 259L733 255L734 253L736 253L735 251L737 250L740 246L734 246L733 245L732 246L725 245L725 241L722 238L723 236L724 237L725 235L724 234L725 233L724 232L725 231L724 231L722 232L721 229L719 228L721 227L720 225L716 220L711 221L710 223L705 223L702 225L702 229L700 229L702 231L700 233L697 234L693 232L689 237L688 236L686 234L685 234L677 238L678 240L675 241L673 240L669 240L670 236L671 235L669 231L668 230L665 230L663 231L664 233L661 233L659 237L659 242L656 242L654 244L655 244L654 246L656 247L653 250L657 253L656 255L660 260L661 264L664 265L663 266L657 268L657 270L655 269L654 271L656 272L656 273L659 273L659 274L662 274L662 278L665 280L663 285L663 287L661 290L657 290L656 289L654 290L652 292L653 296L649 300L648 305L653 307L656 315L656 317L658 317L652 327L652 333L651 333L650 334L647 336L649 339L648 340L651 343L661 345L665 348L670 347L670 349L674 346L676 346L677 348L679 347L679 345L678 344L676 340L679 335L683 334L687 324L691 323L692 322L691 321L692 321L693 319L695 321L701 314L711 314L713 309L716 308L719 303L716 303L714 298L708 300L707 298L705 299L705 297L702 297L701 296L700 296L700 290L702 289L702 285L701 284L702 283L700 282L701 279L696 280L694 281L695 283L692 281L691 280L686 279L684 281L682 279L680 279L679 276L681 275L678 273L679 271L684 268L685 269L687 266L684 263L684 261L690 259L692 256L695 257L693 253L695 254L695 252L697 253L698 251L699 251L699 254L703 258L712 259L711 259ZM707 270L700 271L700 274L702 275L702 278L703 279L707 279L706 275L708 275L706 273L707 270Z"><title>河北</title></path>
+        <path class="off" data-p="山西" d="M598 377L605 377L606 375L610 373L617 373L620 368L625 368L624 364L628 365L634 364L636 365L639 364L640 362L642 363L643 361L644 361L645 360L648 359L648 357L650 357L649 353L650 353L650 347L651 347L650 347L651 343L648 340L649 339L647 336L650 334L651 333L652 333L652 327L658 317L656 317L656 315L653 307L648 305L649 300L653 296L652 292L654 290L656 289L657 290L661 290L663 287L663 285L665 280L662 278L662 274L659 274L659 273L656 273L656 272L654 271L655 269L657 270L657 268L663 266L664 265L661 264L660 260L658 257L657 258L657 261L653 263L652 261L649 265L645 265L644 264L640 264L638 265L637 268L635 268L631 266L629 267L623 276L623 279L620 280L615 278L613 283L610 283L611 285L610 290L607 292L608 294L606 298L605 302L604 302L600 307L600 312L603 315L604 319L603 322L602 322L603 325L598 330L599 335L598 337L599 339L599 347L601 357L595 372L595 376L598 377Z"><title>山西</title></path>
+        <path class="off" data-p="内蒙古" d="M386 217L397 239L393 243L399 250L404 254L404 260L409 258L408 257L410 256L412 260L412 258L415 256L417 258L418 255L424 255L426 253L433 254L435 258L434 266L428 271L422 274L428 274L435 278L436 281L439 282L439 283L445 283L444 291L446 291L447 292L451 291L450 292L452 294L452 296L457 298L460 298L464 293L460 289L462 289L470 286L479 289L485 285L493 282L497 283L496 285L498 288L498 291L493 298L486 303L488 308L485 310L486 313L490 315L498 322L502 320L512 319L516 317L521 317L521 315L523 315L525 311L524 308L525 305L525 298L527 293L530 288L532 288L532 286L535 286L537 284L540 284L540 287L543 291L539 297L537 303L535 305L542 308L546 308L550 311L550 312L559 315L560 318L572 317L572 310L574 312L577 310L574 307L576 302L580 299L581 298L581 297L585 294L588 290L590 289L590 286L591 287L595 286L594 282L598 285L600 284L601 286L603 286L606 281L610 280L609 284L613 283L615 278L620 280L623 279L623 276L629 267L631 266L635 268L637 268L638 265L640 264L644 264L645 265L648 265L652 261L653 263L657 261L657 258L658 257L656 255L657 253L653 250L656 247L654 244L656 242L659 242L659 237L661 233L664 233L663 231L665 230L668 230L669 231L671 235L670 236L669 240L673 240L675 241L678 240L677 238L685 234L686 234L688 236L689 237L693 232L697 234L700 233L702 231L700 229L702 229L702 225L705 223L710 223L711 221L716 220L720 225L721 227L719 228L721 229L722 232L724 231L725 231L724 232L725 233L724 234L725 235L724 237L723 236L722 238L725 241L724 243L726 246L733 245L734 246L739 246L742 244L742 241L743 241L741 239L741 237L742 231L740 228L744 225L746 227L749 228L752 238L753 238L756 234L759 232L759 230L766 227L769 227L774 223L778 222L779 224L782 222L783 219L787 219L787 218L790 219L791 218L790 216L791 216L798 218L798 217L804 216L803 216L804 213L808 212L809 213L811 206L808 204L807 205L805 203L805 202L807 202L807 201L809 200L805 193L806 190L802 186L802 183L795 188L788 188L789 184L786 182L787 179L786 179L787 178L785 175L786 171L788 168L786 168L787 165L784 164L783 160L778 159L781 157L780 154L781 154L788 158L790 157L790 156L791 156L792 158L793 158L796 160L797 156L797 153L801 152L803 149L800 146L800 143L810 141L810 137L808 138L808 136L805 135L806 136L806 138L804 137L803 140L800 140L798 138L798 135L796 135L798 133L794 132L791 128L793 124L803 119L805 116L809 114L820 104L824 112L823 113L825 112L825 109L824 104L829 93L831 92L834 93L836 92L836 86L836 84L834 83L836 82L835 77L837 74L836 74L839 72L841 68L845 65L844 61L848 59L849 55L844 52L838 44L834 43L830 49L826 50L824 49L823 51L820 49L815 50L811 48L811 50L807 51L800 50L798 47L796 37L794 35L797 32L792 31L791 29L787 27L783 31L779 30L778 28L771 25L777 20L781 17L781 16L779 14L779 12L776 10L765 12L757 20L752 21L753 25L759 24L764 26L762 30L764 32L764 34L762 38L753 43L751 49L748 52L748 54L744 59L744 61L740 64L739 68L738 68L742 69L741 73L737 76L729 77L728 79L717 85L705 82L699 79L688 98L689 99L684 105L685 110L680 112L681 116L687 121L692 117L695 118L700 117L705 118L710 122L717 115L722 114L729 115L732 119L738 122L738 124L742 125L741 126L747 131L750 136L751 136L750 141L749 141L747 143L745 142L742 142L738 142L734 139L732 141L725 140L716 144L713 142L710 143L710 147L701 147L697 148L692 155L692 159L690 160L688 160L683 165L678 166L671 166L668 165L664 166L663 170L657 175L654 175L650 179L637 177L633 175L631 172L622 173L618 178L614 186L618 192L621 194L623 197L623 199L620 200L617 203L608 206L598 217L584 223L576 223L573 225L563 223L553 224L551 223L523 233L515 237L511 241L510 239L504 239L504 235L493 236L486 235L475 229L470 230L464 228L460 223L445 219L436 219L435 220L423 221L402 220L386 217Z"><title>内蒙古</title></path>
+        <path class="off" data-p="辽宁" d="M809 276L818 275L818 277L822 271L822 270L828 264L831 262L833 262L832 261L837 259L839 259L841 256L843 257L842 256L843 255L842 253L845 249L841 244L839 239L837 239L837 236L838 234L837 233L840 230L837 230L837 227L835 226L835 224L833 223L834 220L832 220L832 217L830 217L830 210L823 216L822 215L823 214L821 213L823 211L820 208L817 207L813 203L811 205L809 213L808 212L804 213L803 216L804 216L798 217L798 218L791 216L790 216L791 218L790 219L787 218L787 219L783 219L782 222L779 224L778 222L774 223L769 227L766 227L759 230L759 232L756 234L753 238L752 238L749 228L746 227L744 225L740 227L740 228L742 231L741 237L741 239L742 240L742 241L742 243L737 250L735 251L736 253L734 253L733 255L737 259L739 258L738 259L740 261L745 261L746 267L748 268L748 270L750 272L760 268L762 263L765 260L765 258L768 258L767 256L769 256L770 255L775 255L776 254L777 256L781 254L783 256L783 258L786 258L788 261L787 264L783 267L784 269L780 273L777 274L775 279L772 280L773 282L772 284L776 286L780 284L777 286L779 289L778 290L777 288L776 291L774 290L773 292L769 293L770 297L779 294L778 292L779 291L783 292L782 290L785 290L787 288L786 287L791 283L798 279L800 280L800 278L803 278L804 276L806 277L809 276Z"><title>辽宁</title></path>
+        <path class="off" data-p="吉林" d="M906 224L908 223L909 216L912 213L917 215L916 219L919 221L919 222L921 220L922 224L923 224L921 223L922 221L922 219L919 218L925 215L929 216L929 214L931 214L930 212L932 210L933 203L931 205L929 203L926 204L922 201L919 200L918 192L914 196L911 193L908 196L900 197L900 201L894 202L892 198L892 196L890 195L888 190L888 186L886 183L883 186L881 186L882 191L877 192L872 185L872 183L873 182L867 181L865 182L864 177L866 175L864 171L861 171L857 169L852 171L848 171L843 167L843 164L839 164L838 166L834 166L831 163L830 165L822 165L822 163L816 159L817 157L816 155L817 154L815 148L809 150L804 149L801 152L797 153L797 156L796 160L793 158L792 158L791 156L790 156L790 157L788 158L785 155L780 154L781 157L778 159L783 160L784 164L787 165L786 168L788 168L786 171L785 175L787 178L786 179L787 179L786 182L789 184L788 188L795 188L802 183L802 186L806 190L805 193L808 199L808 201L807 201L807 202L805 202L807 205L808 204L811 206L812 204L814 204L817 207L820 208L823 211L821 213L823 214L822 215L823 216L830 210L830 217L832 217L832 220L834 220L833 223L835 224L835 226L837 227L837 230L840 230L837 233L838 234L837 239L839 239L841 244L845 249L841 254L845 255L849 253L850 250L853 249L855 245L857 245L856 244L858 239L859 239L859 237L861 238L863 236L867 240L866 241L868 242L873 243L874 244L880 243L882 245L885 241L882 236L882 233L881 232L895 232L896 231L900 228L900 225L902 223L905 225L906 224Z"><title>吉林</title></path>
+        <path class="off" data-p="黑龙江" d="M809 150L815 148L817 154L816 155L817 157L816 159L822 163L822 165L830 165L831 163L834 166L838 166L839 164L843 164L843 167L848 171L852 171L857 169L861 171L864 171L866 175L864 177L865 182L867 181L873 182L872 183L872 185L877 192L882 191L881 186L883 186L886 183L888 186L888 190L890 195L892 196L892 198L894 202L900 201L900 197L908 196L911 193L914 196L918 192L919 200L922 201L926 204L929 203L931 205L933 203L932 202L933 192L930 179L928 177L931 175L936 174L939 171L939 169L941 170L943 167L944 169L960 173L963 171L963 165L968 161L968 157L971 155L972 153L972 151L975 149L974 147L976 146L974 145L977 142L977 135L980 132L979 128L981 126L986 125L989 121L985 115L987 110L994 106L991 106L989 108L984 107L980 107L972 110L969 113L962 112L957 116L955 116L955 117L953 120L950 120L944 121L939 121L938 122L936 120L929 121L927 116L923 113L926 109L924 107L925 105L922 105L921 103L923 98L916 98L911 95L908 90L905 89L905 87L902 87L902 88L900 88L898 88L896 86L892 86L893 84L892 84L883 85L877 84L873 79L872 75L874 71L869 69L870 67L869 67L870 64L869 61L863 55L863 52L864 50L862 50L863 51L861 51L863 48L861 48L862 46L859 44L860 42L856 38L857 34L853 33L855 31L853 31L854 29L850 25L848 24L850 22L848 22L845 19L843 20L844 17L842 15L841 16L834 13L830 14L830 15L827 13L823 13L820 10L818 10L814 7L810 6L809 7L808 6L808 7L804 6L798 8L791 8L790 7L779 9L776 10L779 12L779 14L781 16L777 20L771 25L778 28L779 30L781 31L783 31L787 27L791 29L792 31L797 32L794 35L796 37L798 47L800 50L807 51L811 50L811 48L815 50L820 49L823 51L824 49L826 50L830 49L834 43L838 44L844 52L849 55L848 59L844 61L845 65L841 68L839 72L836 74L837 74L835 77L836 82L834 83L836 84L836 86L836 92L834 93L831 92L829 93L824 104L825 109L825 112L823 113L824 112L820 104L809 114L805 116L803 119L793 124L791 128L794 132L798 133L796 135L798 135L798 138L800 140L803 140L804 137L806 138L806 136L805 135L808 136L808 138L810 137L810 141L800 143L800 146L803 149L809 150Z"><title>黑龙江</title></path>
+        <path class="on" data-p="上海" d="M766 447L768 448L768 451L769 451L772 454L779 451L783 452L784 451L784 448L779 442L773 438L770 440L769 445L766 445L766 447ZM784 436L778 434L773 431L770 433L774 437L775 436L781 439L784 439L784 436Z"><title>上海</title></path>
+        <path class="on" data-p="江苏" d="M709 378L706 381L705 375L700 370L700 371L698 371L694 372L694 377L701 381L703 381L704 386L707 388L712 388L713 389L714 389L716 391L716 395L722 394L721 399L721 399L719 404L720 406L723 405L725 409L724 412L726 414L732 414L732 412L733 412L733 410L736 410L738 412L739 412L740 416L737 419L734 417L729 417L729 419L731 419L731 422L730 424L728 424L726 427L726 430L728 431L728 433L730 433L731 434L730 435L732 434L734 436L733 440L731 442L733 443L741 442L742 444L745 446L747 445L751 445L754 449L758 449L758 450L759 449L760 453L763 450L763 448L766 447L766 445L769 445L770 440L774 437L770 433L771 431L773 431L778 434L784 436L782 429L780 427L775 425L775 420L767 416L767 415L768 411L765 403L764 402L757 383L746 378L743 376L744 375L742 374L744 374L743 374L740 373L739 370L740 369L741 369L740 367L734 369L731 374L732 375L727 376L726 381L723 382L722 380L723 378L721 378L721 376L719 376L716 376L717 379L715 378L713 380L710 378L709 378Z"><title>江苏</title></path>
+        <path class="on" data-p="浙江" d="M727 501L728 502L731 500L733 502L731 507L733 508L734 517L736 516L740 518L746 513L748 520L756 518L759 523L761 523L763 517L762 515L764 511L765 511L767 509L770 511L771 510L771 508L768 508L769 505L770 504L770 506L772 506L776 501L778 502L779 499L777 494L779 493L779 490L780 490L778 484L779 485L780 484L780 485L783 486L784 482L783 479L784 476L781 474L786 469L779 468L774 460L769 457L769 456L772 453L770 452L769 451L768 451L768 448L763 448L763 450L760 453L759 449L758 450L758 449L754 449L751 445L747 445L743 455L742 454L740 455L742 460L739 462L735 460L734 461L734 469L732 471L732 473L728 477L723 479L723 481L721 481L720 483L721 487L723 488L723 489L724 489L727 493L727 501ZM787 468L789 469L789 465L783 464L784 468L787 468Z"><title>浙江</title></path>
+        <path class="on" data-p="安徽" d="M697 389L698 391L697 391L690 395L687 389L682 388L680 392L682 392L681 394L682 397L677 399L676 406L672 407L670 406L670 409L675 411L675 417L678 417L682 420L686 417L685 418L687 425L686 432L683 433L680 435L678 438L678 441L679 441L681 445L683 444L684 446L686 445L689 448L689 449L686 450L684 454L686 457L686 461L689 463L690 471L692 472L697 469L697 467L698 466L702 468L698 473L699 476L706 473L705 471L707 469L708 471L710 470L712 475L720 476L722 477L722 479L725 479L725 477L728 477L730 474L734 469L734 461L735 460L739 462L742 460L740 455L742 454L743 455L746 447L746 445L742 444L741 442L733 443L731 442L733 440L734 436L732 434L730 435L731 434L728 433L728 431L726 430L726 427L728 424L730 424L731 422L731 419L729 419L729 417L734 417L737 419L740 416L739 412L738 412L736 410L733 410L733 412L732 412L732 414L726 414L724 412L725 409L723 405L720 406L719 404L721 399L721 399L722 394L716 395L716 391L714 389L713 389L712 388L707 388L704 386L703 381L701 381L694 377L691 378L690 380L694 384L697 384L696 387L697 389Z"><title>安徽</title></path>
+        <path class="on" data-p="福建" d="M736 566L736 564L735 565L734 564L736 562L734 560L737 561L736 563L738 563L738 565L738 561L740 562L741 561L742 560L738 558L739 556L741 557L742 555L743 556L743 557L744 557L744 558L745 558L745 557L745 559L747 556L748 558L750 556L749 555L750 555L748 552L747 554L747 556L743 553L745 552L747 546L746 542L747 541L751 539L749 537L748 534L745 534L746 532L750 533L751 530L753 531L749 535L754 533L754 530L753 529L756 528L756 524L759 523L756 518L748 520L746 513L740 518L736 516L734 517L733 508L731 507L733 502L731 500L728 502L727 501L725 502L725 505L722 505L721 507L717 508L716 510L712 507L708 509L708 511L707 513L704 514L705 516L705 520L706 520L705 524L699 527L696 529L697 538L696 538L694 540L694 542L695 542L696 544L694 546L690 548L691 550L689 552L688 559L685 561L687 564L686 566L689 568L691 568L692 569L694 568L694 569L696 573L701 572L700 574L704 581L703 584L703 588L707 593L709 594L711 593L715 587L716 587L720 581L722 580L721 577L722 574L724 575L728 573L730 575L732 570L730 568L736 568L735 567L736 566Z"><title>福建</title></path>
+        <path class="off" data-p="江西" d="M723 479L720 476L712 475L710 470L708 471L707 469L705 471L706 473L699 476L698 473L702 468L698 466L697 467L697 469L692 472L690 471L686 473L682 470L680 471L676 475L673 474L674 477L672 476L669 478L671 478L670 479L664 481L661 480L660 482L657 483L655 485L655 488L658 490L657 496L659 497L658 498L660 500L655 503L656 506L652 508L652 511L649 515L649 519L654 519L652 524L654 527L653 530L653 533L657 535L655 543L659 542L659 543L656 544L656 548L654 551L655 554L655 557L656 558L656 560L662 559L664 557L668 560L667 562L667 563L665 564L662 566L661 570L658 571L662 575L666 573L667 575L667 573L670 574L670 572L673 572L678 569L683 574L685 574L684 570L685 567L686 568L686 566L686 566L685 561L688 559L689 552L691 550L690 548L694 546L696 544L695 542L694 542L694 540L696 538L697 538L698 536L696 535L696 529L699 527L705 524L706 520L705 520L705 516L704 514L707 513L708 511L708 509L712 507L716 510L717 508L721 507L722 505L725 505L725 502L727 500L726 491L720 485L721 481L723 481L723 479Z"><title>江西</title></path>
+        <path class="on" data-p="山东" d="M694 377L695 372L700 371L700 370L705 375L706 381L710 378L712 380L715 378L717 379L716 376L719 376L721 376L721 378L723 378L722 380L723 382L726 381L727 376L732 375L731 374L734 369L740 367L742 368L746 358L751 357L751 355L752 356L753 352L757 350L754 348L755 346L758 346L756 349L763 347L763 342L765 341L766 343L767 341L768 339L765 338L768 339L774 336L777 334L776 335L778 336L778 334L784 331L785 333L786 332L787 333L789 334L791 332L792 332L793 330L791 330L792 328L794 327L793 325L795 322L787 322L786 319L777 322L774 318L771 319L770 316L768 316L767 314L764 314L756 317L756 319L749 323L750 325L748 328L741 328L739 325L737 325L735 320L736 318L740 317L740 313L738 314L734 308L730 308L729 310L728 309L720 307L718 305L715 309L713 310L711 314L701 314L695 321L693 319L692 321L691 321L692 322L691 323L687 324L683 334L679 335L677 338L676 340L678 344L679 345L679 347L677 354L689 348L688 351L686 351L683 355L679 356L677 360L672 362L669 368L670 370L674 369L675 370L676 373L678 373L679 377L681 378L688 377L692 378L694 377Z"><title>山东</title></path>
+        <path class="off" data-p="河南" d="M635 421L640 420L642 421L643 420L646 423L651 420L652 425L651 427L653 431L655 431L655 433L659 431L660 433L665 433L665 437L666 436L669 439L673 438L674 436L676 440L678 440L680 435L683 433L686 433L687 425L685 418L686 417L682 420L678 417L675 417L675 411L670 409L670 406L674 407L677 406L677 399L682 397L681 394L682 392L680 392L681 388L683 388L687 389L689 393L690 395L692 394L698 391L696 387L697 384L694 384L690 380L691 378L689 377L680 378L678 373L676 373L675 370L674 369L670 370L669 368L672 362L677 360L679 356L683 355L686 351L688 351L689 348L677 354L677 351L679 350L679 347L677 348L676 346L674 346L670 349L670 347L665 348L661 345L651 343L650 347L651 347L650 347L650 353L649 353L650 357L648 357L648 359L645 360L644 361L643 361L642 363L640 362L639 364L636 365L634 364L628 365L624 364L625 368L620 368L617 373L610 373L606 375L605 377L598 377L597 379L600 382L598 384L602 386L601 389L602 390L601 391L608 397L607 404L610 406L610 408L612 409L612 411L615 413L617 417L618 416L625 419L626 421L629 422L632 420L635 421Z"><title>河南</title></path>
+        <path class="on" data-p="湖北" d="M608 405L607 404L603 407L601 404L599 405L595 405L585 403L582 406L588 407L588 411L591 411L594 413L595 416L592 418L586 417L583 422L585 426L585 434L587 434L587 437L591 438L591 439L593 440L595 445L593 446L594 448L593 452L590 450L581 458L580 455L578 457L577 455L576 455L572 458L570 456L568 458L566 458L566 460L569 462L568 470L565 471L567 473L569 470L570 470L570 473L574 475L574 481L576 479L578 484L580 485L580 483L581 481L582 477L584 475L587 475L588 472L593 472L597 475L600 473L602 472L599 469L600 468L599 466L603 467L603 465L605 465L606 466L611 467L614 469L620 469L625 472L625 474L627 474L628 477L631 475L635 475L638 472L639 474L640 472L638 475L639 478L640 477L641 478L642 478L649 470L648 474L650 474L651 476L650 477L652 478L649 482L651 483L651 485L653 485L654 486L657 483L660 482L661 480L664 481L670 479L671 478L669 478L672 476L674 477L673 474L676 475L680 471L682 470L686 473L690 471L689 463L686 461L686 457L684 454L686 450L689 449L686 445L684 446L682 444L681 445L678 440L676 440L674 436L673 438L669 439L666 436L665 437L665 433L660 433L659 431L655 433L655 431L653 431L652 428L651 420L646 423L643 420L642 421L640 420L635 421L632 420L629 422L618 416L617 417L615 413L612 411L612 409L610 408L610 406L608 405Z"><title>湖北</title></path>
+        <path class="on" data-p="湖南" d="M624 570L626 568L625 566L627 562L634 563L636 567L638 567L639 567L639 563L640 561L637 560L637 559L638 560L644 555L649 559L653 559L655 557L655 554L654 552L656 548L656 545L659 543L659 542L655 543L657 535L653 533L653 530L654 527L652 524L654 519L649 519L649 515L652 511L652 508L656 506L655 503L660 500L658 498L659 497L657 496L658 490L655 488L655 486L653 485L651 485L651 483L649 482L652 478L650 477L651 476L650 474L648 474L649 470L641 478L640 477L639 478L638 475L640 472L639 474L637 472L635 475L631 475L628 477L627 474L625 474L625 472L620 469L614 469L611 467L603 465L603 467L599 466L600 468L599 469L602 472L600 473L597 475L593 472L589 472L588 473L587 475L584 475L582 477L581 481L580 483L579 485L581 486L579 491L580 492L579 494L581 495L580 500L582 501L580 506L581 506L580 507L581 512L583 513L583 515L580 518L578 517L577 520L572 525L574 526L576 524L577 524L577 525L578 525L579 523L583 524L584 527L582 528L584 529L584 531L585 531L580 532L582 535L580 539L581 541L583 540L584 543L583 545L584 546L586 545L587 546L586 548L588 548L588 546L591 542L593 542L592 545L594 545L596 547L601 539L605 541L607 540L607 538L612 540L611 547L612 548L614 548L615 549L612 551L613 555L609 560L609 561L607 562L607 566L608 567L609 566L609 565L612 562L615 565L615 572L617 572L619 569L624 570Z"><title>湖南</title></path>
+        <path class="on" data-p="广东" d="M649 620L650 615L649 616L651 614L650 610L651 610L654 615L662 612L664 615L666 614L665 613L665 612L664 611L667 609L668 613L670 612L670 614L673 609L675 609L675 608L677 609L678 611L681 611L681 609L680 609L682 607L685 610L693 605L696 606L697 602L701 601L700 598L702 595L707 593L703 586L703 582L704 581L700 574L701 572L696 573L694 569L694 568L692 569L691 568L689 568L686 567L684 570L685 574L683 574L678 569L673 572L670 572L670 574L667 573L667 575L666 573L662 575L658 571L661 570L662 566L665 564L667 563L667 562L668 560L664 557L662 559L656 560L656 557L654 557L653 559L649 559L643 555L638 560L637 559L637 560L640 561L639 563L639 567L638 567L636 567L634 563L627 562L625 566L626 568L623 571L624 578L622 580L623 585L621 586L620 589L618 588L617 592L615 592L614 595L613 599L614 604L613 607L611 609L608 610L608 611L603 613L603 615L602 615L604 619L602 620L602 621L600 620L600 621L597 620L598 626L591 626L590 631L588 631L587 632L588 635L590 635L588 637L586 645L587 651L590 654L590 659L597 658L600 655L599 650L598 650L598 647L594 646L595 643L595 643L598 640L601 639L604 637L608 635L612 634L612 635L615 634L618 634L619 632L620 633L623 632L624 631L623 630L626 628L627 630L629 630L631 628L634 629L636 626L638 627L641 622L644 627L649 623L649 620ZM600 642L596 642L595 645L598 644L600 645L600 642Z"><title>广东</title></path>
+        <path class="on" data-p="广西" d="M583 545L581 551L579 551L579 550L578 551L577 550L574 551L577 551L576 553L577 555L576 555L572 555L572 553L570 553L570 555L569 556L569 559L565 555L563 557L562 557L561 561L556 563L556 561L555 562L554 559L551 561L550 558L548 557L547 553L543 557L543 561L530 566L530 570L528 573L526 571L525 571L519 569L518 567L516 567L515 565L512 567L512 569L507 573L504 571L503 572L504 577L507 579L507 576L513 577L514 578L515 581L514 582L515 584L516 583L519 585L521 582L522 584L526 584L526 583L528 583L530 587L530 593L527 596L525 594L521 597L522 598L520 600L520 603L523 603L525 606L530 605L533 607L536 606L541 608L539 613L537 612L536 615L536 617L538 618L538 619L538 625L539 624L543 625L544 626L544 628L547 630L548 629L549 632L551 631L552 632L557 631L559 633L561 634L563 632L563 634L567 633L569 630L571 632L578 633L576 635L578 636L584 635L585 633L588 635L587 632L588 631L590 631L591 627L598 626L597 620L600 621L600 620L602 621L602 620L604 619L602 615L603 615L603 613L608 611L608 610L611 609L613 607L614 604L613 599L614 595L615 592L617 592L618 588L620 589L621 586L623 585L621 581L624 578L622 573L624 570L619 569L617 572L615 572L615 565L612 562L609 565L609 566L608 567L607 566L607 562L609 561L609 560L613 555L612 551L615 549L614 548L612 548L611 547L612 540L607 538L607 540L605 541L601 539L596 547L594 545L592 545L593 542L591 542L588 546L588 548L586 548L587 546L586 545L583 545Z"><title>广西</title></path>
+        <path class="on" data-p="海南" d="M593 663L591 664L586 663L583 666L580 665L578 669L570 676L569 687L570 694L574 694L575 696L577 696L578 697L585 700L587 699L588 696L593 695L595 690L599 690L602 677L606 672L608 671L608 668L607 663L604 663L602 660L600 662L597 661L593 663ZM654 906L657 907L662 905L664 899L662 899L654 906ZM583 911L584 912L587 908L591 908L586 907L583 911Z"><title>海南</title></path>
+        <path class="on" data-p="重庆" d="M533 496L535 496L535 490L538 494L536 497L539 498L539 495L541 494L541 492L542 491L543 491L544 489L547 490L547 492L549 490L550 488L549 487L550 483L552 483L553 484L555 484L555 483L557 488L561 485L563 486L564 485L566 491L565 493L570 494L569 500L570 500L570 498L571 497L572 498L571 502L577 503L578 498L581 495L579 494L580 492L579 489L581 486L578 484L576 479L574 481L574 475L570 473L570 470L569 470L567 473L565 471L568 470L569 462L566 460L566 458L568 458L570 456L572 458L576 455L577 455L578 457L580 455L581 458L590 450L593 452L594 448L593 446L595 445L593 440L591 439L591 438L587 437L587 434L580 434L580 432L577 430L568 424L566 424L567 426L565 427L565 429L564 429L568 433L568 435L565 438L562 438L562 441L560 443L560 447L558 448L559 450L557 452L555 450L554 451L551 451L550 453L552 455L544 467L543 466L542 467L539 467L536 461L531 464L529 461L524 459L523 462L521 462L522 463L520 464L523 467L523 470L518 474L516 477L517 478L518 479L518 481L522 481L524 488L527 488L528 489L531 489L533 496Z"><title>重庆</title></path>
+        <path class="on" data-p="四川" d="M450 522L449 526L453 528L453 532L455 531L454 534L453 534L457 538L457 541L459 541L460 545L462 544L465 544L467 542L472 539L473 540L473 541L475 542L477 539L479 538L480 535L477 528L477 520L478 518L479 519L481 518L487 511L488 507L486 506L488 502L489 501L490 503L493 500L492 496L493 494L494 495L499 494L502 494L499 496L500 500L503 502L502 503L502 504L500 506L504 510L509 508L512 505L516 507L515 509L516 512L519 511L521 513L532 510L533 508L531 504L526 504L524 501L523 501L522 500L521 496L523 495L525 495L527 492L533 497L531 489L528 489L527 488L524 488L522 481L519 481L518 479L517 478L516 476L523 470L523 467L520 464L522 463L521 462L523 462L524 459L530 461L531 464L536 461L539 467L542 467L543 466L544 467L552 455L550 453L551 451L554 451L555 450L557 452L559 450L558 448L560 447L560 443L562 441L562 438L565 438L568 435L568 433L564 429L565 428L565 427L567 426L565 425L567 425L568 423L563 423L560 424L559 425L554 420L551 420L550 418L548 420L547 420L545 418L544 414L539 414L534 416L529 414L528 411L521 415L519 410L517 411L518 414L514 416L512 416L509 416L508 415L506 415L500 412L500 410L502 408L501 408L501 407L500 403L502 402L499 401L498 397L496 395L488 395L487 393L485 394L482 393L481 388L482 388L478 383L473 386L474 388L470 387L469 390L465 390L468 394L468 395L469 394L469 397L471 398L471 400L467 401L466 402L466 404L465 403L465 405L460 406L459 403L462 400L461 397L458 401L458 402L459 403L457 407L455 404L454 404L453 406L452 404L449 404L450 408L449 410L451 412L450 415L448 415L446 416L442 415L441 418L438 414L437 415L437 413L435 414L434 416L433 416L433 412L429 408L427 414L421 411L419 411L418 408L413 406L411 403L409 396L405 392L405 387L399 387L397 385L394 387L394 388L393 391L389 391L389 393L390 397L391 397L392 400L395 401L391 405L391 409L388 411L391 415L402 422L402 424L406 428L406 432L413 440L411 443L409 441L409 444L412 448L412 450L414 452L414 454L416 469L415 474L417 482L418 498L421 503L421 496L427 490L427 493L431 496L432 499L434 500L434 503L431 504L434 508L436 509L436 512L438 509L440 510L442 508L448 522L450 522Z"><title>四川</title></path>
+        <path class="on" data-p="贵州" d="M580 497L578 498L577 503L572 502L572 498L571 497L570 498L570 500L569 500L570 494L565 493L566 491L564 485L563 486L561 485L557 488L555 483L555 484L553 484L552 483L550 483L549 485L550 488L549 490L547 492L547 490L544 489L543 491L542 491L541 492L541 494L539 495L539 498L536 497L538 494L535 490L535 496L534 495L533 497L527 492L525 495L523 495L521 496L522 500L523 501L524 501L526 504L530 503L532 505L533 509L531 511L521 513L519 511L517 511L514 519L512 518L509 520L508 519L504 520L501 517L498 521L494 517L493 521L489 525L489 526L490 525L492 527L490 530L491 534L493 536L496 536L497 533L501 534L502 532L506 538L504 541L500 553L502 554L502 556L504 555L504 557L506 558L505 560L508 561L508 562L507 561L505 564L507 565L504 571L507 573L512 569L512 567L515 565L516 567L518 567L519 569L525 571L526 571L528 573L530 570L530 566L543 561L543 557L547 553L548 557L550 558L551 561L554 559L555 562L556 561L556 563L557 563L561 561L562 557L563 557L564 555L569 559L569 556L570 555L570 553L572 553L572 555L576 555L577 555L576 553L577 551L574 551L577 550L578 551L579 550L579 551L581 551L583 545L583 544L584 543L583 540L581 541L580 539L582 535L580 532L583 531L582 528L584 527L584 525L582 523L579 523L578 525L577 525L577 524L576 524L574 526L572 525L577 520L578 517L580 518L583 515L583 513L581 511L580 507L581 506L580 506L582 501L580 500L580 497Z"><title>贵州</title></path>
+        <path class="on" data-p="云南" d="M516 512L515 509L516 507L512 505L509 508L504 510L503 509L500 506L502 504L502 501L501 500L500 501L499 499L499 496L502 494L499 494L494 495L493 494L492 496L493 500L490 503L489 501L488 502L486 506L488 507L487 511L481 518L479 519L478 518L477 520L477 528L480 535L479 539L477 539L475 542L473 541L473 540L472 539L467 542L465 544L462 544L460 545L460 543L456 540L457 538L453 534L454 534L455 531L453 532L453 528L449 526L450 522L448 522L442 508L440 510L438 509L436 512L436 509L434 508L431 504L434 503L434 500L432 499L431 496L427 493L427 490L421 496L421 503L418 498L417 483L414 484L415 486L414 489L415 490L413 491L412 487L409 488L410 492L408 494L411 500L410 502L405 504L404 499L402 500L403 502L402 503L401 507L404 516L406 515L406 513L410 515L411 534L410 541L411 543L408 543L410 549L409 550L407 549L404 555L402 553L401 558L398 561L396 560L394 564L396 568L392 570L391 576L394 576L394 578L394 579L395 580L395 582L391 586L393 588L400 583L408 582L408 583L413 582L413 583L410 586L410 589L412 589L413 592L412 594L414 596L413 600L416 601L417 603L421 602L423 603L424 606L422 606L422 608L420 610L421 614L419 616L418 621L419 622L431 623L430 628L431 630L434 631L433 632L434 634L438 633L440 635L445 630L449 629L449 633L451 634L449 636L451 638L451 639L452 640L456 639L457 640L459 641L460 639L459 637L459 632L460 632L459 629L459 627L457 625L456 619L457 619L458 615L460 614L462 617L462 616L464 615L465 616L467 616L469 611L471 609L480 615L484 611L484 608L486 609L488 612L489 609L495 614L497 608L499 608L500 610L501 611L505 608L507 608L509 606L508 602L509 601L515 599L516 597L520 601L521 598L522 598L521 597L525 594L527 596L530 593L530 587L527 583L524 584L524 583L522 584L521 582L519 585L516 583L515 584L514 582L515 581L514 578L513 577L507 576L507 579L504 577L503 572L507 565L505 564L507 561L508 562L508 561L505 560L506 558L504 557L504 555L502 556L502 554L500 553L506 537L502 532L501 534L497 533L496 536L492 535L490 530L492 527L490 525L489 526L489 525L493 521L494 517L498 521L501 517L505 520L508 519L509 520L512 518L514 519L516 512Z"><title>云南</title></path>
+        <path class="off" data-p="西藏" d="M266 348L253 343L251 344L246 340L232 343L229 342L225 344L218 344L211 347L209 347L207 353L202 355L200 357L196 356L195 354L191 355L182 359L182 360L177 362L174 361L168 363L160 362L158 360L158 356L155 356L154 357L150 355L148 357L148 359L143 361L143 363L137 365L135 365L132 363L130 363L128 362L126 363L121 363L117 361L115 364L116 365L114 366L111 369L111 371L109 372L107 380L95 381L93 386L89 387L91 394L89 396L92 400L97 405L99 417L96 421L94 422L91 419L90 414L84 418L86 422L85 424L86 426L90 429L89 432L92 436L90 437L90 441L92 442L96 448L100 448L101 446L104 449L105 448L109 451L111 456L120 458L127 463L128 467L130 467L131 464L133 464L133 459L135 460L136 459L142 461L144 461L145 466L151 468L156 474L158 473L163 476L168 484L173 481L176 481L178 482L178 489L181 490L182 492L184 492L188 495L192 493L194 494L192 500L197 501L199 500L200 502L202 499L203 502L204 503L207 508L208 508L208 505L210 503L210 507L213 508L215 507L216 505L218 505L226 510L232 509L234 510L236 508L240 509L241 507L245 507L249 504L251 505L253 510L251 517L254 522L258 519L256 517L258 511L261 509L263 505L267 502L271 504L273 503L275 504L277 505L280 506L282 505L286 507L287 509L288 510L289 507L291 507L292 505L294 507L296 509L295 510L297 511L296 516L298 517L303 517L304 519L305 521L303 524L304 529L313 527L321 529L332 526L332 523L339 515L343 514L349 512L355 508L357 504L364 501L367 503L371 502L372 504L374 503L384 512L387 509L389 509L390 506L388 505L389 502L391 500L392 496L394 496L396 500L397 499L401 504L403 502L402 500L404 499L405 504L410 502L411 500L408 494L410 492L409 488L412 487L413 491L415 490L414 489L415 486L414 484L417 483L415 474L416 469L414 454L414 452L412 450L412 448L409 444L409 441L411 443L413 440L406 432L406 428L402 424L402 422L396 418L389 417L388 420L390 422L388 422L388 427L383 427L381 429L378 428L380 434L379 435L374 433L373 430L370 430L371 434L369 436L369 434L367 432L365 432L364 434L361 433L359 433L357 429L358 428L358 425L356 425L355 422L352 423L355 421L354 420L349 420L345 415L342 417L341 417L341 418L338 418L337 420L333 419L330 417L327 419L323 415L320 416L319 414L317 415L314 413L313 414L308 413L307 414L306 411L302 412L295 407L294 407L290 406L289 407L285 407L277 404L271 398L271 395L269 394L270 393L265 388L268 386L268 383L267 381L267 377L266 376L269 373L267 371L264 372L264 367L262 365L263 364L263 362L267 360L266 359L267 353L263 353L261 352L261 350L266 348Z"><title>西藏</title></path>
+        <path class="on" data-p="陕西" d="M598 377L595 376L595 372L601 357L599 347L599 339L598 337L599 335L598 330L603 325L602 322L603 322L604 319L603 315L600 312L600 307L606 301L606 298L608 293L607 292L610 290L611 285L609 283L610 280L605 281L603 286L601 286L600 284L598 285L594 282L595 286L591 287L590 286L590 289L588 290L585 294L581 297L581 298L580 299L576 302L574 307L577 310L574 312L572 310L572 317L562 318L560 318L559 315L554 313L553 315L551 315L548 318L549 319L547 324L549 327L548 328L548 332L558 335L560 338L562 339L563 338L563 339L565 339L567 342L568 341L570 342L570 350L567 352L568 358L569 359L569 363L559 365L555 363L554 365L557 370L554 371L552 370L552 371L548 371L547 372L542 368L536 368L535 370L537 374L535 375L535 377L532 378L533 379L536 379L539 382L538 384L536 383L535 384L537 386L534 391L537 397L536 399L535 398L534 397L530 398L527 397L526 398L525 401L523 401L524 404L527 405L526 406L526 409L521 411L519 410L520 414L528 411L529 414L534 416L539 414L544 414L545 418L548 420L550 418L551 420L554 420L559 425L560 424L563 423L564 424L567 423L570 426L577 430L580 432L580 434L585 434L585 426L583 422L586 417L592 418L595 416L593 412L588 411L588 407L582 406L584 404L585 403L597 406L599 405L600 404L603 407L608 402L608 397L601 391L602 390L601 389L602 386L598 384L600 382L597 379L598 377Z"><title>陕西</title></path>
+        <path class="off" data-p="甘肃" d="M535 355L534 356L535 362L533 365L530 361L529 362L528 360L526 361L528 360L526 359L525 360L522 356L523 355L519 355L518 353L517 354L517 349L520 347L517 340L515 339L514 336L517 334L514 332L514 330L511 330L508 326L505 326L505 324L507 324L506 322L498 322L490 315L486 313L485 309L488 308L486 303L493 298L498 291L498 288L496 285L497 283L493 282L485 285L479 289L470 286L462 289L460 289L464 293L460 298L457 298L452 296L452 294L450 292L451 291L447 292L446 291L444 291L445 283L439 283L439 282L436 281L435 278L428 274L422 274L428 271L434 266L435 258L433 254L426 253L424 255L418 255L417 258L415 256L412 258L412 260L410 256L408 257L409 258L404 260L404 254L399 250L393 243L397 239L386 217L373 218L369 221L367 224L368 224L368 226L370 228L368 230L369 232L368 234L360 236L356 241L353 237L349 239L347 241L343 242L335 250L332 254L331 259L318 260L313 281L308 287L309 290L321 288L322 293L330 293L333 294L331 295L333 297L341 296L344 304L350 302L353 303L355 305L358 305L362 303L368 307L371 308L373 305L378 306L378 301L379 301L380 299L382 300L384 299L382 293L383 288L382 287L388 288L400 295L403 294L403 291L408 293L412 289L417 292L416 293L426 302L433 306L434 306L434 304L431 302L432 301L438 305L443 306L445 308L446 307L445 311L450 314L453 315L454 313L457 314L460 318L463 316L465 320L465 321L470 324L473 328L471 329L470 331L475 335L473 336L475 339L477 343L480 346L477 348L479 349L478 353L476 353L474 354L476 359L475 360L471 358L470 361L468 361L468 364L470 366L465 370L464 372L462 372L462 378L466 379L467 382L466 384L464 383L462 387L461 386L459 387L456 385L446 382L444 383L443 386L447 391L450 392L450 396L456 395L457 399L461 397L462 400L459 403L461 407L462 405L465 405L465 403L466 404L467 401L471 400L471 398L469 397L469 394L468 395L468 394L465 390L469 390L470 387L474 388L473 386L478 383L482 388L481 388L482 393L485 394L487 393L488 395L496 395L498 397L499 401L502 402L500 403L501 407L501 408L502 408L500 410L500 412L506 415L508 415L509 416L512 416L513 417L518 414L518 410L521 411L525 410L527 405L524 404L523 401L525 401L526 398L527 397L530 398L534 397L535 398L536 399L537 397L534 391L537 386L535 384L536 383L538 384L539 382L536 379L533 379L532 378L535 377L535 375L537 374L535 370L536 368L542 368L547 372L548 371L552 371L552 370L557 370L554 365L555 363L559 365L562 364L563 364L569 364L569 359L568 358L567 352L570 350L570 342L568 341L567 342L565 339L563 339L563 338L562 339L560 338L558 335L548 332L548 328L546 328L543 328L542 327L542 328L540 327L539 328L537 328L538 331L536 331L538 334L538 336L536 336L534 339L533 339L536 341L535 345L541 345L543 348L542 351L541 352L542 355L539 356L535 355Z"><title>甘肃</title></path>
+        <path class="off" data-p="青海" d="M476 343L475 339L473 336L475 335L470 331L471 329L473 328L473 327L465 321L465 320L463 316L460 318L457 314L454 313L453 315L450 314L445 311L446 307L445 308L443 306L438 305L432 301L431 302L434 304L434 306L433 306L426 302L416 293L417 292L412 289L408 293L403 291L403 294L400 295L388 288L382 287L383 288L382 293L384 299L382 300L380 299L379 301L378 301L378 306L373 305L371 308L368 307L362 303L358 305L355 305L353 303L350 302L344 304L341 296L333 297L331 295L333 294L330 293L322 293L321 288L311 289L309 291L291 296L281 298L277 301L272 301L274 303L273 304L275 306L279 304L279 316L283 318L286 321L288 321L292 330L290 330L282 334L283 338L287 340L288 348L286 348L284 350L281 347L274 347L271 344L270 349L261 349L261 352L267 353L266 359L267 360L263 362L263 364L262 365L264 367L264 372L267 371L269 373L266 376L267 377L267 381L268 383L268 386L265 388L270 393L269 394L270 394L271 398L272 400L282 406L289 407L290 406L294 407L295 407L302 412L306 411L307 414L308 413L313 414L314 413L317 415L319 414L320 416L323 415L327 419L330 417L333 419L337 420L338 418L341 418L341 417L342 417L345 415L349 420L354 420L355 421L352 423L355 422L356 425L358 425L358 428L357 429L359 433L361 433L364 434L365 432L367 432L370 436L371 434L370 430L371 430L373 430L374 432L376 434L379 435L380 434L378 428L381 429L383 427L388 427L388 422L390 422L388 418L390 417L391 418L395 418L390 414L388 411L391 409L391 405L395 401L392 400L391 397L390 397L389 392L393 391L394 388L394 387L396 385L405 387L405 392L409 396L411 403L413 406L418 408L419 411L421 411L427 414L429 408L433 412L432 415L434 416L435 414L437 413L437 415L438 414L441 418L442 415L446 416L448 415L450 415L451 412L449 410L450 408L449 404L452 404L453 406L454 404L455 404L457 407L459 403L458 402L458 401L460 398L457 399L456 395L455 395L453 396L450 396L450 392L447 391L443 386L444 383L446 382L450 382L459 388L461 386L462 387L464 383L466 384L467 382L466 379L462 378L462 372L464 372L465 370L470 366L468 364L468 361L470 361L471 358L475 360L476 359L474 354L476 353L478 353L479 349L477 348L480 346L476 343Z"><title>青海</title></path>
+        <path class="off" data-p="宁夏" d="M548 328L549 328L547 324L549 319L548 318L554 314L550 312L550 311L546 308L542 308L535 305L538 302L539 297L543 292L543 290L541 289L539 284L537 284L535 286L532 286L532 288L530 288L527 293L525 298L525 305L524 308L525 311L523 315L521 315L521 317L516 317L512 319L502 320L500 322L506 322L507 324L505 324L505 326L508 326L511 330L514 330L514 332L517 334L514 336L515 339L517 340L520 347L517 349L517 354L518 353L519 355L523 355L522 356L525 360L526 359L529 360L529 362L530 361L531 361L533 365L535 362L534 356L537 355L539 356L542 354L541 352L542 351L542 347L538 345L535 345L536 341L533 339L534 339L536 336L538 336L538 334L536 331L538 331L537 328L546 328L548 328Z"><title>宁夏</title></path>
+        <path class="off" data-p="新疆" d="M373 218L373 215L365 207L359 193L356 193L357 187L351 188L346 187L345 184L341 183L338 180L327 174L317 173L307 173L304 172L296 172L294 171L293 172L289 169L285 170L283 165L281 164L281 162L282 159L287 154L285 148L288 143L287 143L288 140L285 135L283 135L280 130L277 122L273 120L272 117L267 118L264 114L256 115L254 113L249 111L247 107L238 104L240 101L234 98L237 96L236 92L231 93L230 94L224 92L221 93L218 95L220 98L219 101L216 104L210 106L203 107L200 111L199 114L202 129L199 133L195 133L190 137L186 134L173 135L164 131L159 130L150 154L148 155L147 162L147 163L151 165L151 170L141 169L139 166L125 171L122 171L118 171L116 173L112 173L108 175L110 178L113 177L117 181L117 191L122 203L121 206L123 207L123 209L116 212L120 215L114 216L113 220L114 223L114 224L115 227L113 229L113 232L109 232L107 235L99 236L89 241L89 243L81 245L80 248L76 249L75 252L65 252L62 251L60 251L58 253L55 263L51 265L51 263L46 264L45 266L43 265L41 266L41 264L42 262L40 259L34 263L28 261L27 263L29 265L25 265L20 270L14 270L12 275L13 279L12 282L8 282L6 284L10 291L11 291L11 293L10 292L9 294L11 299L14 300L15 300L16 298L21 298L28 301L27 307L30 315L28 317L29 319L32 321L32 323L29 326L27 326L26 325L22 326L22 329L28 329L28 332L31 330L37 331L37 336L40 335L44 337L47 342L46 343L47 346L45 347L45 349L48 349L49 353L52 353L55 351L56 354L58 357L65 359L73 361L75 359L77 360L80 360L78 362L78 365L82 372L82 375L85 378L90 379L93 382L95 383L94 381L97 380L107 380L109 372L111 371L111 369L114 366L116 365L115 364L117 361L121 363L126 363L128 362L130 363L132 363L135 365L137 365L143 363L143 361L148 359L148 357L150 355L154 357L155 356L158 356L158 360L160 362L168 363L174 361L177 362L182 360L182 359L191 355L195 354L196 356L200 357L202 355L207 353L209 347L218 344L225 344L228 342L232 343L246 340L251 344L253 343L267 348L270 349L271 345L274 347L281 347L284 350L286 348L289 348L287 344L287 340L283 338L282 334L290 330L292 330L291 327L290 326L288 321L286 321L283 318L279 316L279 304L275 306L273 304L274 303L272 301L277 301L281 298L291 296L309 291L308 287L313 281L318 260L331 259L332 254L335 250L343 242L347 241L349 239L353 237L356 241L360 236L368 234L369 232L368 230L370 228L368 226L368 224L367 224L369 221L373 218Z"><title>新疆</title></path>
+        <path class="off" data-p="台湾" d="M759 615L762 619L763 626L766 626L768 614L775 602L778 583L782 575L781 569L784 565L783 563L780 562L777 559L775 560L774 562L768 565L753 591L754 598L752 603L754 604L756 613L759 615Z"><title>台湾</title></path>
+        <path class="on" data-p="香港" d="M656 614L654 616L656 617L654 618L653 620L656 620L657 618L660 620L660 617L661 617L662 616L661 615L659 616L661 614L660 613L656 614Z"><title>香港</title></path>
+        <path class="off" data-p="澳门" d="M648 622L649 621L649 620L649 620L648 620L648 621L648 621L648 622Z"><title>澳门</title></path>
+        <g class="cn-pin"><circle class="dot" cx="657" cy="610" r="3.0"/><text class="pin-label" x="650" y="614" text-anchor="end" data-i18n="life.map.sz">深圳</text></g></svg>
+        <svg class="cn-inset" viewBox="511 585 297 421" aria-hidden="true">
+        <path class="p line" d="M792 595L797 574L797 574L797 574L797 574L797 573L797 573L797 573L797 573L796 573L796 574L796 574L792 595L792 595L792 595L792 596L792 596L792 596L792 596L792 596L792 596L792 596L792 595M771 647L782 630L783 630L783 630L783 630L782 630L782 630L782 630L782 630L782 630L782 630L782 630L770 647L770 647L770 647L770 647L770 647L770 647L770 648L771 648L771 648L771 648L771 647M743 702L752 682L752 682L752 682L752 682L752 682L752 682L752 682L752 682L752 682L752 682L752 682L743 702L743 702L743 702L743 702L743 702L743 702L743 702L743 702L743 702L743 702L743 702M737 760L737 741L737 741L737 741L737 741L737 741L737 741L737 741L737 741L737 741L737 741L737 741L737 760L737 761L737 761L737 761L737 761L737 761L737 761L737 761L737 761L737 761L737 761L737 761L737 760L737 760M731 836L728 841L728 841L728 841L728 841L728 841L728 841L728 841L728 841L728 841L728 841L728 841L731 836L731 836L734 828L734 828L736 820L736 820L736 820L736 820L736 820L736 820L735 820L735 820L735 820L735 820L735 820L733 827L731 836M680 915L692 899L692 899L692 899L692 898L692 898L692 898L692 898L692 898L692 898L692 898L691 898L680 915L680 915L680 915L680 915L680 915L680 915L680 915L680 915L680 915L680 915L680 915M628 986L620 988L620 988L620 988L620 988L620 988L620 988L620 988L620 988L620 988L620 988L620 988L629 986L629 986L632 985L632 985L637 982L637 982L637 982L637 982L637 982L637 982L637 981L637 981L637 981L637 981L637 981L632 984L628 986M564 936L564 937L564 937L564 937L564 937L564 937L564 937L564 937L564 937L564 937L564 937L564 937L564 936L563 933L563 927L563 919L563 916L563 916L563 916L563 916L563 916L563 916L563 916L563 916L563 916L563 916L563 916L563 919L563 919L563 927L563 927L563 933L563 933L564 936L564 936M594 832L592 835L592 835L592 835L592 835L592 835L592 835L592 835L592 835L593 835L593 835L593 835L594 832L594 832L595 830L595 830L596 828L596 828L596 824L596 824L597 821L597 821L597 817L597 817L597 815L597 815L597 815L597 815L597 815L597 815L597 815L597 815L596 815L596 815L596 815L596 817L596 821L596 824L595 828L594 830L594 832M589 757L589 758L589 758L589 758L589 758L589 758L589 758L589 758L589 758L589 758L589 758L589 758L589 757L589 757L588 752L588 752L586 748L586 748L585 745L585 745L584 743L584 743L580 738L580 737L580 737L580 737L580 737L580 737L580 738L580 738L580 738L580 738L580 738L584 743L585 745L586 748L588 752L589 757"/>
+        <g class="p on"><circle cx="616" cy="720" r="3.7"/><circle cx="627" cy="722" r="3.7"/><circle cx="616" cy="733" r="3.7"/><circle cx="624" cy="735" r="3.7"/><circle cx="699" cy="735" r="3.7"/><circle cx="654" cy="752" r="3.7"/><circle cx="716" cy="758" r="3.7"/><circle cx="678" cy="782" r="3.7"/><circle cx="666" cy="830" r="3.7"/><circle cx="700" cy="830" r="3.7"/><circle cx="657" cy="841" r="3.7"/><circle cx="707" cy="845" r="3.7"/><circle cx="649" cy="854" r="3.7"/><circle cx="676" cy="855" r="3.7"/><circle cx="679" cy="871" r="3.7"/><circle cx="650" cy="874" r="3.7"/><circle cx="627" cy="881" r="3.7"/><circle cx="676" cy="888" r="3.7"/><circle cx="638" cy="901" r="3.7"/><circle cx="599" cy="902" r="3.7"/><circle cx="652" cy="906" r="3.7"/><circle cx="586" cy="909" r="3.7"/><circle cx="653" cy="910" r="3.7"/><circle cx="643" cy="931" r="3.7"/><circle cx="629" cy="945" r="3.7"/><circle cx="624" cy="979" r="3.7"/></g>
+        <path class="p on" d="M593 663L591 664L586 663L583 666L580 665L578 669L570 676L569 687L570 694L574 694L575 696L577 696L578 697L585 700L587 699L588 696L593 695L595 690L599 690L602 677L606 672L608 671L608 668L607 663L604 663L602 660L600 662L597 661L593 663Z"/>
+        <path class="p off" d="M759 615L762 619L763 626L766 626L768 614L775 602L778 583L782 575L781 569L784 565L783 563L780 562L777 559L775 560L774 562L768 565L753 591L754 598L752 603L754 604L756 613L759 615Z"/>
+        </svg>
+          <div class="cn-legend">
+            <span class="k on"></span><span data-i18n="life.map.on">去过</span>
+            <span class="k off"></span><span data-i18n="life.map.off">还没去</span>
+            <span class="k sz"></span><span data-i18n="life.map.sz">深圳</span>
+          </div>
+        </div>
+        <p class="cn-note" data-i18n="life.travel.desc">数了数，20 个。</p>
+      </div>
+    </div>
+  </section>
   <!-- 这个站怎么搭的（只描述站点本身，不写个人能力清单） -->
-  <section id="stack">
+  <section id="stack" data-mode="tech">
     <div class="sec-head"><span class="arrow">▸</span><span class="title" data-i18n="stack.title">这个站怎么搭的</span><span class="sub" data-i18n="stack.sub">how this site is built</span></div>
     <div class="grid m3">
       <div class="card reveal">
@@ -940,13 +1466,12 @@ window.MUJIU = (function () {
             <span class="chip hot" data-i18n="stack.o6">fail2ban</span>
           </div>
         </div>
-        <p style="margin-top:12px" data-i18n="stack.ops.desc">一台 VPS 跑全部站点：证书自动续签，Cloudflare 挡在前面，本地改完发布一下就能看到。</p>
       </div>
     </div>
   </section>
 
   <!-- 项目（整卡是链接：可右键/中键新标签打开，也能用键盘 Tab 到） -->
-  <section id="projects">
+  <section id="projects" data-mode="tech">
     <div class="sec-head"><span class="arrow">▸</span><span class="title" data-i18n="proj.title">作品 / 项目</span><span class="sub" data-i18n="proj.sub">projects</span></div>
     <div class="grid m3">
       <a class="card proj-card reveal" href="https://mujiu.net" target="_blank" rel="noopener">
@@ -977,10 +1502,15 @@ window.MUJIU = (function () {
   </section>
 
   <!-- 更新日志（版本号是按几次大改归纳的，不是每次提交都编号） -->
-  <section id="changelog">
+  <section id="changelog" data-mode="tech">
     <div class="sec-head"><span class="arrow">▸</span><span class="title" data-i18n="log.title">更新日志</span><span class="sub" data-i18n="log.sub">changelog · 含服务器日志里的更早记录</span></div>
     <div class="card reveal">
       <div class="timeline">
+        <div class="tl">
+          <span class="d">2026-10-08</span>
+          <h4><span data-i18n="log.6.t">方向分流门 + 生活向 + 照片墙</span><span class="v">v4.2</span></h4>
+          <p data-i18n="log.6.p">首屏先问一句想看哪个方向：技术向、生活向、两个都看；生活向新增五张卡、一张走过的地图和六张手机拍的照片（点开有大图）；首次访问会先放一段终端开机日志，按任意键即可跳过。</p>
+        </div>
         <div class="tl">
           <span class="d">2026-10-02</span>
           <h4><span data-i18n="log.5.t">小助手接上大模型</span><span class="v">v4.1</span></h4>
@@ -1029,12 +1559,12 @@ window.MUJIU = (function () {
       </div>
       <p style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line)">
         <span data-i18n="log.note">再往前的日子没有留下访问记录，08-26 是日志里最早的一天；上面这些日期来自提交记录与服务器日志。</span>
-        <br /><span style="color:var(--text-300);font-size:12px" data-i18n="log.legend">版本号 v1.0 → v4.0 是按几次大改归纳的，不是每次提交都编号。</span>
+        <br /><span style="color:var(--text-300);font-size:12px" data-i18n="log.legend">版本号 v1.0 → v4.2 是按几次大改归纳的，不是每次提交都编号。</span>
       </p>
     </div>
   </section>
   <!-- 服务器仪表盘 -->
-  <section id="server">
+  <section id="server" data-mode="tech">
     <div class="sec-head"><span class="arrow">▸</span><span class="title" data-i18n="server.title">服务器仪表盘</span><span class="sub" data-i18n="server.sub">live · 每 5 秒刷新</span></div>
     <div class="card reveal">
       <div class="dash" id="dash">
@@ -1124,7 +1654,7 @@ window.MUJIU = (function () {
 
   <footer>
     <div>© <span id="year"></span> <span class="nb">樊旭阳</span> · <span class="g">mujiu.net</span> · <a href="https://mujiu.net" target="_blank" rel="noopener">mujiu.net</a></div>
-    <div style="margin-top:6px"><span class="ver" data-i18n="foot.ver">v4.1</span> · <span data-i18n="foot.updated">更新于</span> 2026-10-02</div>
+    <div style="margin-top:6px"><span class="ver" data-i18n="foot.ver">v4.2</span> · <span data-i18n="foot.updated">更新于</span> 2026-10-08</div>
     <div style="margin-top:6px" data-i18n="foot.easter">试试键盘彩蛋：↑↑↓↓←→←→BA</div>
   </footer>
 </div>
@@ -1702,6 +2232,180 @@ window.MUJIU = (function () {
     var reply = document.getElementById('asstReply');
     if (reply && reply.dataset.k) reply.textContent = t(reply.dataset.k);
   };
+
+  // 17) 方向分流：技术向 / 生活向（选择只存在访客自己的浏览器里）
+  (function () {
+    var MODE_KEY = 'mujiu_mode';
+    var html = document.documentElement;
+    var gate = document.getElementById('gate');
+    var btns = document.querySelectorAll('[data-mode-btn]');
+    var picks = document.querySelectorAll('[data-pick]');
+    var valid = { tech: 1, life: 1, all: 1 };
+
+    function stored() {
+      var m = (location.search.match(/[?&]mode=(tech|life|all)(?:&|$)/) || [])[1];
+      if (m) return { mode: m, remember: false };   // 带参进来：只切不记，避免污染访客的默认
+      try { var l = localStorage.getItem(MODE_KEY); if (valid[l]) return { mode: l, remember: true }; } catch (e) {}
+      var c = MUJIU.readCookie(MODE_KEY);
+      if (valid[c]) return { mode: c, remember: true };
+      return null;
+    }
+
+    function paint(m) {
+      if (!valid[m]) return;
+      if (m === 'all') html.removeAttribute('data-mode'); else html.setAttribute('data-mode', m);
+      for (var i = 0; i < btns.length; i++) {
+        var on = btns[i].getAttribute('data-mode-btn') === m;
+        btns[i].classList.toggle('active', on);
+        btns[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+      }
+    }
+
+    function closeGate() {
+      if (!gate || gate.hidden) return;
+      gate.style.animation = '';   // 启动动画那轮压掉过 gateIn，这里还原，.leaving 才有淡出
+      gate.classList.add('leaving');
+      html.style.overflow = '';
+      setTimeout(function () { gate.hidden = true; gate.classList.remove('leaving'); }, 260);
+    }
+
+    function openGate() {
+      if (!gate || !gate.hidden) return;
+      gate.hidden = false;
+      html.style.overflow = 'hidden';
+      var first = gate.querySelector('.gate-card');
+      if (first) first.focus();
+    }
+    MUJIU.openGate = openGate;
+
+    function choose(m, remember) {
+      paint(m);
+      if (remember) MUJIU.writeStore(MODE_KEY, m);
+      closeGate();
+      var t2 = document.getElementById('totop');
+      if (t2) t2.focus({ preventScroll: true });
+    }
+
+    var s = stored();
+    if (s) {
+      paint(s.mode);
+    } else if (gate) {
+      // 有启动动画就把开门交给它（放完 / 被跳过时由 19) 调 openGate），
+      // 免得 gateIn 在幕布后面白放一遍
+      if (html.getAttribute('data-boot') === '1' && document.getElementById('boot')) {
+        MUJIU.bootPending = true;
+      } else {
+        openGate();
+      }
+    }
+
+    var i;
+    for (i = 0; i < picks.length; i++) {
+      picks[i].addEventListener('click', function () { choose(this.getAttribute('data-pick'), true); });
+    }
+    for (i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', function () { choose(this.getAttribute('data-mode-btn'), true); });
+    }
+    // Esc 等于「不做选择」→ 走默认的技术向
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && gate && !gate.hidden) choose('tech', true); });
+  })();
+
+  // 18) 照片墙：点开看大图（左右键翻，Esc 关）
+  (function () {
+    var lb = document.getElementById('phLb');
+    if (!lb) return;
+    var items = [].slice.call(document.querySelectorAll('.ph'));
+    if (!items.length) return;
+    var big = lb.querySelector('img');
+    var cap = lb.querySelector('.lb-cap');
+    var cur = -1;
+
+    function show(i) {
+      cur = (i + items.length) % items.length;
+      var btn = items[cur], t = btn.querySelector('.ph-cap');
+      big.src = btn.getAttribute('data-full') || '';
+      big.alt = t ? t.textContent : '';
+      cap.textContent = t ? t.textContent : '';
+      lb.hidden = false;
+    }
+    function close() { lb.hidden = true; big.removeAttribute('src'); }
+
+    items.forEach(function (el) {
+      el.addEventListener('click', function () { show(items.indexOf(el)); });
+    });
+    lb.querySelector('.lb-close').addEventListener('click', close);
+    lb.querySelector('.lb-prev').addEventListener('click', function () { show(cur - 1); });
+    lb.querySelector('.lb-next').addEventListener('click', function () { show(cur + 1); });
+    lb.addEventListener('click', function (e) { if (e.target === lb) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (lb.hidden) return;
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowLeft') show(cur - 1);
+      else if (e.key === 'ArrowRight') show(cur + 1);
+    });
+  })();
+
+  // 19) 启动动画：首次访问的终端开机日志（放完或被跳过 → 再开分流门）
+  (function boot() {
+    var html = document.documentElement;
+    if (html.getAttribute('data-boot') !== '1') return;
+
+    var el = document.getElementById('boot');
+    var log = document.getElementById('bootLog');
+    var gate = document.getElementById('gate');
+    var lines = log ? [].slice.call(log.querySelectorAll('.boot-line')) : [];
+    var killed = false;
+
+    function done() {
+      // 先把选择页垫到幕布底下再淡出，否则幕布变透明的这 0.42s 会露出正文，
+      // 看起来就是「先蹦进页面、又闪回选择页」
+      if (MUJIU.bootPending) {
+        // 幕布已经负责这次过渡，门就别再自己对 opacity 淡入一遍，
+        // 不然中途门自己也是半透明的，正文照样透出来
+        if (gate) gate.style.animation = 'none';
+        MUJIU.openGate();
+      }
+      try { localStorage.setItem('mujiu_boot', '1'); } catch (e) {}   // 看过就不再放
+      // 用 setTimeout 而不是 rAF：后台标签页 / 无合成帧时 rAF 不跑，会把幕布永远留在屏上
+      setTimeout(function () {
+        if (el) el.classList.add('out');
+        setTimeout(function () {
+          html.removeAttribute('data-boot');
+          if (el) el.classList.remove('out');
+        }, 620);
+      }, 40);
+    }
+    function cleanup() {
+      window.removeEventListener('keydown', skip, true);
+      window.removeEventListener('pointerdown', skip, true);
+      window.removeEventListener('wheel', skip, true);
+    }
+    function skip() {
+      if (killed) return;
+      killed = true; cleanup(); done();       // 任意点击 / 按键 / 滚动都能立刻跳过
+    }
+
+    // 元素缺失，或者这次本来就不该开门 → 直接交还，别把人卡在黑屏上
+    if (!el || !log || !gate || !lines.length || !MUJIU.bootPending) {
+      html.removeAttribute('data-boot');
+      if (MUJIU.openGate) MUJIU.openGate();
+      return;
+    }
+
+    var t = 0;
+    lines.forEach(function (line, i) {
+      t += i === 0 ? 260 : 320;
+      setTimeout(function () { line.classList.add('on'); }, t);
+    });
+    var hold = t + 520;
+
+    window.addEventListener('keydown', skip, true);
+    window.addEventListener('pointerdown', skip, true);
+    window.addEventListener('wheel', skip, true);
+
+    setTimeout(function () { if (!killed) { killed = true; cleanup(); done(); } }, hold);
+    setTimeout(skip, 3800);                   // 兜底：定时器出岔子也要放人
+  })();
 
   MUJIU.applyI18n();   // 脚本位于 body 末尾，元素已就绪，先按当前语言刷一遍
 })();

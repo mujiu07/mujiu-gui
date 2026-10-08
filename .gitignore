@@ -1,3 +1,10 @@
 .DS_Store
 Thumbs.db
 *.log
+
+# 照片墙：图片不进公开仓库，只随 rsync 上传到服务器
+assets/photos/
+
+# 服务端脚本：只随 rsync 部署到服务器，不进公开仓库
+api/chat.php
+scripts/
